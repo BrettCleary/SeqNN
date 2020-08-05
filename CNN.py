@@ -1,5 +1,6 @@
 import numpy as np
 import math
+from matplotlib import pyplot as plt
 
 class Cnn:
  
@@ -59,7 +60,16 @@ class Cnn:
                     for zY in range(self.__fieldHeight):
                         fieldArray2D[zX, zY] = self.__data[x*self.__fieldWidth + zX, y*self.__fieldHeight + zY]
                 fieldArray1D = fieldArray2D.flatten()
-                self.__firstLayerOutput[x, y] = 1 / (1 + math.exp(-1 * np.dot(self.__inputWeights[outputIndex, 0:(self.__fieldWidth*self.__fieldHeight)], fieldArray1D.T) - self.__inputWeights[outputIndex, self.__fieldWidth*self.__fieldHeight]))
+                try:
+                    self.__firstLayerOutput[x, y] = 1 / (1 + math.exp(-1 * np.dot(self.__inputWeights[outputIndex, 0:(self.__fieldWidth*self.__fieldHeight)], fieldArray1D.T) - self.__inputWeights[outputIndex, self.__fieldWidth*self.__fieldHeight]))
+                except OverflowError:
+                    dotProduct = np.dot(self.__inputWeights[outputIndex, 0:(self.__fieldWidth*self.__fieldHeight)], fieldArray1D.T)
+                    if dotProduct < 0:
+                        self.__firstLayerOutput[x, y] = 0
+                    else:
+                        print('inf overflow firstLayerOutput')
+                        print('dot product: ', np.dot(self.__inputWeights[outputIndex, 0:(self.__fieldWidth*self.__fieldHeight)], fieldArray1D.T))
+                        print('bias: ', self.__inputWeights[outputIndex, self.__fieldWidth*self.__fieldHeight])
                 outputIndex += 1
         return
 
@@ -83,7 +93,6 @@ class Cnn:
             poolLayer1D = self.__firstPoolLayer.flatten()
             a = -1 * np.dot(self.__outputWeights[num, 0:self.__firstPoolRows*self.__firstPoolCols], poolLayer1D) - self.__outputWeights[num, self.__firstPoolRows*self.__firstPoolCols]
             self.__outputClasses[num] = 1 / (1 + math.exp(a))
-        
         return
 
     def __gradientDescent__(self, weights, weightDer, step):
@@ -110,10 +119,12 @@ class Cnn:
     
     def __outputLayerBackprop__(self, target):
         for num in range(10):
-            self.__outputErrors[num] = self.__outputClasses[num] - target[num]
+            self.__outputErrors[num] = self.__outputClasses[num] - target[num] #need soft weight sharing
             poolLayer1D = self.__firstPoolLayer.flatten()
             for nodei in range(self.__firstPoolRows*self.__firstPoolCols):
                 self.__outputWeightDer[num, nodei] = self.__outputErrors[num] * poolLayer1D[nodei]
+            
+            self.__outputWeightDer[num, self.__firstPoolRows*self.__firstPoolCols] = self.__outputErrors[num]
         return
 
     def __convLayerBackprop__(self):
@@ -128,10 +139,11 @@ class Cnn:
                     errorSum = errorSum * self.__outputErrors[k]
                     totalErrorSum += errorSum
                 firstLayerErrors[first_i][first_j] = totalErrorSum * self.__firstLayerOutput[first_i][first_j] * (1 - self.__firstLayerOutput[first_i][first_j])
-                for field_i in range(self.__fieldWidth):
-                    for field_j in range(self.__fieldHeight):
-                        imageVal = self.__data[first_j*self.__fieldWidth + field_i, first_i*self.__fieldHeight + field_j]
-                        self.__firstLayerWeightDer[first_i*self.__firstLayerRows + first_j, field_i*self.__fieldWidth + field_j] = imageVal * firstLayerErrors[first_i][first_j]
+                for field_i in range(self.__fieldHeight):
+                    for field_j in range(self.__fieldWidth):
+                        imageVal = self.__data[first_i*self.__fieldHeight + field_i, first_j*self.__fieldWidth + field_j]
+                        self.__firstLayerWeightDer[first_i*self.__firstLayerCol + first_j, field_i*self.__fieldWidth + field_j] = imageVal * firstLayerErrors[first_i][first_j]
+                self.__firstLayerWeightDer[first_i*self.__firstLayerCol + first_j, self.__fieldWidth*self.__fieldHeight] = firstLayerErrors[first_i][first_j] #bias error der
         return
     
     def __adjustWeights__(self):
@@ -145,18 +157,13 @@ class Cnn:
             self.__fwdProp__(grayscaleImageArray[i])
             self.__backprop__(targetLabelArray[i])
             self.__adjustWeights__()
-            #print(self.__firstLayerWeightDer)
-            #print(self.__outputWeightDer)
-            #print('input weights')
-            #for i in self.__inputWeights:
-            #    print(i)
         return
 
     def predictNumber(self, img):
         self.__fwdProp__(img)
         maxNum = 0
         maxProb = 0.0
-        for num in range(9):
+        for num in range(10):
             if self.__outputClasses[num] > maxProb:
                 maxProb = self.__outputClasses[num]
                 maxNum = num

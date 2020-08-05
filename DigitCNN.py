@@ -18,32 +18,28 @@ step = 0.01
 
 model = CNN.Cnn(imgWidth, imgHeight, strideHor, strideVert, fieldWidth, fieldHeight, poolWidth, poolHeight, step)
 
-#imA = Image.open("zero.jpg").convert('L')
-#data = np.array( imA, dtype='uint8' )
-
-#target = np.zeros(10)
-#target[1] = 1
-
-#imgArray = [data]
-#targetArray = [target]
-
 def createNpImgArray(csvFileName, isTrain, allImagesArray, targetArrayNp):
-    dfTrain = pd.read_csv(csvFileName)
+    dfTrainRaw = pd.read_csv(csvFileName)
+
+    dfTrain = dfTrainRaw
+    dfTarget = dfTrainRaw.iloc[:, 0]
+
+    if isTrain:
+        dfTrain = dfTrainRaw.iloc[:, 1:]
+
+
     for rowIndex, row in dfTrain.iterrows():
         numpyArray = np.zeros((imgWidth, imgHeight))
         for colIndex in range(len(dfTrain.columns)):
             #read pixels into 2d numpy array
-            if isTrain:
-                npRow = (colIndex - 1) / imgWidth
-                npCol = (colIndex - 1) % imgWidth
-            else:
-                npRow = colIndex / imgWidth
-                npCol = colIndex % imgWidth
-            numpyArray[npRow, npCol] = dfTrain[rowIndex, colIndex]
+            npRow = math.floor(colIndex / imgWidth)
+            npCol = colIndex % imgWidth
+            temp = dfTrain.iloc[rowIndex, colIndex]
+            numpyArray[npRow, npCol] = temp
         allImagesArray.append(numpyArray)
-        targetArray = np.zeros(10)
         if isTrain:
-            targetArray[dfTrain[rowIndex, 0]] = 1
+            targetArray = np.zeros(10)
+            targetArray[dfTarget.iloc[rowIndex]] = 1
             targetArrayNp.append(targetArray)
     return
 
@@ -55,15 +51,18 @@ allImagesArrayTest = []
 dummyTarget = []
 
 createNpImgArray('Data\\train.csv', True, allImagesArrayTrain, targetArrayTrain)
-createNpImgArray('Data\\test.csv', False, allImagesArrayTest, dummyTarget)
+#createNpImgArray('Data\\test.csv', False, allImagesArrayTest, dummyTarget)
 
 
 #cross validate
-n_folds = 5
+n_foldsBoundaries = 6
+n_folds = n_foldsBoundaries - 1
 n_ImagesPerFold = math.floor(len(allImagesArrayTrain) / n_folds)
-for i in range(n_folds - 1):
+for i in range(n_folds):
     holdOutSet = allImagesArrayTrain[i * n_ImagesPerFold : (i + 1) * n_ImagesPerFold]
     holdOutTargets = targetArrayTrain[i * n_ImagesPerFold : (i + 1) * n_ImagesPerFold]
+    #holdOutSet = allImagesArrayTrain
+    #holdOutTargets = targetArrayTrain
     aTrainSet = []
     aTargetTrain = []
     bTrainSet = []
@@ -78,18 +77,24 @@ for i in range(n_folds - 1):
 
     trainingSet = aTrainSet + bTrainSet
     trainingTargets = aTargetTrain + bTargetTrain
-    
+    #trainingSet = allImagesArrayTrain
+    #trainingTargets = targetArrayTrain
+
     cvModel = CNN.Cnn(imgWidth, imgHeight, strideHor, strideVert, fieldWidth, fieldHeight, poolWidth, poolHeight, step)
-    cvModel.sequentialTrain(trainingSet, trainingTargets)
+    for iteration in range(1):
+        #if iteration % 50 == 0:
+        #    print(iteration)
+        cvModel.sequentialTrain(trainingSet, trainingTargets)
 
     #test accuracy on holdOutSet
     numWrong = 0
     for imgIndex in range(len(holdOutSet)):
         img = holdOutSet[imgIndex]
-        if holdOutTargets[imgIndex, cvModel.predictNumber(img)] != 1:
+        predictedNum = cvModel.predictNumber(img)
+        if holdOutTargets[imgIndex][predictedNum] != 1:
             numWrong += 1
 
-    print('Error Rate: ', numWrong / n_ImagesPerFold, ' on validation set ', i)
+    print('Error Rate: ', numWrong / n_ImagesPerFold * 100, '% on validation set ', i)
 
 
 
