@@ -1,6 +1,7 @@
 import numpy as np
 import math
 from matplotlib import pyplot as plt
+import multiprocessing
 
 class Cnn:
  
@@ -81,8 +82,8 @@ class Cnn:
                     for poolY in range(self.__poolHeight):
                         if self.__firstLayerOutput[x*self.__poolWidth + poolX, y*self.__poolHeight + poolY] < minVal:
                             minVal = self.__firstLayerOutput[x*self.__poolWidth + poolX, y*self.__poolHeight + poolY]
-                            #add [x,y] to the adj list of [x*poolW + poolX, y*poolH + poolY]
-                            self.__firstLayerAdjList[x*self.__poolWidth + poolX][y*self.__poolHeight + poolY].append([x,y])
+                            #adjacency list representation of edges from first layer vertices to pool vertices using [row, col] indexing
+                            self.__firstLayerAdjList[y*self.__poolHeight + poolY][x*self.__poolWidth + poolX].append([y,x])
                 self.__firstPoolLayer[x,y] = minVal
         return
 
@@ -127,24 +128,62 @@ class Cnn:
             self.__outputWeightDer[num, self.__firstPoolRows*self.__firstPoolCols] = self.__outputErrors[num]
         return
 
+#    def __convLayerBackpropTask__(self, start, end, sections):
+#        firstLayerErrors = np.zeros((self.__firstLayerRows, self.__firstLayerCol))
+#        for first_i in range(math.floor(self.__firstLayerRows * start / sections), math.floor(self.__firstLayerRows * end / sections)):
+#            for first_j in range(self.__firstLayerCol):
+#                totalErrorSum = 0
+#                for k in range(10):
+#                    errorSum = 0
+#                    for adj_xy in self.__firstLayerAdjList[first_i][first_j]:
+#                        errorSum += self.__outputWeights[k, adj_xy[0]*self.__firstPoolCols + adj_xy[1]]
+#                    errorSum = errorSum * self.__outputErrors[k]
+#                    totalErrorSum += errorSum
+#                firstLayerErrors[first_i][first_j] = totalErrorSum * self.__firstLayerOutput[first_i][first_j] * (1 - self.__firstLayerOutput[first_i][first_j])
+#                for field_i in range(self.__fieldHeight):
+#                    for field_j in range(self.__fieldWidth):
+#                        imageVal = self.__data[first_i*self.__fieldHeight + field_i, first_j*self.__fieldWidth + field_j]
+#                        self.__firstLayerWeightDer[first_i*self.__firstLayerCol + first_j, field_i*self.__fieldWidth + field_j] = imageVal * firstLayerErrors[first_i][first_j]
+#                self.__firstLayerWeightDer[first_i*self.__firstLayerCol + first_j, self.__fieldWidth*self.__fieldHeight] = firstLayerErrors[first_i][first_j] #bias error der
+#        return
+
     def __convLayerBackprop__(self):
+        """
+        if __name__ == "CNN": 
+            p1 = multiprocessing.Process(target = self.__convLayerBackpropTask__, args=(0,1,2))
+            p2 = multiprocessing.Process(target = self.__convLayerBackpropTask__, args=(1,2,2))
+
+            p1.start()
+            p2.start()
+            p1.join()
+            p2.join()
+        else:
+            print('error')
+
+        """
         firstLayerErrors = np.zeros((self.__firstLayerRows, self.__firstLayerCol))
         for first_i in range(self.__firstLayerRows):
             for first_j in range(self.__firstLayerCol):
                 totalErrorSum = 0
                 for k in range(10):
                     errorSum = 0
-                    for adj_xy in self.__firstLayerAdjList[first_j][first_i]:
-                        errorSum += self.__outputWeights[k, adj_xy[1]*self.__firstPoolRows + adj_xy[0]]
+                    for adj_xy in self.__firstLayerAdjList[first_i][first_j]:
+                        errorSum += self.__outputWeights[k, adj_xy[0]*self.__firstPoolCols + adj_xy[1]]
                     errorSum = errorSum * self.__outputErrors[k]
                     totalErrorSum += errorSum
                 firstLayerErrors[first_i][first_j] = totalErrorSum * self.__firstLayerOutput[first_i][first_j] * (1 - self.__firstLayerOutput[first_i][first_j])
+                
+                imageValCol_j = 0
+                imageValColMajorIndex = first_j*self.__fieldWidth
+                firstLayerWeightDerRow_i = first_i*self.__firstLayerCol + first_j
                 for field_i in range(self.__fieldHeight):
+                    imageValRow_i = first_i*self.__fieldHeight + field_i
                     for field_j in range(self.__fieldWidth):
-                        imageVal = self.__data[first_i*self.__fieldHeight + field_i, first_j*self.__fieldWidth + field_j]
-                        self.__firstLayerWeightDer[first_i*self.__firstLayerCol + first_j, field_i*self.__fieldWidth + field_j] = imageVal * firstLayerErrors[first_i][first_j]
-                self.__firstLayerWeightDer[first_i*self.__firstLayerCol + first_j, self.__fieldWidth*self.__fieldHeight] = firstLayerErrors[first_i][first_j] #bias error der
+                        imageVal = self.__data[imageValRow_i, imageValColMajorIndex + field_j]
+                        self.__firstLayerWeightDer[firstLayerWeightDerRow_i, field_i*self.__fieldWidth + field_j] = imageVal * firstLayerErrors[first_i][first_j]
+                self.__firstLayerWeightDer[firstLayerWeightDerRow_i, self.__fieldWidth*self.__fieldHeight] = firstLayerErrors[first_i][first_j] #bias error der
         return
+        
     
     def __adjustWeights__(self):
         self.__gradientDescent__(self.__outputWeights, self.__outputWeightDer, self.__step)

@@ -123,3 +123,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+#VS Build Files
+Debug/
+Release/
+.vs/
+
