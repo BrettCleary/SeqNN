@@ -13,8 +13,11 @@ class SequentialModel
 	std::vector<Layer> allLayers;
 
 
-	void FwdProp() {
-
+	const std::vector<std::vector<double>>* FwdProp(const std::vector<std::vector<double>>* input) {
+		for (Layer& layer_i : allLayers) {
+			input = layer_i.fwdProp(*input);
+		}
+		return input;
 	}
 
 	void BackProp() {

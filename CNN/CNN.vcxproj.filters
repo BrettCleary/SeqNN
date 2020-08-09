@@ -41,13 +41,13 @@
     <ClInclude Include="Layer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PoolLayer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="DenseLayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Conv2DLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Pool2DLayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
