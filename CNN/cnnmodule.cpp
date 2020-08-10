@@ -17,7 +17,7 @@ PyObject* tanh_impl(PyObject*, PyObject* o) {
     double tanh_x = sinh_impl(x) / cosh_impl(x);
     return PyFloat_FromDouble(tanh_x);
 }
-
+/*
 static PyMethodDef CNN_methods[] = {
     // The first property is the name exposed to Python, fast_tanh, the second is the C++
     // function name that contains the implementation.
@@ -37,7 +37,7 @@ static PyModuleDef CNN_module = {
 
 PyMODINIT_FUNC PyInit_CNN() {
     return PyModule_Create(&CNN_module);
-}
+}*/
 
 /*namespace py = pybind11;
 

@@ -5,12 +5,12 @@
 class Conv2DLayer :
     public Layer
 {
-    //first [row][col] is for current layer indexes. second [row][col] is for input
-    std::vector<std::vector<std::vector<std::vector<double>>>> weights;
-    //first [row][col] is for current layer indices to access bias
-    std::vector<std::vector<double>> bias;
+    
+    //current layer [row][col]
+    std::vector<std::vector<double>> error;
+    //input layer[row][col]
+    std::vector<std::vector<double>> backPropError;
 
-    std::vector<std::vector<double>> output;
 
     int windowRows = 2;
     int windowCols = 2;
@@ -20,7 +20,7 @@ class Conv2DLayer :
     
 public:
 
-    virtual std::vector<std::vector<double>>* fwdProp(const std::vector<std::vector<double>>& input) override {
+    virtual std::vector<std::vector<double>>* FwdProp(const std::vector<std::vector<double>>& input) override {
         if (!initialized) {
             numInputRows = input.size();
             numInputCols = input[0].size();
@@ -28,24 +28,40 @@ public:
             numOutputCols = (numInputCols - windowCols) / (strideCol + 1);
             numOutputRows = (numInputRows - windowRows) / (strideRow + 1);
 
+            //init weights and weight derivatives to 0
             for (int i = 0; i < numOutputRows; ++i) {
                 std::vector<std::vector<std::vector<double>>> row_pool;
+                std::vector<std::vector<std::vector<double>>> row_poolDer;
                 for (int j = 0; j < numOutputCols; ++j) {
                     std::vector<std::vector<double>> col_pool;
+                    std::vector<std::vector<double>> col_poolDer;
                     for (int k = 0; k < windowRows; ++k) {
                         std::vector<double> row_i(windowCols, 0);
                         col_pool.push_back(row_i);
+                        std::vector<double> row_iDer(windowCols, 0);
+                        col_poolDer.push_back(row_iDer);
                     }
                     row_pool.push_back(col_pool);
+                    row_poolDer.push_back(col_poolDer);
                 }
                 weights.push_back(row_pool);
+                weightDer.push_back(row_poolDer);
             }
 
+            //init output and bias to 0
             for (int i = 0; i < numOutputRows; ++i) {
                 std::vector<double> row_i(numOutputCols, 0);
                 output.push_back(row_i);
                 std::vector<double> bias_i(numOutputCols, 0);
                 bias.push_back(bias_i);
+                std::vector<double> biasDer_i(numOutputCols, 0);
+                biasDer.push_back(biasDer_i);
+            }
+
+            //init backPropError to 0
+            for (int k = 0; k < numInputRows; ++k) {
+                std::vector<double> row_i(numInputCols, 0);
+                backPropError.push_back(row_i);
             }
 
             initialized = true;
@@ -60,15 +76,50 @@ public:
                     }
                 }
                 activation += bias[i][j];
-                output[i][j] = logSig(activation);
+                output[i][j] = LogSig(activation);
             }
         }
     
         return &output;
     }
 
-    virtual std::vector<double> backProp(std::vector<double> errors) override {
+    virtual const std::vector<std::vector<double>>* BackProp(const std::vector<std::vector<double>>& backPropErrorSum) override {
 
+        //calculate errors
+        for (int i = 0; i < numOutputRows; ++i) {
+            for (int j = 0; j < numOutputCols; ++j) {
+                error[i][j] = output[i][j] * (1 - output[i][j]) * backPropErrorSum[i][j];
+            }
+        }
+
+        //calculate weight derivatives
+        for (int i = 0; i < numOutputRows; ++i) {
+            for (int j = 0; j < numOutputCols; ++j) {
+                for (int m = 0; m < numInputRows; ++m) {
+                    for (int n = 0; n < numInputCols; ++n) {
+                        weightDer[i][j][m][n] += error[i][j] * weights[i][j][m][n];
+                    }
+                }
+                biasDer[i][j] = error[i][j];
+            }
+        }
+
+        //calculate backPropErrorSum for the input layer
+        for (int m = 0; m < numInputRows; ++m) {
+            for (int n = 0; n < numInputCols; ++n) {
+                double errorSum = 0;
+                for (int i = 0; i < numOutputRows; ++i) {
+                    for (int j = 0; j < numOutputCols; ++j) {
+                        errorSum += error[i][j] * weights[i][j][m][n];
+                    }
+                }
+                backPropError[m][n] = errorSum;
+            }
+        }
+
+        ++numPropsSinceLastUpdate;
+
+        return &backPropError;
     }
 
 };

@@ -151,7 +151,7 @@
     <ClCompile Include="Conv2DLayer.cpp" />
     <ClCompile Include="DenseLayer.cpp" />
     <ClCompile Include="Layer.cpp" />
-    <ClCompile Include="PoolLayer.cpp" />
+    <ClCompile Include="Pool2DLayer.cpp" />
     <ClCompile Include="SequentialModel.cpp" />
   </ItemGroup>
   <ItemGroup>

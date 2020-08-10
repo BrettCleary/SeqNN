@@ -7,6 +7,7 @@ import math
 import CNNSlow
 import cProfile
 import re
+import CNN
 
 import sys
 print(sys.executable)

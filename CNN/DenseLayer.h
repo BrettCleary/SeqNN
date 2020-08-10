@@ -3,8 +3,7 @@
 class DenseLayer :
     public Layer
 {
-    std::vector<std::vector<double>> output;
-    //first 2 dim are output [row][col], next 2 are input [row][col] 
+    //first 2 dim are current layer output [row][col], next 2 are input [row][col] 
     std::vector<std::vector<std::vector<std::vector<double>>>> weights;
     std::vector<std::vector<std::vector<std::vector<double>>>> weightDer;
     //first [row][col] is for current layer indices to access bias
@@ -16,12 +15,9 @@ class DenseLayer :
     //input layer[row][col]
     std::vector<std::vector<double>> backPropError;
 
-
-
-
 public:
 
-    virtual std::vector<std::vector<double>>* fwdProp(const std::vector<std::vector<double>>& input) override {
+    virtual std::vector<std::vector<double>>* FwdProp(const std::vector<std::vector<double>>& input) override {
         if (!initialized) {
             numOutputRows = 1;
             numOutputCols = 10;
@@ -85,14 +81,14 @@ public:
                     }
                 }
                 activation += bias[i][j];
-                output[i][j] = logSig(activation);
+                output[i][j] = LogSig(activation);
             }
         }
 
         return &output;
     }
 
-    virtual std::vector<std::vector<double>>& backProp(std::vector<std::vector<double>> backPropErrorSum) override {
+    virtual const std::vector<std::vector<double>>* BackProp(const std::vector<std::vector<double>>& backPropErrorSum) override {
 
         //calculate errors
         for (int i = 0; i < numOutputRows; ++i) {
@@ -106,27 +102,29 @@ public:
             for (int j = 0; j < numOutputCols; ++j) {
                 for (int m = 0; m < numInputRows; ++m) {
                     for (int n = 0; n < numInputCols; ++n) {
-                        weightDer[i][j][m][n] = error[i][j] * weights[i][j][m][n];
+                        weightDer[i][j][m][n] += error[i][j] * weights[i][j][m][n];
                     }
                 }
+                biasDer[i][j] = error[i][j];
             }
         }
 
         //calculate backPropErrorSum for the input layer
-        for (int j = 0; j < numOutputCols; ++j) {
-            for (int m = 0; m < numInputRows; ++m) {
+        for (int m = 0; m < numInputRows; ++m) {
+            for (int n = 0; n < numInputCols; ++n) {
                 double errorSum = 0;
                 for (int i = 0; i < numOutputRows; ++i) {
                     for (int j = 0; j < numOutputCols; ++j) {
-                        errorSum += error[i][j] * 
+                        errorSum += error[i][j] * weights[i][j][m][n];
                     }
                 }
+                backPropError[m][n] = errorSum;
             }
         }
 
+        ++numPropsSinceLastUpdate;
+
+        return &backPropError;
     }
-
-
-
 };
 
