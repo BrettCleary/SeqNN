@@ -5,8 +5,7 @@
     <ProjectGuid>33332eea-b95d-4de2-9efe-dbee8c470f3a</ProjectGuid>
     <ProjectHome>.</ProjectHome>
     <StartupFile>DigitCNN.py</StartupFile>
-    <SearchPath>
-    </SearchPath>
+    <SearchPath>CNN</SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>DigitCNN</Name>

@@ -1,3 +1,7 @@
+#ifndef CNN_DENSELAYER_H
+#define CNN_DENSELAYER_H
+
+
 #pragma once
 #include "Layer.h"
 class DenseLayer :
@@ -128,3 +132,5 @@ public:
     }
 };
 
+
+#endif // CNN_DENSELAYER_H

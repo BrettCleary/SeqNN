@@ -1,4 +1,6 @@
-#include <Python.h>
+#ifndef CNN_LAYER_H
+#define CNN_LAYER_H
+
 #include <string>
 #include <vector>
 
@@ -62,9 +64,10 @@ public:
 	std::string GetName() {
 		return name;
 	}
-
+	/*
 	Layer(PyObject* outputSize, PyObject* activationFxn, PyObject* nameIn, PyObject* regMethod) {
 
-	}
+	}*/
 };
 
+#endif // CNN_LAYER_H

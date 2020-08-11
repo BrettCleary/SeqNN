@@ -1,3 +1,5 @@
+#ifndef CNN_CONV2DLAYER_H
+#define CNN_CONV2DLAYER_HC
 #include "Layer.h"
 
 
@@ -124,3 +126,4 @@ public:
 
 };
 
+#endif // CNN_CONV2DLAYER_HC

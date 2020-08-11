@@ -1,3 +1,6 @@
+#ifndef CNN_POOL2DLAYER_H
+#define CNN_POOL2DLAYER_H
+
 #pragma once
 #include "Layer.h"
 #include <algorithm>
@@ -87,3 +90,4 @@ public:
     }
 };
 
+#endif // CNN_POOL2DLAYER_H
