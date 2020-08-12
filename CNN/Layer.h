@@ -53,7 +53,7 @@ public:
 		}
 	}
 
-	virtual const std::vector<std::vector<double>>* GetOutput() {
+	const std::vector<std::vector<double>>* GetOutput() {
 		return &output;
 	}
 

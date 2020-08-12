@@ -61,6 +61,9 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="SeqNN_swig.i" />
+    <CustomBuild Include="example.i" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="numpy.i" />
   </ItemGroup>
 </Project>

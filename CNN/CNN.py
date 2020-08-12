@@ -95,6 +95,635 @@ except __builtin__.Exception:
         pass
     _newclass = 0
 
+class SwigPyIterator(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, SwigPyIterator, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, SwigPyIterator, name)
+
+    def __init__(self, *args, **kwargs):
+        raise AttributeError("No constructor defined - class is abstract")
+    __repr__ = _swig_repr
+    __swig_destroy__ = _CNN.delete_SwigPyIterator
+    __del__ = lambda self: None
+
+    def value(self):
+        return _CNN.SwigPyIterator_value(self)
+
+    def incr(self, n=1):
+        return _CNN.SwigPyIterator_incr(self, n)
+
+    def decr(self, n=1):
+        return _CNN.SwigPyIterator_decr(self, n)
+
+    def distance(self, x):
+        return _CNN.SwigPyIterator_distance(self, x)
+
+    def equal(self, x):
+        return _CNN.SwigPyIterator_equal(self, x)
+
+    def copy(self):
+        return _CNN.SwigPyIterator_copy(self)
+
+    def next(self):
+        return _CNN.SwigPyIterator_next(self)
+
+    def __next__(self):
+        return _CNN.SwigPyIterator___next__(self)
+
+    def previous(self):
+        return _CNN.SwigPyIterator_previous(self)
+
+    def advance(self, n):
+        return _CNN.SwigPyIterator_advance(self, n)
+
+    def __eq__(self, x):
+        return _CNN.SwigPyIterator___eq__(self, x)
+
+    def __ne__(self, x):
+        return _CNN.SwigPyIterator___ne__(self, x)
+
+    def __iadd__(self, n):
+        return _CNN.SwigPyIterator___iadd__(self, n)
+
+    def __isub__(self, n):
+        return _CNN.SwigPyIterator___isub__(self, n)
+
+    def __add__(self, n):
+        return _CNN.SwigPyIterator___add__(self, n)
+
+    def __sub__(self, *args):
+        return _CNN.SwigPyIterator___sub__(self, *args)
+    def __iter__(self):
+        return self
+SwigPyIterator_swigregister = _CNN.SwigPyIterator_swigregister
+SwigPyIterator_swigregister(SwigPyIterator)
+
+class doubleVector1D(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, doubleVector1D, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, doubleVector1D, name)
+    __repr__ = _swig_repr
+
+    def iterator(self):
+        return _CNN.doubleVector1D_iterator(self)
+    def __iter__(self):
+        return self.iterator()
+
+    def __nonzero__(self):
+        return _CNN.doubleVector1D___nonzero__(self)
+
+    def __bool__(self):
+        return _CNN.doubleVector1D___bool__(self)
+
+    def __len__(self):
+        return _CNN.doubleVector1D___len__(self)
+
+    def __getslice__(self, i, j):
+        return _CNN.doubleVector1D___getslice__(self, i, j)
+
+    def __setslice__(self, *args):
+        return _CNN.doubleVector1D___setslice__(self, *args)
+
+    def __delslice__(self, i, j):
+        return _CNN.doubleVector1D___delslice__(self, i, j)
+
+    def __delitem__(self, *args):
+        return _CNN.doubleVector1D___delitem__(self, *args)
+
+    def __getitem__(self, *args):
+        return _CNN.doubleVector1D___getitem__(self, *args)
+
+    def __setitem__(self, *args):
+        return _CNN.doubleVector1D___setitem__(self, *args)
+
+    def pop(self):
+        return _CNN.doubleVector1D_pop(self)
+
+    def append(self, x):
+        return _CNN.doubleVector1D_append(self, x)
+
+    def empty(self):
+        return _CNN.doubleVector1D_empty(self)
+
+    def size(self):
+        return _CNN.doubleVector1D_size(self)
+
+    def swap(self, v):
+        return _CNN.doubleVector1D_swap(self, v)
+
+    def begin(self):
+        return _CNN.doubleVector1D_begin(self)
+
+    def end(self):
+        return _CNN.doubleVector1D_end(self)
+
+    def rbegin(self):
+        return _CNN.doubleVector1D_rbegin(self)
+
+    def rend(self):
+        return _CNN.doubleVector1D_rend(self)
+
+    def clear(self):
+        return _CNN.doubleVector1D_clear(self)
+
+    def get_allocator(self):
+        return _CNN.doubleVector1D_get_allocator(self)
+
+    def pop_back(self):
+        return _CNN.doubleVector1D_pop_back(self)
+
+    def erase(self, *args):
+        return _CNN.doubleVector1D_erase(self, *args)
+
+    def __init__(self, *args):
+        this = _CNN.new_doubleVector1D(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def push_back(self, x):
+        return _CNN.doubleVector1D_push_back(self, x)
+
+    def front(self):
+        return _CNN.doubleVector1D_front(self)
+
+    def back(self):
+        return _CNN.doubleVector1D_back(self)
+
+    def assign(self, n, x):
+        return _CNN.doubleVector1D_assign(self, n, x)
+
+    def resize(self, *args):
+        return _CNN.doubleVector1D_resize(self, *args)
+
+    def insert(self, *args):
+        return _CNN.doubleVector1D_insert(self, *args)
+
+    def reserve(self, n):
+        return _CNN.doubleVector1D_reserve(self, n)
+
+    def capacity(self):
+        return _CNN.doubleVector1D_capacity(self)
+    __swig_destroy__ = _CNN.delete_doubleVector1D
+    __del__ = lambda self: None
+doubleVector1D_swigregister = _CNN.doubleVector1D_swigregister
+doubleVector1D_swigregister(doubleVector1D)
+
+class doubleVector2D(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, doubleVector2D, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, doubleVector2D, name)
+    __repr__ = _swig_repr
+
+    def iterator(self):
+        return _CNN.doubleVector2D_iterator(self)
+    def __iter__(self):
+        return self.iterator()
+
+    def __nonzero__(self):
+        return _CNN.doubleVector2D___nonzero__(self)
+
+    def __bool__(self):
+        return _CNN.doubleVector2D___bool__(self)
+
+    def __len__(self):
+        return _CNN.doubleVector2D___len__(self)
+
+    def __getslice__(self, i, j):
+        return _CNN.doubleVector2D___getslice__(self, i, j)
+
+    def __setslice__(self, *args):
+        return _CNN.doubleVector2D___setslice__(self, *args)
+
+    def __delslice__(self, i, j):
+        return _CNN.doubleVector2D___delslice__(self, i, j)
+
+    def __delitem__(self, *args):
+        return _CNN.doubleVector2D___delitem__(self, *args)
+
+    def __getitem__(self, *args):
+        return _CNN.doubleVector2D___getitem__(self, *args)
+
+    def __setitem__(self, *args):
+        return _CNN.doubleVector2D___setitem__(self, *args)
+
+    def pop(self):
+        return _CNN.doubleVector2D_pop(self)
+
+    def append(self, x):
+        return _CNN.doubleVector2D_append(self, x)
+
+    def empty(self):
+        return _CNN.doubleVector2D_empty(self)
+
+    def size(self):
+        return _CNN.doubleVector2D_size(self)
+
+    def swap(self, v):
+        return _CNN.doubleVector2D_swap(self, v)
+
+    def begin(self):
+        return _CNN.doubleVector2D_begin(self)
+
+    def end(self):
+        return _CNN.doubleVector2D_end(self)
+
+    def rbegin(self):
+        return _CNN.doubleVector2D_rbegin(self)
+
+    def rend(self):
+        return _CNN.doubleVector2D_rend(self)
+
+    def clear(self):
+        return _CNN.doubleVector2D_clear(self)
+
+    def get_allocator(self):
+        return _CNN.doubleVector2D_get_allocator(self)
+
+    def pop_back(self):
+        return _CNN.doubleVector2D_pop_back(self)
+
+    def erase(self, *args):
+        return _CNN.doubleVector2D_erase(self, *args)
+
+    def __init__(self, *args):
+        this = _CNN.new_doubleVector2D(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def push_back(self, x):
+        return _CNN.doubleVector2D_push_back(self, x)
+
+    def front(self):
+        return _CNN.doubleVector2D_front(self)
+
+    def back(self):
+        return _CNN.doubleVector2D_back(self)
+
+    def assign(self, n, x):
+        return _CNN.doubleVector2D_assign(self, n, x)
+
+    def resize(self, *args):
+        return _CNN.doubleVector2D_resize(self, *args)
+
+    def insert(self, *args):
+        return _CNN.doubleVector2D_insert(self, *args)
+
+    def reserve(self, n):
+        return _CNN.doubleVector2D_reserve(self, n)
+
+    def capacity(self):
+        return _CNN.doubleVector2D_capacity(self)
+    __swig_destroy__ = _CNN.delete_doubleVector2D
+    __del__ = lambda self: None
+doubleVector2D_swigregister = _CNN.doubleVector2D_swigregister
+doubleVector2D_swigregister(doubleVector2D)
+
+class doubleVector3D(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, doubleVector3D, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, doubleVector3D, name)
+    __repr__ = _swig_repr
+
+    def iterator(self):
+        return _CNN.doubleVector3D_iterator(self)
+    def __iter__(self):
+        return self.iterator()
+
+    def __nonzero__(self):
+        return _CNN.doubleVector3D___nonzero__(self)
+
+    def __bool__(self):
+        return _CNN.doubleVector3D___bool__(self)
+
+    def __len__(self):
+        return _CNN.doubleVector3D___len__(self)
+
+    def __getslice__(self, i, j):
+        return _CNN.doubleVector3D___getslice__(self, i, j)
+
+    def __setslice__(self, *args):
+        return _CNN.doubleVector3D___setslice__(self, *args)
+
+    def __delslice__(self, i, j):
+        return _CNN.doubleVector3D___delslice__(self, i, j)
+
+    def __delitem__(self, *args):
+        return _CNN.doubleVector3D___delitem__(self, *args)
+
+    def __getitem__(self, *args):
+        return _CNN.doubleVector3D___getitem__(self, *args)
+
+    def __setitem__(self, *args):
+        return _CNN.doubleVector3D___setitem__(self, *args)
+
+    def pop(self):
+        return _CNN.doubleVector3D_pop(self)
+
+    def append(self, x):
+        return _CNN.doubleVector3D_append(self, x)
+
+    def empty(self):
+        return _CNN.doubleVector3D_empty(self)
+
+    def size(self):
+        return _CNN.doubleVector3D_size(self)
+
+    def swap(self, v):
+        return _CNN.doubleVector3D_swap(self, v)
+
+    def begin(self):
+        return _CNN.doubleVector3D_begin(self)
+
+    def end(self):
+        return _CNN.doubleVector3D_end(self)
+
+    def rbegin(self):
+        return _CNN.doubleVector3D_rbegin(self)
+
+    def rend(self):
+        return _CNN.doubleVector3D_rend(self)
+
+    def clear(self):
+        return _CNN.doubleVector3D_clear(self)
+
+    def get_allocator(self):
+        return _CNN.doubleVector3D_get_allocator(self)
+
+    def pop_back(self):
+        return _CNN.doubleVector3D_pop_back(self)
+
+    def erase(self, *args):
+        return _CNN.doubleVector3D_erase(self, *args)
+
+    def __init__(self, *args):
+        this = _CNN.new_doubleVector3D(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def push_back(self, x):
+        return _CNN.doubleVector3D_push_back(self, x)
+
+    def front(self):
+        return _CNN.doubleVector3D_front(self)
+
+    def back(self):
+        return _CNN.doubleVector3D_back(self)
+
+    def assign(self, n, x):
+        return _CNN.doubleVector3D_assign(self, n, x)
+
+    def resize(self, *args):
+        return _CNN.doubleVector3D_resize(self, *args)
+
+    def insert(self, *args):
+        return _CNN.doubleVector3D_insert(self, *args)
+
+    def reserve(self, n):
+        return _CNN.doubleVector3D_reserve(self, n)
+
+    def capacity(self):
+        return _CNN.doubleVector3D_capacity(self)
+    __swig_destroy__ = _CNN.delete_doubleVector3D
+    __del__ = lambda self: None
+doubleVector3D_swigregister = _CNN.doubleVector3D_swigregister
+doubleVector3D_swigregister(doubleVector3D)
+
+class doubleVector4D(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, doubleVector4D, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, doubleVector4D, name)
+    __repr__ = _swig_repr
+
+    def iterator(self):
+        return _CNN.doubleVector4D_iterator(self)
+    def __iter__(self):
+        return self.iterator()
+
+    def __nonzero__(self):
+        return _CNN.doubleVector4D___nonzero__(self)
+
+    def __bool__(self):
+        return _CNN.doubleVector4D___bool__(self)
+
+    def __len__(self):
+        return _CNN.doubleVector4D___len__(self)
+
+    def __getslice__(self, i, j):
+        return _CNN.doubleVector4D___getslice__(self, i, j)
+
+    def __setslice__(self, *args):
+        return _CNN.doubleVector4D___setslice__(self, *args)
+
+    def __delslice__(self, i, j):
+        return _CNN.doubleVector4D___delslice__(self, i, j)
+
+    def __delitem__(self, *args):
+        return _CNN.doubleVector4D___delitem__(self, *args)
+
+    def __getitem__(self, *args):
+        return _CNN.doubleVector4D___getitem__(self, *args)
+
+    def __setitem__(self, *args):
+        return _CNN.doubleVector4D___setitem__(self, *args)
+
+    def pop(self):
+        return _CNN.doubleVector4D_pop(self)
+
+    def append(self, x):
+        return _CNN.doubleVector4D_append(self, x)
+
+    def empty(self):
+        return _CNN.doubleVector4D_empty(self)
+
+    def size(self):
+        return _CNN.doubleVector4D_size(self)
+
+    def swap(self, v):
+        return _CNN.doubleVector4D_swap(self, v)
+
+    def begin(self):
+        return _CNN.doubleVector4D_begin(self)
+
+    def end(self):
+        return _CNN.doubleVector4D_end(self)
+
+    def rbegin(self):
+        return _CNN.doubleVector4D_rbegin(self)
+
+    def rend(self):
+        return _CNN.doubleVector4D_rend(self)
+
+    def clear(self):
+        return _CNN.doubleVector4D_clear(self)
+
+    def get_allocator(self):
+        return _CNN.doubleVector4D_get_allocator(self)
+
+    def pop_back(self):
+        return _CNN.doubleVector4D_pop_back(self)
+
+    def erase(self, *args):
+        return _CNN.doubleVector4D_erase(self, *args)
+
+    def __init__(self, *args):
+        this = _CNN.new_doubleVector4D(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def push_back(self, x):
+        return _CNN.doubleVector4D_push_back(self, x)
+
+    def front(self):
+        return _CNN.doubleVector4D_front(self)
+
+    def back(self):
+        return _CNN.doubleVector4D_back(self)
+
+    def assign(self, n, x):
+        return _CNN.doubleVector4D_assign(self, n, x)
+
+    def resize(self, *args):
+        return _CNN.doubleVector4D_resize(self, *args)
+
+    def insert(self, *args):
+        return _CNN.doubleVector4D_insert(self, *args)
+
+    def reserve(self, n):
+        return _CNN.doubleVector4D_reserve(self, n)
+
+    def capacity(self):
+        return _CNN.doubleVector4D_capacity(self)
+    __swig_destroy__ = _CNN.delete_doubleVector4D
+    __del__ = lambda self: None
+doubleVector4D_swigregister = _CNN.doubleVector4D_swigregister
+doubleVector4D_swigregister(doubleVector4D)
+
+class outputVector(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, outputVector, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, outputVector, name)
+    __repr__ = _swig_repr
+
+    def iterator(self):
+        return _CNN.outputVector_iterator(self)
+    def __iter__(self):
+        return self.iterator()
+
+    def __nonzero__(self):
+        return _CNN.outputVector___nonzero__(self)
+
+    def __bool__(self):
+        return _CNN.outputVector___bool__(self)
+
+    def __len__(self):
+        return _CNN.outputVector___len__(self)
+
+    def __getslice__(self, i, j):
+        return _CNN.outputVector___getslice__(self, i, j)
+
+    def __setslice__(self, *args):
+        return _CNN.outputVector___setslice__(self, *args)
+
+    def __delslice__(self, i, j):
+        return _CNN.outputVector___delslice__(self, i, j)
+
+    def __delitem__(self, *args):
+        return _CNN.outputVector___delitem__(self, *args)
+
+    def __getitem__(self, *args):
+        return _CNN.outputVector___getitem__(self, *args)
+
+    def __setitem__(self, *args):
+        return _CNN.outputVector___setitem__(self, *args)
+
+    def pop(self):
+        return _CNN.outputVector_pop(self)
+
+    def append(self, x):
+        return _CNN.outputVector_append(self, x)
+
+    def empty(self):
+        return _CNN.outputVector_empty(self)
+
+    def size(self):
+        return _CNN.outputVector_size(self)
+
+    def swap(self, v):
+        return _CNN.outputVector_swap(self, v)
+
+    def begin(self):
+        return _CNN.outputVector_begin(self)
+
+    def end(self):
+        return _CNN.outputVector_end(self)
+
+    def rbegin(self):
+        return _CNN.outputVector_rbegin(self)
+
+    def rend(self):
+        return _CNN.outputVector_rend(self)
+
+    def clear(self):
+        return _CNN.outputVector_clear(self)
+
+    def get_allocator(self):
+        return _CNN.outputVector_get_allocator(self)
+
+    def pop_back(self):
+        return _CNN.outputVector_pop_back(self)
+
+    def erase(self, *args):
+        return _CNN.outputVector_erase(self, *args)
+
+    def __init__(self, *args):
+        this = _CNN.new_outputVector(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def push_back(self, x):
+        return _CNN.outputVector_push_back(self, x)
+
+    def front(self):
+        return _CNN.outputVector_front(self)
+
+    def back(self):
+        return _CNN.outputVector_back(self)
+
+    def assign(self, n, x):
+        return _CNN.outputVector_assign(self, n, x)
+
+    def resize(self, *args):
+        return _CNN.outputVector_resize(self, *args)
+
+    def insert(self, *args):
+        return _CNN.outputVector_insert(self, *args)
+
+    def reserve(self, n):
+        return _CNN.outputVector_reserve(self, n)
+
+    def capacity(self):
+        return _CNN.outputVector_capacity(self)
+    __swig_destroy__ = _CNN.delete_outputVector
+    __del__ = lambda self: None
+outputVector_swigregister = _CNN.outputVector_swigregister
+outputVector_swigregister(outputVector)
+
 class Shape(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, Shape, name, value)
@@ -233,12 +862,39 @@ class SequentialModel(_object):
     def Add(self, layer):
         return _CNN.SequentialModel_Add(self, layer)
 
-    def Train(self, inputData, targets, batchSize, numEpochs):
-        return _CNN.SequentialModel_Train(self, inputData, targets, batchSize, numEpochs)
+    def _AddInputDataPoint(self, dataPoint):
+        return _CNN.SequentialModel__AddInputDataPoint(self, dataPoint)
+
+    def AddInputDataPoint(self, len1_):
+        return _CNN.SequentialModel_AddInputDataPoint(self, len1_)
+
+    def Train(self):
+        return _CNN.SequentialModel_Train(self)
+
+    def Predict(self, inputData):
+        return _CNN.SequentialModel_Predict(self, inputData)
     __swig_destroy__ = _CNN.delete_SequentialModel
     __del__ = lambda self: None
 SequentialModel_swigregister = _CNN.SequentialModel_swigregister
 SequentialModel_swigregister(SequentialModel)
+
+class testClass(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, testClass, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, testClass, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        this = _CNN.new_testClass()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _CNN.delete_testClass
+    __del__ = lambda self: None
+testClass_swigregister = _CNN.testClass_swigregister
+testClass_swigregister(testClass)
 
 class Conv2DLayer(Layer):
     __swig_setmethods__ = {}

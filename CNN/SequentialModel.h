@@ -1,6 +1,9 @@
 #ifndef CNN_SEQMODEL_H
 #define CNN_SEQMODEL_H
 #include "Layer.h"
+#include "Conv2DLayer.h"
+#include "DenseLayer.h"
+#include "Pool2DLayer.h"
 #include <vector>
 //#include <numpy/ndarraytypes.h>
 //#include <boost/python/numpy.hpp>
@@ -11,26 +14,44 @@
 class SequentialModel
 {
 	//PyObject_HEAD
-	std::vector<Layer> allLayers;
+	//std::vector<Layer*> allLayers;
+	Layer* allLayers[3];
 	double weightStepSize = 0.025;
 
+	std::vector<std::vector<std::vector<double>>> inputData;
+	std::vector<std::vector<std::vector<double>>> targets;
+	int batchSize;
+	int numEpochs;
+
+
+
+
 	void FwdProp(const std::vector<std::vector<double>>* input) {
-		for (Layer& layer_i : allLayers) {
-			input = layer_i.FwdProp(*input);
+		/*for (Layer* layer_i : allLayers) {
+			input = layer_i->FwdProp(*input);
+		}*/
+
+		for (int i = 0; i < 3; ++i) {
+			input = allLayers[i]->FwdProp(*input);
 		}
 	}
 
 	void BackProp(const std::vector<std::vector<double>>& error) {
 		const std::vector<std::vector<double>>* errorPtr = &error;
-		for (int i = allLayers.size() - 1; i >= 0; --i) {
-			errorPtr = allLayers[i].BackProp(*errorPtr);
+		/*for (int i = allLayers.size() - 1; i >= 0; --i) {
+			errorPtr = allLayers[i]->BackProp(*errorPtr);
+		}*/
+
+		for (int i = 2; i >= 0; --i) {
+			errorPtr = allLayers[i]->BackProp(*errorPtr);
 		}
 	}
 
 	std::vector<std::vector<double>> CalcError(const std::vector<std::vector<double>>& target) {
 		auto dError_dAct = target;
-		auto& lastLayer = allLayers[allLayers.size() - 1];
-		const std::vector<std::vector<double>>& output = *(lastLayer.GetOutput());
+		//auto& lastLayer = allLayers[allLayers.size() - 1];
+		auto& lastLayer = allLayers[2];
+		const std::vector<std::vector<double>>& output = *(lastLayer->GetOutput());
 
 		for (int i = 0; i < target.size(); ++i) {
 			for (int j = 0; j < target[0].size(); ++j) {
@@ -41,16 +62,72 @@ class SequentialModel
 	}
 	
 	void UpdateWeights() {
-		for (Layer& layer_i : allLayers) {
-			layer_i.UpdateWeights(weightStepSize);
+		/*for (Layer* layer_i : allLayers) {
+			layer_i->UpdateWeights(weightStepSize);
+		}*/
+
+		for (int i = 0; i < 3; ++i) {
+			allLayers[i]->UpdateWeights(weightStepSize);
+		}
+	}
+
+public:
+	//SequentialModel(std::vector<Layer*> layerList) {
+	SequentialModel(){
+		//convert from pyobject* to list
+		//allLayers = layerListConverted
+
+		//testClass b;
+		//Conv2DLayer a;
+		//testing
+		//allLayers.push_back(new Conv2DLayer());
+		//allLayers.push_back(new Pool2DLayer());
+		//allLayers.push_back(new DenseLayer());
+
+		allLayers[0] = new Conv2DLayer();
+		allLayers[1] = new Pool2DLayer();
+		allLayers[2] = new DenseLayer();
+	}
+
+	void Add(Layer& layer) {
+		
+		//allLayers.push_back(layerConverted);
+	}
+
+	void _AddInputDataPoint(std::vector<std::vector<double>>& dataPoint) {
+		inputData.push_back(dataPoint);
+	}
+
+	int AddInputDataPoint(int len1_, int len2_, double* vec_) {
+		std::vector< std::vector<double> > v(len1_);
+		for (int i = 0; i < len1_; ++i) {
+			v[i].insert(v[i].end(), vec_ + i * len2_, vec_ + (i + 1) * len2_);
+		}
+		_AddInputDataPoint(v);
+
+		return 1;
+	}
+
+	void Train() {
+
+		int numBatches = numEpochs * std::min(inputData.size(), targets.size()) / batchSize;
+
+		for (int batch_k = 0; batch_k < numBatches; ++batch_k) {
+			for (int i = batch_k * batchSize; i < (batch_k - 1) * batchSize; ++i) {
+				FwdProp(&inputData[i]);
+				auto error = CalcError(targets[i]);
+				BackProp(error);
+			}
+			UpdateWeights();
 		}
 	}
 
 	const std::vector<int> Predict(const std::vector<std::vector<std::vector<double>>>& inputData) {
 		for (auto& input_i : inputData) {
 			FwdProp(&input_i);
-			auto& lastLayer = allLayers[allLayers.size() - 1];
-			const std::vector<std::vector<double>>& output = *(lastLayer.GetOutput());
+			//auto& lastLayer = allLayers[allLayers.size() - 1];
+			auto& lastLayer = allLayers[2];
+			const std::vector<std::vector<double>>& output = *(lastLayer->GetOutput());
 
 			double maxProb = -1;
 			int maxI = -1;
@@ -66,33 +143,8 @@ class SequentialModel
 			}
 			return { maxI, maxJ };
 		}
+		return {};
 	}
-
-public:
-	SequentialModel(std::vector<Layer*> layerList) {
-		//convert from pyobject* to list
-		//allLayers = layerListConverted
-	}
-
-	void Add(Layer& layer) {
-		
-		//allLayers.push_back(layerConverted);
-	}
-
-	void Train(const std::vector<std::vector<std::vector<double>>>& inputData, const std::vector<std::vector<std::vector<double>>>& targets, int batchSize, int numEpochs) {
-
-		int numBatches = numEpochs * std::min(inputData.size(), targets.size()) / batchSize;
-
-		for (int batch_k = 0; batch_k < numBatches; ++batch_k) {
-			for (int i = batch_k * batchSize; i < (batch_k - 1) * batchSize; ++i) {
-				FwdProp(&inputData[i]);
-				auto error = CalcError(targets[i]);
-				BackProp(error);
-			}
-			UpdateWeights();
-		}
-	}
-
 
 	/*std::vector<std::vector<char>> ConvertNumpyToVector2DByte(np::ndarray const & ndArry) {
 		int numRows = ndArry.shape(0);
