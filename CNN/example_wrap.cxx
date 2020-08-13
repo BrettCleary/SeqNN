@@ -17081,39 +17081,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_SequentialModel__AddInputDataPoint(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  SequentialModel *arg1 = (SequentialModel *) 0 ;
-  std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > > *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:SequentialModel__AddInputDataPoint",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_SequentialModel, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SequentialModel__AddInputDataPoint" "', argument " "1"" of type '" "SequentialModel *""'"); 
-  }
-  arg1 = reinterpret_cast< SequentialModel * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_std__vectorT_double_std__allocatorT_double_t_t_std__allocatorT_std__vectorT_double_std__allocatorT_double_t_t_t_t,  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SequentialModel__AddInputDataPoint" "', argument " "2"" of type '" "std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > > &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SequentialModel__AddInputDataPoint" "', argument " "2"" of type '" "std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > > &""'"); 
-  }
-  arg2 = reinterpret_cast< std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > > * >(argp2);
-  (arg1)->_AddInputDataPoint(*arg2);
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_SequentialModel_AddInputDataPoint(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SequentialModel *arg1 = (SequentialModel *) 0 ;
@@ -17167,6 +17134,225 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_SequentialModel_AddInputDataPoints(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SequentialModel *arg1 = (SequentialModel *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  int arg4 ;
+  double *arg5 = (double *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyArrayObject *array2 = NULL ;
+  int is_new_object2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:SequentialModel_AddInputDataPoints",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_SequentialModel, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SequentialModel_AddInputDataPoints" "', argument " "1"" of type '" "SequentialModel *""'"); 
+  }
+  arg1 = reinterpret_cast< SequentialModel * >(argp1);
+  {
+    npy_intp size[3] = {
+      -1, -1, -1 
+    };
+    array2 = obj_to_array_contiguous_allow_conversion(obj1, NPY_DOUBLE,
+      &is_new_object2);
+    if (!array2 || !require_dimensions(array2, 3) ||
+      !require_size(array2, size, 3)) SWIG_fail;
+    arg2 = (int) array_size(array2,0);
+    arg3 = (int) array_size(array2,1);
+    arg4 = (int) array_size(array2,2);
+    arg5 = (double*) array_data(array2);
+  }
+  result = (int)(arg1)->AddInputDataPoints(arg2,arg3,arg4,arg5);
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  {
+    if (is_new_object2 && array2)
+    {
+      Py_DECREF(array2); 
+    }
+  }
+  return resultobj;
+fail:
+  {
+    if (is_new_object2 && array2)
+    {
+      Py_DECREF(array2); 
+    }
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SequentialModel_AddTargetVector(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SequentialModel *arg1 = (SequentialModel *) 0 ;
+  int arg2 ;
+  double *arg3 = (double *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyArrayObject *array2 = NULL ;
+  int is_new_object2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:SequentialModel_AddTargetVector",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_SequentialModel, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SequentialModel_AddTargetVector" "', argument " "1"" of type '" "SequentialModel *""'"); 
+  }
+  arg1 = reinterpret_cast< SequentialModel * >(argp1);
+  {
+    npy_intp size[1] = {
+      -1
+    };
+    array2 = obj_to_array_contiguous_allow_conversion(obj1,
+      NPY_DOUBLE,
+      &is_new_object2);
+    if (!array2 || !require_dimensions(array2, 1) ||
+      !require_size(array2, size, 1)) SWIG_fail;
+    arg2 = (int) array_size(array2,0);
+    arg3 = (double*) array_data(array2);
+  }
+  result = (int)(arg1)->AddTargetVector(arg2,arg3);
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  {
+    if (is_new_object2 && array2)
+    {
+      Py_DECREF(array2); 
+    }
+  }
+  return resultobj;
+fail:
+  {
+    if (is_new_object2 && array2)
+    {
+      Py_DECREF(array2); 
+    }
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SequentialModel_AddTargetVectors(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SequentialModel *arg1 = (SequentialModel *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  int arg4 ;
+  double *arg5 = (double *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyArrayObject *array2 = NULL ;
+  int is_new_object2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:SequentialModel_AddTargetVectors",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_SequentialModel, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SequentialModel_AddTargetVectors" "', argument " "1"" of type '" "SequentialModel *""'"); 
+  }
+  arg1 = reinterpret_cast< SequentialModel * >(argp1);
+  {
+    npy_intp size[3] = {
+      -1, -1, -1 
+    };
+    array2 = obj_to_array_contiguous_allow_conversion(obj1, NPY_DOUBLE,
+      &is_new_object2);
+    if (!array2 || !require_dimensions(array2, 3) ||
+      !require_size(array2, size, 3)) SWIG_fail;
+    arg2 = (int) array_size(array2,0);
+    arg3 = (int) array_size(array2,1);
+    arg4 = (int) array_size(array2,2);
+    arg5 = (double*) array_data(array2);
+  }
+  result = (int)(arg1)->AddTargetVectors(arg2,arg3,arg4,arg5);
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  {
+    if (is_new_object2 && array2)
+    {
+      Py_DECREF(array2); 
+    }
+  }
+  return resultobj;
+fail:
+  {
+    if (is_new_object2 && array2)
+    {
+      Py_DECREF(array2); 
+    }
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SequentialModel_SetBatchSize(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SequentialModel *arg1 = (SequentialModel *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:SequentialModel_SetBatchSize",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_SequentialModel, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SequentialModel_SetBatchSize" "', argument " "1"" of type '" "SequentialModel *""'"); 
+  }
+  arg1 = reinterpret_cast< SequentialModel * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SequentialModel_SetBatchSize" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  (arg1)->SetBatchSize(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SequentialModel_SetNumEpochs(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SequentialModel *arg1 = (SequentialModel *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:SequentialModel_SetNumEpochs",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_SequentialModel, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SequentialModel_SetNumEpochs" "', argument " "1"" of type '" "SequentialModel *""'"); 
+  }
+  arg1 = reinterpret_cast< SequentialModel * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SequentialModel_SetNumEpochs" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  (arg1)->SetNumEpochs(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_SequentialModel_Train(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SequentialModel *arg1 = (SequentialModel *) 0 ;
@@ -17191,10 +17377,14 @@ fail:
 SWIGINTERN PyObject *_wrap_SequentialModel_Predict(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SequentialModel *arg1 = (SequentialModel *) 0 ;
-  std::vector< std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > >,std::allocator< std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > > > > *arg2 = 0 ;
+  int arg2 ;
+  int arg3 ;
+  int arg4 ;
+  double *arg5 = (double *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  int res2 = SWIG_OLDOBJ ;
+  PyArrayObject *array2 = NULL ;
+  int is_new_object2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   std::vector< int,std::allocator< int > > result;
@@ -17206,22 +17396,34 @@ SWIGINTERN PyObject *_wrap_SequentialModel_Predict(PyObject *SWIGUNUSEDPARM(self
   }
   arg1 = reinterpret_cast< SequentialModel * >(argp1);
   {
-    std::vector< std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > >,std::allocator< std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > > > > *ptr = (std::vector< std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > >,std::allocator< std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > > > > *)0;
-    res2 = swig::asptr(obj1, &ptr);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SequentialModel_Predict" "', argument " "2"" of type '" "std::vector< std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > >,std::allocator< std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > > > > const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SequentialModel_Predict" "', argument " "2"" of type '" "std::vector< std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > >,std::allocator< std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > > > > const &""'"); 
-    }
-    arg2 = ptr;
+    npy_intp size[3] = {
+      -1, -1, -1 
+    };
+    array2 = obj_to_array_contiguous_allow_conversion(obj1, NPY_DOUBLE,
+      &is_new_object2);
+    if (!array2 || !require_dimensions(array2, 3) ||
+      !require_size(array2, size, 3)) SWIG_fail;
+    arg2 = (int) array_size(array2,0);
+    arg3 = (int) array_size(array2,1);
+    arg4 = (int) array_size(array2,2);
+    arg5 = (double*) array_data(array2);
   }
-  result = (arg1)->Predict((std::vector< std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > >,std::allocator< std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > > > > const &)*arg2);
+  result = (arg1)->Predict(arg2,arg3,arg4,arg5);
   resultobj = swig::from(static_cast< std::vector< int,std::allocator< int > > >(result));
-  if (SWIG_IsNewObj(res2)) delete arg2;
+  {
+    if (is_new_object2 && array2)
+    {
+      Py_DECREF(array2); 
+    }
+  }
   return resultobj;
 fail:
-  if (SWIG_IsNewObj(res2)) delete arg2;
+  {
+    if (is_new_object2 && array2)
+    {
+      Py_DECREF(array2); 
+    }
+  }
   return NULL;
 }
 
@@ -17866,8 +18068,12 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Layer_swigregister", Layer_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_SequentialModel", _wrap_new_SequentialModel, METH_VARARGS, NULL},
 	 { (char *)"SequentialModel_Add", _wrap_SequentialModel_Add, METH_VARARGS, NULL},
-	 { (char *)"SequentialModel__AddInputDataPoint", _wrap_SequentialModel__AddInputDataPoint, METH_VARARGS, NULL},
 	 { (char *)"SequentialModel_AddInputDataPoint", _wrap_SequentialModel_AddInputDataPoint, METH_VARARGS, NULL},
+	 { (char *)"SequentialModel_AddInputDataPoints", _wrap_SequentialModel_AddInputDataPoints, METH_VARARGS, NULL},
+	 { (char *)"SequentialModel_AddTargetVector", _wrap_SequentialModel_AddTargetVector, METH_VARARGS, NULL},
+	 { (char *)"SequentialModel_AddTargetVectors", _wrap_SequentialModel_AddTargetVectors, METH_VARARGS, NULL},
+	 { (char *)"SequentialModel_SetBatchSize", _wrap_SequentialModel_SetBatchSize, METH_VARARGS, NULL},
+	 { (char *)"SequentialModel_SetNumEpochs", _wrap_SequentialModel_SetNumEpochs, METH_VARARGS, NULL},
 	 { (char *)"SequentialModel_Train", _wrap_SequentialModel_Train, METH_VARARGS, NULL},
 	 { (char *)"SequentialModel_Predict", _wrap_SequentialModel_Predict, METH_VARARGS, NULL},
 	 { (char *)"delete_SequentialModel", _wrap_delete_SequentialModel, METH_VARARGS, NULL},

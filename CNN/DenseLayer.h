@@ -7,12 +7,6 @@
 class DenseLayer :
     public Layer
 {
-    //first 2 dim are current layer output [row][col], next 2 are input [row][col] 
-    std::vector<std::vector<std::vector<std::vector<double>>>> weights;
-    std::vector<std::vector<std::vector<std::vector<double>>>> weightDer;
-    //first [row][col] is for current layer indices to access bias
-    std::vector<std::vector<double>> bias;
-    std::vector<std::vector<double>> biasDer;
     //current layer [row][col]
     std::vector<std::vector<double>> error;
 
@@ -43,13 +37,13 @@ public:
                 weights.push_back(row_pool);
             }
 
-            //init weight derivatives to 0
+            //init weight derivatives to 1. if 0, then weights will be stuck at 0
             for (int i = 0; i < numOutputRows; ++i) {
                 std::vector<std::vector<std::vector<double>>> row_pool;
                 for (int j = 0; j < numOutputCols; ++j) {
                     std::vector<std::vector<double>> col_pool;
                     for (int k = 0; k < numInputRows; ++k) {
-                        std::vector<double> row_i(numInputCols, 0);
+                        std::vector<double> row_i(numInputCols, 1);
                         col_pool.push_back(row_i);
                     }
                     row_pool.push_back(col_pool);
@@ -71,10 +65,16 @@ public:
                 bias.push_back(bias_i);
                 std::vector<double> biasDer_i(numOutputCols, 0);
                 biasDer.push_back(biasDer_i);
+                std::vector<double> error_i(numOutputCols, 0);
+                error.push_back(biasDer_i);
             }
 
             initialized = true;
         }
+
+        //std::cout << "finished initializing denselayer" << std::endl;
+
+        //std::cout << " numInputRows: " << numInputRows << " numInputCols: " << numInputCols << " numOutputRows: " << numOutputRows << " numOutputCols: " << numOutputCols << std::endl;
 
         for (int i = 0; i < numOutputRows; ++i) {
             for (int j = 0; j < numOutputCols; ++j) {
@@ -93,13 +93,20 @@ public:
     }
 
     virtual const std::vector<std::vector<double>>* BackProp(const std::vector<std::vector<double>>& backPropErrorSum) override {
-
+        /*std::cout << "backprop dense layer" << std::endl;
+        for (auto vec : backPropErrorSum) {
+            for (auto element : vec) {
+                std::cout << element << std::endl;
+            }
+        }*/
         //calculate errors
         for (int i = 0; i < numOutputRows; ++i) {
             for (int j = 0; j < numOutputCols; ++j) {
                 error[i][j] = output[i][j] * (1 - output[i][j]) * backPropErrorSum[i][j];
+                //std::cout << "error for i: " << i << " j: " << j << " is " << error[i][j] << " backproperrorsum: " << backPropErrorSum[i][j] << " output: " << output[i][j] << std::endl;
             }
         }
+        //std::cout << "calculated errors for backprop" << std::endl;
 
         //calculate weight derivatives
         for (int i = 0; i < numOutputRows; ++i) {
@@ -107,11 +114,13 @@ public:
                 for (int m = 0; m < numInputRows; ++m) {
                     for (int n = 0; n < numInputCols; ++n) {
                         weightDer[i][j][m][n] += error[i][j] * weights[i][j][m][n];
+                        //std::cout << "error for i: " << i << " j: " << j << " is " << error[i][j] << " weights: " << weights[i][j][m][n] << " weightDer: " << weightDer[i][j][m][n] << std::endl;
                     }
                 }
                 biasDer[i][j] = error[i][j];
             }
         }
+        //std::cout << "calculated weight derivatives for backprop" << std::endl;
 
         //calculate backPropErrorSum for the input layer
         for (int m = 0; m < numInputRows; ++m) {
@@ -125,6 +134,7 @@ public:
                 backPropError[m][n] = errorSum;
             }
         }
+       // std::cout << "calculated backproperrorsum for backprop" << std::endl;
 
         ++numPropsSinceLastUpdate;
 

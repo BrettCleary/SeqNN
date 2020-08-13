@@ -34,7 +34,16 @@ import_array();
 %}
 
 
+
+//NUMPY Interface Function Signatures
 %apply (int DIM1, int DIM2, double* IN_ARRAY2) {(int len1_, int len2_, double* vec_)}
+%apply (int DIM1, double* IN_ARRAY1) {(int len1_, double* vec_)}
+%apply ( int DIM1, int DIM2, int DIM3, double* IN_ARRAY3 ) {(int len1_, int len2_, int len3_, double* vec_)}
+
+
+
+
+
 /*
 %rename (_AddInputDataPoint) AddInputDataPoint;
 %inline %{

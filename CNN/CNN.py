@@ -862,17 +862,29 @@ class SequentialModel(_object):
     def Add(self, layer):
         return _CNN.SequentialModel_Add(self, layer)
 
-    def _AddInputDataPoint(self, dataPoint):
-        return _CNN.SequentialModel__AddInputDataPoint(self, dataPoint)
-
     def AddInputDataPoint(self, len1_):
         return _CNN.SequentialModel_AddInputDataPoint(self, len1_)
+
+    def AddInputDataPoints(self, len1_):
+        return _CNN.SequentialModel_AddInputDataPoints(self, len1_)
+
+    def AddTargetVector(self, len1_):
+        return _CNN.SequentialModel_AddTargetVector(self, len1_)
+
+    def AddTargetVectors(self, len1_):
+        return _CNN.SequentialModel_AddTargetVectors(self, len1_)
+
+    def SetBatchSize(self, sz):
+        return _CNN.SequentialModel_SetBatchSize(self, sz)
+
+    def SetNumEpochs(self, num):
+        return _CNN.SequentialModel_SetNumEpochs(self, num)
 
     def Train(self):
         return _CNN.SequentialModel_Train(self)
 
-    def Predict(self, inputData):
-        return _CNN.SequentialModel_Predict(self, inputData)
+    def Predict(self, len1_):
+        return _CNN.SequentialModel_Predict(self, len1_)
     __swig_destroy__ = _CNN.delete_SequentialModel
     __del__ = lambda self: None
 SequentialModel_swigregister = _CNN.SequentialModel_swigregister

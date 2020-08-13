@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
 
 class Layer
 {
@@ -27,6 +28,8 @@ protected:
 	std::vector<std::vector<double>> bias;
 	std::vector<std::vector<double>> biasDer;
 
+	bool usingWeights = true;
+
 
 	std::vector<std::vector<double>> output;
 
@@ -37,20 +40,29 @@ protected:
 public:
 
 	void UpdateWeights(double step) {
+		//std::cout << "updating weights in Layer Class" << std::endl;
+		if (!usingWeights)
+			return;
+
 		if (weights.empty() || weightDer.empty() || bias.empty() || biasDer.empty()) {
+			std::cout << "weights, weightDer, bias, or biasDer was empty, so weights were not updated" << std::endl;
+			std::cout << "weights.empty() = " << weights.empty() << " weightDer.empty() = " << weightDer.empty() << " bias.empty() = " << bias.empty() << " biasDer.empty() " << biasDer.empty() << std::endl;
 			return;
 		}
+		
 
 		for (int i = 0; i < numOutputRows; ++i) {
 			for (int j = 0; j < numOutputCols; ++j) {
 				for (int m = 0; m < numInputRows; ++m) {
 					for (int n = 0; n < numInputCols; ++n) {
 						weights[i][j][m][n] += - step * weightDer[i][j][m][n];
+						std::cout << "i j m n: " << i << j << m << n << " step: " << step << " weightDer[i][j][m][n] = " << weightDer[i][j][m][n] << " weights[i][j][m][n] = " << weights[i][j][m][n] << std::endl;
 					}
 				}
 				bias[i][j] += - step * biasDer[i][j];
 			}
 		}
+		//std::cout << "finished updating weights in Layer Class" << std::endl;
 	}
 
 	const std::vector<std::vector<double>>* GetOutput() {

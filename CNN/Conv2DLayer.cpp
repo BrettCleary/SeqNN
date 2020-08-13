@@ -3,11 +3,11 @@
 
 std::vector<std::vector<double>>* Conv2DLayer::FwdProp(const std::vector<std::vector<double>>& input) {
     if (!initialized) {
-        numInputRows = input.size();
-        numInputCols = input[0].size();
+        numInputRows = windowRows;
+        numInputCols = windowCols;
 
-        numOutputCols = (numInputCols - windowCols) / (strideCol + 1);
-        numOutputRows = (numInputRows - windowRows) / (strideRow + 1);
+        numOutputCols = (input[0].size() - windowCols) / strideCol + 1;
+        numOutputRows = (input.size() - windowRows) / strideRow + 1;
 
         //init weights and weight derivatives to 0
         for (int i = 0; i < numOutputRows; ++i) {
@@ -19,7 +19,7 @@ std::vector<std::vector<double>>* Conv2DLayer::FwdProp(const std::vector<std::ve
                 for (int k = 0; k < windowRows; ++k) {
                     std::vector<double> row_i(windowCols, 0);
                     col_pool.push_back(row_i);
-                    std::vector<double> row_iDer(windowCols, 0);
+                    std::vector<double> row_iDer(windowCols, 1);
                     col_poolDer.push_back(row_iDer);
                 }
                 row_pool.push_back(col_pool);
@@ -37,6 +37,8 @@ std::vector<std::vector<double>>* Conv2DLayer::FwdProp(const std::vector<std::ve
             bias.push_back(bias_i);
             std::vector<double> biasDer_i(numOutputCols, 0);
             biasDer.push_back(biasDer_i);
+            std::vector<double> error_i(numOutputCols, 0);
+            error.push_back(biasDer_i);
         }
 
         //init backPropError to 0
@@ -48,19 +50,24 @@ std::vector<std::vector<double>>* Conv2DLayer::FwdProp(const std::vector<std::ve
         initialized = true;
     }
 
+    //std::cout << "finished initializing conv2dlayer" << std::endl;
+
+    //std::cout << " numInputRows: " << numInputRows << " numInputCols: " << numInputCols << " numOutputRows: " << numOutputRows << " numOutputCols: " << numOutputCols << std::endl;
+
+
     for (int i = 0; i < numOutputRows; ++i) {
         for (int j = 0; j < numOutputCols; ++j) {
             double activation = 0;
             for (int m = 0; m < windowRows; ++m) {
                 for (int n = 0; n < windowCols; ++n) {
-                    activation += input[numOutputRows * windowRows + m][numOutputCols * windowCols + n] * weights[i][j][m][n];
+                    activation += input[i * windowRows + m][j * windowCols + n] * weights[i][j][m][n];
                 }
             }
             activation += bias[i][j];
             output[i][j] = LogSig(activation);
         }
     }
-
+    //std::cout << "leaving conv2dlayer" << std::endl;
     return &output;
 }
 
@@ -72,6 +79,7 @@ const std::vector<std::vector<double>>* Conv2DLayer::BackProp(const std::vector<
             error[i][j] = output[i][j] * (1 - output[i][j]) * backPropErrorSum[i][j];
         }
     }
+    //std::cout << "calculated errors for backprop" << std::endl;
 
     //calculate weight derivatives
     for (int i = 0; i < numOutputRows; ++i) {
@@ -79,11 +87,13 @@ const std::vector<std::vector<double>>* Conv2DLayer::BackProp(const std::vector<
             for (int m = 0; m < numInputRows; ++m) {
                 for (int n = 0; n < numInputCols; ++n) {
                     weightDer[i][j][m][n] += error[i][j] * weights[i][j][m][n];
+                    //std::cout << weightDer[i][j][m][n] << std::endl;
                 }
             }
             biasDer[i][j] = error[i][j];
         }
     }
+    //std::cout << "calculated weight derivatives for backprop" << std::endl;
 
     //calculate backPropErrorSum for the input layer
     for (int m = 0; m < numInputRows; ++m) {
@@ -97,6 +107,7 @@ const std::vector<std::vector<double>>* Conv2DLayer::BackProp(const std::vector<
             backPropError[m][n] = errorSum;
         }
     }
+   // std::cout << "calculated backproperrorsum for backprop" << std::endl;
 
     ++numPropsSinceLastUpdate;
 

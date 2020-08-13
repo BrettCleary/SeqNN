@@ -5,6 +5,7 @@
 #include "DenseLayer.h"
 #include "Pool2DLayer.h"
 #include <vector>
+#include <iostream>
 //#include <numpy/ndarraytypes.h>
 //#include <boost/python/numpy.hpp>
 
@@ -16,12 +17,13 @@ class SequentialModel
 	//PyObject_HEAD
 	//std::vector<Layer*> allLayers;
 	Layer* allLayers[3];
-	double weightStepSize = 0.025;
+	double weightStepSize = .025;
 
 	std::vector<std::vector<std::vector<double>>> inputData;
+	//[dataPoint][row][col]
 	std::vector<std::vector<std::vector<double>>> targets;
-	int batchSize;
-	int numEpochs;
+	int batchSize = 1;
+	int numEpochs = 1;
 
 
 
@@ -30,10 +32,12 @@ class SequentialModel
 		/*for (Layer* layer_i : allLayers) {
 			input = layer_i->FwdProp(*input);
 		}*/
-
+		//std::cout << std::endl;
 		for (int i = 0; i < 3; ++i) {
 			input = allLayers[i]->FwdProp(*input);
+			//std::cout << "fwdprop layer i: " << i << " completed." << std::endl;
 		}
+		//std::cout << std::endl;
 	}
 
 	void BackProp(const std::vector<std::vector<double>>& error) {
@@ -41,10 +45,12 @@ class SequentialModel
 		/*for (int i = allLayers.size() - 1; i >= 0; --i) {
 			errorPtr = allLayers[i]->BackProp(*errorPtr);
 		}*/
-
+		//std::cout << std::endl;
 		for (int i = 2; i >= 0; --i) {
 			errorPtr = allLayers[i]->BackProp(*errorPtr);
+			//std::cout << " backprop layer i: " << i << " completed." << std::endl;
 		}
+		//std::cout << std::endl;
 	}
 
 	std::vector<std::vector<double>> CalcError(const std::vector<std::vector<double>>& target) {
@@ -56,6 +62,7 @@ class SequentialModel
 		for (int i = 0; i < target.size(); ++i) {
 			for (int j = 0; j < target[0].size(); ++j) {
 				dError_dAct[i][j] = (output[i][j] - target[i][j]) / (output[i][j] * (1 - output[i][j]));
+				//std::cout << dError_dAct[i][j] << std::endl;
 			}
 		}
 		return move(dError_dAct);
@@ -68,7 +75,63 @@ class SequentialModel
 
 		for (int i = 0; i < 3; ++i) {
 			allLayers[i]->UpdateWeights(weightStepSize);
+			//std::cout << "Updated Weights for i = " << i << std::endl;
 		}
+	}
+
+	void _AddInputDataPoint(std::vector<std::vector<double>>& dataPoint) {
+		inputData.push_back(dataPoint);
+	}
+
+	const std::vector<int> _Predict(const std::vector<std::vector<std::vector<double>>>& inputData) {
+		std::vector<int> maxOutputs;
+		for (auto& input_i : inputData) {
+			FwdProp(&input_i);
+			//std::cout << "fwdprop completed" << std::endl;
+			//auto& lastLayer = allLayers[allLayers.size() - 1];
+			auto& lastLayer = allLayers[2];
+			const std::vector<std::vector<double>>& output = *(lastLayer->GetOutput());
+
+			double maxProb = -1;
+			int maxI = -1;
+			int maxJ = -1;
+			for (int i = 0; i < output.size(); ++i) {
+				for (int j = 0; j < output[0].size(); ++j) {
+					if (output[i][j] > maxProb) {
+						maxProb = output[i][j];
+						maxI = i;
+						maxJ = j;
+					}
+				}
+			}
+			maxOutputs.push_back(maxJ);
+		}
+		return maxOutputs;
+	}
+
+	std::vector<std::vector<std::vector<double>>> ConvertNpToVector(int len1_, int len2_, int len3_, double* vec_) {
+		std::vector<std::vector<std::vector<double>>> v(len3_);
+		bool display = false;
+		for (int k = 0; k < len3_; ++k) {
+			if (k == 0)
+				display = false;
+			else
+				display = false;
+			std::vector<std::vector<double>> arry(len1_);
+			v[k] = std::move(arry);
+			for (int i = 0; i < len1_; ++i) {
+				//std::cout << "len1_: " << len1_ << " len2_: " << len2_ << " len3_: " << len3_ << std::endl;
+				if (display) {
+					//std::cout << "i: " << i << std::endl;
+					for (int j = 0; j < len2_; ++j) {
+						//std::cout << " j: " << j << " val: " << *(vec_ + k * len1_ * len2_ + i * len2_ + j) << " ";
+					}
+				}
+
+				v[k][i].insert(v[k][i].end(), vec_ + k * len1_ * len2_ + i * len2_, vec_ + k * len1_ * len2_ + (i + 1) * len2_);
+			}
+		}
+		return std::move(v);
 	}
 
 public:
@@ -94,9 +157,7 @@ public:
 		//allLayers.push_back(layerConverted);
 	}
 
-	void _AddInputDataPoint(std::vector<std::vector<double>>& dataPoint) {
-		inputData.push_back(dataPoint);
-	}
+	
 
 	int AddInputDataPoint(int len1_, int len2_, double* vec_) {
 		std::vector< std::vector<double> > v(len1_);
@@ -108,43 +169,67 @@ public:
 		return 1;
 	}
 
+	int AddInputDataPoints(int len1_, int len2_, int len3_, double* vec_) {
+		//return 3;
+		inputData = ConvertNpToVector(len1_, len2_, len3_, vec_);
+		return 1;
+	}
+
+	int AddTargetVector(int len1_, double* vec_) {
+		std::vector<double> v(len1_);
+		for (int i = 0; i < len1_; ++i) {
+			v.insert(v.end(), vec_, vec_ + len1_);
+		}
+		std::vector<std::vector<double>> v2D{ v };
+		targets.push_back(v2D);
+
+		return 2;
+	}
+
+	int AddTargetVectors(int len1_, int len2_, int len3_, double* vec_) {
+		//return 4;
+		targets = ConvertNpToVector(len1_, len2_, len3_, vec_);
+		return 1;
+	}
+
+	void SetBatchSize(int sz) {
+		batchSize = sz;
+	}
+
+	void SetNumEpochs(int num) {
+		numEpochs = num;
+	}
+
 	void Train() {
-
+		//std::cout << "\n entering train" << std::endl;
+		//std::cout << "batches: " << batchSize << std::endl;
 		int numBatches = numEpochs * std::min(inputData.size(), targets.size()) / batchSize;
-
+		int n = 0;
 		for (int batch_k = 0; batch_k < numBatches; ++batch_k) {
-			for (int i = batch_k * batchSize; i < (batch_k - 1) * batchSize; ++i) {
-				FwdProp(&inputData[i]);
-				auto error = CalcError(targets[i]);
+			for (int i = 0; i < batchSize; ++i) {
+				FwdProp(&inputData[n]);
+				//std::cout << "finished fwdprop for batch: " << batch_k << " and data element i: " << i << std::endl;
+				auto error = CalcError(targets[n]);
+				//std::cout << "finished error for batch: " << batch_k << " and data element i: " << i << std::endl;
 				BackProp(error);
+				//std::cout << "finished backprop for batch: " << batch_k << " and data element i: " << i << std::endl;
+				++n;
+				n = (n + 1) % inputData.size();
 			}
+			//std::cout << "updating weights: " << std::endl;
 			UpdateWeights();
+			//std::cout << "done updating weights: " << std::endl;
 		}
+		//std::cout << "leaving train" << std::endl;
 	}
 
-	const std::vector<int> Predict(const std::vector<std::vector<std::vector<double>>>& inputData) {
-		for (auto& input_i : inputData) {
-			FwdProp(&input_i);
-			//auto& lastLayer = allLayers[allLayers.size() - 1];
-			auto& lastLayer = allLayers[2];
-			const std::vector<std::vector<double>>& output = *(lastLayer->GetOutput());
-
-			double maxProb = -1;
-			int maxI = -1;
-			int maxJ = -1;
-			for (int i = 0; i < output.size(); ++i) {
-				for (int j = 0; j < output[0].size(); ++j) {
-					if (output[i][j] > maxProb) {
-						maxProb = output[i][j];
-						maxI = i;
-						maxJ = j;
-					}
-				}
-			}
-			return { maxI, maxJ };
-		}
-		return {};
+	std::vector<int> Predict(int len1_, int len2_, int len3_, double* vec_) {
+		auto v = ConvertNpToVector(len1_, len2_, len3_, vec_);
+		//std::cout << "converted" << std::endl;
+		return _Predict(v);
 	}
+
+	
 
 	/*std::vector<std::vector<char>> ConvertNumpyToVector2DByte(np::ndarray const & ndArry) {
 		int numRows = ndArry.shape(0);

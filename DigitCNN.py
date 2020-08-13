@@ -8,59 +8,6 @@ import CNNSlow
 import cProfile
 import re
 import CNN
-#import example
-
-import sys
-print(sys.executable)
-
-# ----- Object creation -----
-
-print( "Creating some objects:")
-c = CNN.Circle(10)
-print ("    Created circle", c)
-s = CNN.Square(10)
-print ("    Created square", s)
-
-# ----- Access a static member -----
-
-print ("\nA total of", CNN.cvar.Shape_nshapes, "shapes were created")
-
-# ----- Member data access -----
-
-# Set the location of the object
-
-c.x = 20
-c.y = 30
-
-s.x = -10
-s.y = 5
-
-print ("\nHere is their current position:")
-print ("    Circle = (%f, %f)" % (c.x, c.y))
-print ("    Square = (%f, %f)" % (s.x, s.y))
-
-# ----- Call some methods -----
-
-print ("\nHere are some properties of the shapes:")
-for o in [c, s]:
-    print ("   ", o)
-    print ("        area      = ", o.area())
-    print ("        perimeter = ", o.perimeter())
-# prevent o from holding a reference to the last object looked at
-o = None
-
-print ("\nGuess I'll clean up now")
-
-# Note: this invokes the virtual destructor
-del c
-del s
-
-print (CNN.cvar.Shape_nshapes, "shapes remain")
-print ("Goodbye")
-
-model = CNN.SequentialModel()
-
-
 
 
 #def cnnTest():
@@ -76,66 +23,97 @@ step = 0.01
 
 #model = CNNSlow.Cnn(imgWidth, imgHeight, strideHor, strideVert, fieldWidth, fieldHeight, poolWidth, poolHeight, step)
 
-def createNpImgArray(csvFileName, isTrain, allImagesArray, targetArrayNp):
+def createNpImgArray(csvFileName, isTrain):
     dfTrainRaw = pd.read_csv(csvFileName)
 
     dfTrain = dfTrainRaw
-    dfTarget = dfTrainRaw.iloc[:, 0]
-
     if isTrain:
         dfTrain = dfTrainRaw.iloc[:, 1:]
 
-
+    imagesArray = np.zeros((imgHeight, imgWidth))
     for rowIndex, row in dfTrain.iterrows():
-        numpyArray = np.zeros((imgWidth, imgHeight))
+        numpyArray = np.zeros((imgHeight, imgWidth))
         for colIndex in range(len(dfTrain.columns)):
             #read pixels into 2d numpy array
             npRow = math.floor(colIndex / imgWidth)
             npCol = colIndex % imgWidth
             temp = dfTrain.iloc[rowIndex, colIndex]
             numpyArray[npRow, npCol] = temp
-        allImagesArray.append(numpyArray)
-        if isTrain:
-            targetArray = np.zeros(10)
-            targetArray[dfTarget.iloc[rowIndex]] = 1
-            targetArrayNp.append(targetArray)
-    return
+        imagesArray = np.dstack((imagesArray, numpyArray))
+    return imagesArray[:,:,1:]
+
+def createNpImgTargetArray(csvFileName):
+    dfTrainRaw = pd.read_csv(csvFileName)
+
+    dfTarget = dfTrainRaw.iloc[:, 0]
+
+    targetArrayNp = np.zeros((1, 10))
+    for rowIndex, row in dfTarget.iteritems():
+        targetArray = np.zeros((1, 10))
+        targetArray[0, dfTarget.iloc[rowIndex]] = 1
+        targetArrayNp = np.dstack((targetArrayNp, targetArray))
+    return targetArrayNp[:,:,1:]
 
 
-allImagesArrayTrain = [] #list of 2d numpy arrays representing pixel values
-targetArrayTrain = []
+#allImagesArrayTrain = [] #list of 2d numpy arrays representing pixel values
+#targetArrayTrain = []
 
 allImagesArrayTest = [] 
 dummyTarget = []
 
-createNpImgArray('Data\\trainScratch.csv', True, allImagesArrayTrain, targetArrayTrain)
-#createNpImgArray('Data\\test.csv', False, allImagesArrayTest, dummyTarget)
+allImagesArrayTrain = createNpImgArray('Data\\trainScratch.csv', True)
+targetArrayTrain = createNpImgTargetArray('Data\\trainScratch.csv')
 
-print(model.AddInputDataPoint(allImagesArrayTrain[0]))
+model = CNN.SequentialModel()
+
+#print(allImagesArrayTrain.shape)
+#print(allImagesArrayTrain.dtype)
+#print(targetArrayTrain.shape)
+model.AddInputDataPoints(allImagesArrayTrain)
+model.AddTargetVectors(targetArrayTrain)
+
+#print("made it here")
+batchSize = 1
+numEpochs = 9
+
+model.SetBatchSize(batchSize)
+model.SetNumEpochs(numEpochs)
+print("")
+print("set batch size and num epochs")
+
+model.Train()
+
+print("trained")
+
+print("")
+
+output = model.Predict(allImagesArrayTrain)
+print(output)
+print("printed")
 
 #cross validate
-n_foldsBoundaries = 6
-n_folds = n_foldsBoundaries - 1
-n_ImagesPerFold = math.floor(len(allImagesArrayTrain) / n_folds)
-for i in range(n_folds):
-    holdOutSet = allImagesArrayTrain[i * n_ImagesPerFold : (i + 1) * n_ImagesPerFold]
-    holdOutTargets = targetArrayTrain[i * n_ImagesPerFold : (i + 1) * n_ImagesPerFold]
-    #holdOutSet = allImagesArrayTrain
-    #holdOutTargets = targetArrayTrain
-    aTrainSet = []
-    aTargetTrain = []
-    bTrainSet = []
-    bTargetTrain = []
+#n_foldsBoundaries = 6
+#n_folds = n_foldsBoundaries - 1
+#n_ImagesPerFold = math.floor(len(allImagesArrayTrain) / n_folds)
+#for i in range(n_folds):
+#    holdOutSet = allImagesArrayTrain[i * n_ImagesPerFold : (i + 1) * n_ImagesPerFold]
+#    holdOutTargets = targetArrayTrain[i * n_ImagesPerFold : (i + 1) * n_ImagesPerFold]
+#    #holdOutSet = allImagesArrayTrain
+#    #holdOutTargets = targetArrayTrain
+#    aTrainSet = []
+#    aTargetTrain = []
+#    bTrainSet = []
+#    bTargetTrain = []
 
-    if i != 0:
-        aTrainSet = allImagesArrayTrain[: i * n_ImagesPerFold]
-        aTargetTrain = targetArrayTrain[: i * n_ImagesPerFold]
-    if i != range(n_folds - 1):
-        bTrainSet = allImagesArrayTrain[(i + 1) * n_ImagesPerFold :]
-        bTargetTrain = targetArrayTrain[(i + 1) * n_ImagesPerFold :]
-
-    trainingSet = aTrainSet + bTrainSet
-    trainingTargets = aTargetTrain + bTargetTrain
+    #if i != 0:
+    #    aTrainSet = allImagesArrayTrain[: i * n_ImagesPerFold]
+    #    aTargetTrain = targetArrayTrain[: i * n_ImagesPerFold]
+    #if i != range(n_folds - 1):
+    #    bTrainSet = allImagesArrayTrain[(i + 1) * n_ImagesPerFold :]
+    #    bTargetTrain = targetArrayTrain[(i + 1) * n_ImagesPerFold :]
+#
+ #   trainingSet = aTrainSet + bTrainSet
+ #   trainingTargets = aTargetTrain + bTargetTrain
     #trainingSet = allImagesArrayTrain
     #trainingTargets = targetArrayTrain
 
