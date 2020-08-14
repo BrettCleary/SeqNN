@@ -4,6 +4,9 @@
 #include <string>
 #include <vector>
 #include <iostream>
+//#include "SequentialModel.h"
+
+class SequentialModel;
 
 class Layer
 {
@@ -27,43 +30,59 @@ protected:
 	//first [row][col] is for current layer indices to access bias
 	std::vector<std::vector<double>> bias;
 	std::vector<std::vector<double>> biasDer;
+	//current layer [row][col]
+	std::vector<std::vector<double>> error;
+
+	//input layer [row][col
+	const std::vector<std::vector<double>>* inputValues;
+
+
+	//input layer[row][col]
+	std::vector<std::vector<double>> backPropError;
+
+
+	//for use in calculating numerical derivatives in O(W^2) time to verify backprop procedure which runs in O(W) time
+	std::vector<std::vector<std::vector<std::vector<double>>>> weightDerNumerical;
+	std::vector<std::vector<double>> biasDerNumerical;
+	double epsilon = 0.00001;
+	double errorLimitWeightDer = 0.01;
 
 	bool usingWeights = true;
-
 
 	std::vector<std::vector<double>> output;
 
 	double LogSig(double a) {
-		return 1 / (1 + exp(a));
+		return 1 / (1 + exp(-a));
 	}
 
 public:
 
-	void UpdateWeights(double step) {
-		//std::cout << "updating weights in Layer Class" << std::endl;
+	void ResetWeights() {
 		if (!usingWeights)
 			return;
 
-		if (weights.empty() || weightDer.empty() || bias.empty() || biasDer.empty()) {
-			std::cout << "weights, weightDer, bias, or biasDer was empty, so weights were not updated" << std::endl;
-			std::cout << "weights.empty() = " << weights.empty() << " weightDer.empty() = " << weightDer.empty() << " bias.empty() = " << bias.empty() << " biasDer.empty() " << biasDer.empty() << std::endl;
-			return;
-		}
-		
-
-		for (int i = 0; i < numOutputRows; ++i) {
-			for (int j = 0; j < numOutputCols; ++j) {
-				for (int m = 0; m < numInputRows; ++m) {
-					for (int n = 0; n < numInputCols; ++n) {
-						weights[i][j][m][n] += - step * weightDer[i][j][m][n];
-						std::cout << "i j m n: " << i << j << m << n << " step: " << step << " weightDer[i][j][m][n] = " << weightDer[i][j][m][n] << " weights[i][j][m][n] = " << weights[i][j][m][n] << std::endl;
+		for (int i = 0; i < weights.size(); ++i) {
+			for (int j = 0; j < weights[0].size(); ++j) {
+				for (int m = 0; m < weights[0][0].size(); ++m) {
+					for (int n = 0; n < weights[0][0][0].size(); ++n) {
+						weightDer[i][j][m][n] = 0;
+						weightDerNumerical[i][j][m][n] = 0;
 					}
 				}
-				bias[i][j] += - step * biasDer[i][j];
+				biasDer[i][j] = 0;
+				biasDerNumerical[i][j] = 0;
 			}
 		}
-		//std::cout << "finished updating weights in Layer Class" << std::endl;
 	}
+
+	/*void InitializeWeightArrays() {
+		if (!usingWeights)
+			return;
+	}*/
+
+	bool GradientCorrect(SequentialModel* model, int startIndex, int endIndex);
+
+	void UpdateWeights(double step);
 
 	const std::vector<std::vector<double>>* GetOutput() {
 		return &output;

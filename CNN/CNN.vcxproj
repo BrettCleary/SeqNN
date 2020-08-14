@@ -160,6 +160,7 @@
     <ClCompile Include="DenseLayer.cpp" />
     <ClCompile Include="example.cxx" />
     <ClCompile Include="example_wrap.cxx" />
+    <ClCompile Include="Layer.cpp" />
     <ClCompile Include="Pool2DLayer.cpp" />
     <ClCompile Include="SequentialModel.cpp" />
   </ItemGroup>

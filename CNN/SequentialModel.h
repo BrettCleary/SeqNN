@@ -6,6 +6,8 @@
 #include "Pool2DLayer.h"
 #include <vector>
 #include <iostream>
+#include <cmath>
+#include <exception>
 //#include <numpy/ndarraytypes.h>
 //#include <boost/python/numpy.hpp>
 
@@ -16,8 +18,9 @@ class SequentialModel
 {
 	//PyObject_HEAD
 	//std::vector<Layer*> allLayers;
-	Layer* allLayers[3];
-	double weightStepSize = .025;
+	static const int numLayers = 2;
+	Layer* allLayers[numLayers];
+	const double weightStepSize = .001;
 
 	std::vector<std::vector<std::vector<double>>> inputData;
 	//[dataPoint][row][col]
@@ -25,7 +28,26 @@ class SequentialModel
 	int batchSize = 1;
 	int numEpochs = 1;
 
+	//double* crossEntropyErrorSum;
 
+	//bool calcCrossEntropyError = false;
+
+	std::vector<std::vector<double>> errorPrev;
+	int printCounter = 0;
+
+
+	void PrintErrorChange(const std::vector<std::vector<double>>& error) {
+		if (errorPrev.empty())
+			return;
+		for (int i = 0; i < error.size(); ++i) {
+			std::cout << "dErrror: " << std::endl;
+			std::cout << " i: " << i << std::endl;;
+			for (int j = 0; j < error[0].size(); ++j) {
+				std::cout << " j: " << j << " dError = " << error[i][j] - errorPrev[i][j];
+			}
+		}
+		std::cout << std::endl;
+	}
 
 
 	void FwdProp(const std::vector<std::vector<double>>* input) {
@@ -33,7 +55,7 @@ class SequentialModel
 			input = layer_i->FwdProp(*input);
 		}*/
 		//std::cout << std::endl;
-		for (int i = 0; i < 3; ++i) {
+		for (int i = 0; i < numLayers; ++i) {
 			input = allLayers[i]->FwdProp(*input);
 			//std::cout << "fwdprop layer i: " << i << " completed." << std::endl;
 		}
@@ -41,12 +63,18 @@ class SequentialModel
 	}
 
 	void BackProp(const std::vector<std::vector<double>>& error) {
+		if (printCounter > 100) {
+			PrintErrorChange(error);
+			errorPrev = error;
+			printCounter = 0;
+		}
+		++printCounter;
 		const std::vector<std::vector<double>>* errorPtr = &error;
 		/*for (int i = allLayers.size() - 1; i >= 0; --i) {
 			errorPtr = allLayers[i]->BackProp(*errorPtr);
 		}*/
 		//std::cout << std::endl;
-		for (int i = 2; i >= 0; --i) {
+		for (int i = numLayers - 1; i >= 0; --i) {
 			errorPtr = allLayers[i]->BackProp(*errorPtr);
 			//std::cout << " backprop layer i: " << i << " completed." << std::endl;
 		}
@@ -56,13 +84,13 @@ class SequentialModel
 	std::vector<std::vector<double>> CalcError(const std::vector<std::vector<double>>& target) {
 		auto dError_dAct = target;
 		//auto& lastLayer = allLayers[allLayers.size() - 1];
-		auto& lastLayer = allLayers[2];
+		auto& lastLayer = allLayers[numLayers - 1];
 		const std::vector<std::vector<double>>& output = *(lastLayer->GetOutput());
 
 		for (int i = 0; i < target.size(); ++i) {
 			for (int j = 0; j < target[0].size(); ++j) {
 				dError_dAct[i][j] = (output[i][j] - target[i][j]) / (output[i][j] * (1 - output[i][j]));
-				//std::cout << dError_dAct[i][j] << std::endl;
+				//std::cout << "for i and j: " << i << j << " dError_dact = " << dError_dAct[i][j] << " output = " << output[i][j] << " target = " << target[i][j] << std::endl;
 			}
 		}
 		return move(dError_dAct);
@@ -73,7 +101,7 @@ class SequentialModel
 			layer_i->UpdateWeights(weightStepSize);
 		}*/
 
-		for (int i = 0; i < 3; ++i) {
+		for (int i = 0; i < numLayers; ++i) {
 			allLayers[i]->UpdateWeights(weightStepSize);
 			//std::cout << "Updated Weights for i = " << i << std::endl;
 		}
@@ -89,7 +117,7 @@ class SequentialModel
 			FwdProp(&input_i);
 			//std::cout << "fwdprop completed" << std::endl;
 			//auto& lastLayer = allLayers[allLayers.size() - 1];
-			auto& lastLayer = allLayers[2];
+			auto& lastLayer = allLayers[numLayers - 1];
 			const std::vector<std::vector<double>>& output = *(lastLayer->GetOutput());
 
 			double maxProb = -1;
@@ -137,27 +165,44 @@ class SequentialModel
 public:
 	//SequentialModel(std::vector<Layer*> layerList) {
 	SequentialModel(){
-		//convert from pyobject* to list
-		//allLayers = layerListConverted
 
-		//testClass b;
-		//Conv2DLayer a;
-		//testing
-		//allLayers.push_back(new Conv2DLayer());
-		//allLayers.push_back(new Pool2DLayer());
-		//allLayers.push_back(new DenseLayer());
+		//crossEntropyErrorSum = new double();
 
-		allLayers[0] = new Conv2DLayer();
+		/*allLayers[0] = new Conv2DLayer();
 		allLayers[1] = new Pool2DLayer();
-		allLayers[2] = new DenseLayer();
+		allLayers[2] = new DenseLayer();*/
+		allLayers[0] = new Pool2DLayer();
+		allLayers[1] = new DenseLayer();
 	}
 
-	void Add(Layer& layer) {
-		
+	//void Add(Layer& layer) {
+	/*	
 		//allLayers.push_back(layerConverted);
+	}*/
+
+	bool CheckGradientNumerically() {
+		int n = 0;
+		while (n < inputData.size() - batchSize) {
+			for (int i = 0; i < batchSize; ++i) {
+				FwdProp(&inputData[n]);
+				auto error = CalcError(targets[n]);
+				BackProp(error);
+				++n;
+			}
+			for (int k = 0; k < numLayers; ++k) {
+				//std::cout << "layer k = " << k << std::endl;
+				if (!allLayers[k]->GradientCorrect(this, n - batchSize, n))
+					return false;
+			}
+			for (int p = 0; p < numLayers; ++p) {
+				allLayers[p]->ResetWeights();
+			}
+		}
+		return true;
 	}
 
-	
+	//for use by layers to calculate weight derivatives numerically 
+	double CalcErrorNumerically(int dataPointIndex);
 
 	int AddInputDataPoint(int len1_, int len2_, double* vec_) {
 		std::vector< std::vector<double> > v(len1_);
@@ -201,26 +246,32 @@ public:
 	}
 
 	void Train() {
-		//std::cout << "\n entering train" << std::endl;
-		//std::cout << "batches: " << batchSize << std::endl;
-		int numBatches = numEpochs * std::min(inputData.size(), targets.size()) / batchSize;
-		int n = 0;
-		for (int batch_k = 0; batch_k < numBatches; ++batch_k) {
-			for (int i = 0; i < batchSize; ++i) {
-				FwdProp(&inputData[n]);
-				//std::cout << "finished fwdprop for batch: " << batch_k << " and data element i: " << i << std::endl;
-				auto error = CalcError(targets[n]);
-				//std::cout << "finished error for batch: " << batch_k << " and data element i: " << i << std::endl;
-				BackProp(error);
-				//std::cout << "finished backprop for batch: " << batch_k << " and data element i: " << i << std::endl;
-				++n;
-				n = (n + 1) % inputData.size();
+		try {
+			//std::cout << "\n entering train" << std::endl;
+			//std::cout << "batches: " << batchSize << std::endl;
+			int numBatches = numEpochs * std::min(inputData.size(), targets.size()) / batchSize;
+			int n = 0;
+			for (int batch_k = 0; batch_k < numBatches; ++batch_k) {
+				for (int i = 0; i < batchSize; ++i) {
+					std::cout << "Entering FwdProp()" << std::endl;
+					FwdProp(&inputData[n]);
+					std::cout << "finished fwdprop for batch: " << batch_k << " and data element i: " << i << std::endl;
+					auto error = CalcError(targets[n]);
+					std::cout << "finished error for batch: " << batch_k << " and data element i: " << i << std::endl;
+					BackProp(error);
+					std::cout << "finished backprop for batch: " << batch_k << " and data element i: " << i << std::endl;
+					++n;
+					n = (n + 1) % inputData.size();
+				}
+				std::cout << "updating weights: " << std::endl;
+				UpdateWeights();
+				std::cout << "done updating weights: " << std::endl;
 			}
-			//std::cout << "updating weights: " << std::endl;
-			UpdateWeights();
-			//std::cout << "done updating weights: " << std::endl;
+			//std::cout << "leaving train" << std::endl;
 		}
-		//std::cout << "leaving train" << std::endl;
+		catch (std::exception& e) {
+			std::cout << "exception in Train()" << std::endl;
+		}
 	}
 
 	std::vector<int> Predict(int len1_, int len2_, int len3_, double* vec_) {

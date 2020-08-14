@@ -73,8 +73,8 @@ model.AddInputDataPoints(allImagesArrayTrain)
 model.AddTargetVectors(targetArrayTrain)
 
 #print("made it here")
-batchSize = 1
-numEpochs = 9
+batchSize = 10
+numEpochs = 2
 
 model.SetBatchSize(batchSize)
 model.SetNumEpochs(numEpochs)
@@ -82,10 +82,14 @@ print("")
 print("set batch size and num epochs")
 
 model.Train()
+#model.CheckGradientNumerically()
+#model.Train()
 
 print("trained")
 
 print("")
+
+#print(model.CheckGradientNumerically())
 
 output = model.Predict(allImagesArrayTrain)
 print(output)

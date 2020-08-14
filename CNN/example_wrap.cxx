@@ -16857,6 +16857,76 @@ SWIGINTERN PyObject *Square_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObjec
   return SWIG_Py_Void();
 }
 
+SWIGINTERN PyObject *_wrap_Layer_ResetWeights(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Layer *arg1 = (Layer *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Layer_ResetWeights",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Layer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Layer_ResetWeights" "', argument " "1"" of type '" "Layer *""'"); 
+  }
+  arg1 = reinterpret_cast< Layer * >(argp1);
+  (arg1)->ResetWeights();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Layer_GradientCorrect(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Layer *arg1 = (Layer *) 0 ;
+  SequentialModel *arg2 = (SequentialModel *) 0 ;
+  int arg3 ;
+  int arg4 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  int val4 ;
+  int ecode4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:Layer_GradientCorrect",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Layer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Layer_GradientCorrect" "', argument " "1"" of type '" "Layer *""'"); 
+  }
+  arg1 = reinterpret_cast< Layer * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_SequentialModel, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Layer_GradientCorrect" "', argument " "2"" of type '" "SequentialModel *""'"); 
+  }
+  arg2 = reinterpret_cast< SequentialModel * >(argp2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Layer_GradientCorrect" "', argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Layer_GradientCorrect" "', argument " "4"" of type '" "int""'");
+  } 
+  arg4 = static_cast< int >(val4);
+  result = (bool)(arg1)->GradientCorrect(arg2,arg3,arg4);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Layer_UpdateWeights(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Layer *arg1 = (Layer *) 0 ;
@@ -17048,33 +17118,53 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_SequentialModel_Add(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_SequentialModel_CheckGradientNumerically(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SequentialModel *arg1 = (SequentialModel *) 0 ;
-  Layer *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
   PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
+  bool result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:SequentialModel_Add",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"O:SequentialModel_CheckGradientNumerically",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_SequentialModel, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SequentialModel_Add" "', argument " "1"" of type '" "SequentialModel *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SequentialModel_CheckGradientNumerically" "', argument " "1"" of type '" "SequentialModel *""'"); 
   }
   arg1 = reinterpret_cast< SequentialModel * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_Layer,  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SequentialModel_Add" "', argument " "2"" of type '" "Layer &""'"); 
+  result = (bool)(arg1)->CheckGradientNumerically();
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SequentialModel_CalcErrorNumerically(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SequentialModel *arg1 = (SequentialModel *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:SequentialModel_CalcErrorNumerically",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_SequentialModel, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SequentialModel_CalcErrorNumerically" "', argument " "1"" of type '" "SequentialModel *""'"); 
   }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SequentialModel_Add" "', argument " "2"" of type '" "Layer &""'"); 
-  }
-  arg2 = reinterpret_cast< Layer * >(argp2);
-  (arg1)->Add(*arg2);
-  resultobj = SWIG_Py_Void();
+  arg1 = reinterpret_cast< SequentialModel * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SequentialModel_CalcErrorNumerically" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  result = (double)(arg1)->CalcErrorNumerically(arg2);
+  resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
   return NULL;
@@ -18059,6 +18149,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Square_perimeter", _wrap_Square_perimeter, METH_VARARGS, NULL},
 	 { (char *)"delete_Square", _wrap_delete_Square, METH_VARARGS, NULL},
 	 { (char *)"Square_swigregister", Square_swigregister, METH_VARARGS, NULL},
+	 { (char *)"Layer_ResetWeights", _wrap_Layer_ResetWeights, METH_VARARGS, NULL},
+	 { (char *)"Layer_GradientCorrect", _wrap_Layer_GradientCorrect, METH_VARARGS, NULL},
 	 { (char *)"Layer_UpdateWeights", _wrap_Layer_UpdateWeights, METH_VARARGS, NULL},
 	 { (char *)"Layer_GetOutput", _wrap_Layer_GetOutput, METH_VARARGS, NULL},
 	 { (char *)"Layer_FwdProp", _wrap_Layer_FwdProp, METH_VARARGS, NULL},
@@ -18067,7 +18159,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_Layer", _wrap_delete_Layer, METH_VARARGS, NULL},
 	 { (char *)"Layer_swigregister", Layer_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_SequentialModel", _wrap_new_SequentialModel, METH_VARARGS, NULL},
-	 { (char *)"SequentialModel_Add", _wrap_SequentialModel_Add, METH_VARARGS, NULL},
+	 { (char *)"SequentialModel_CheckGradientNumerically", _wrap_SequentialModel_CheckGradientNumerically, METH_VARARGS, NULL},
+	 { (char *)"SequentialModel_CalcErrorNumerically", _wrap_SequentialModel_CalcErrorNumerically, METH_VARARGS, NULL},
 	 { (char *)"SequentialModel_AddInputDataPoint", _wrap_SequentialModel_AddInputDataPoint, METH_VARARGS, NULL},
 	 { (char *)"SequentialModel_AddInputDataPoints", _wrap_SequentialModel_AddInputDataPoints, METH_VARARGS, NULL},
 	 { (char *)"SequentialModel_AddTargetVector", _wrap_SequentialModel_AddTargetVector, METH_VARARGS, NULL},

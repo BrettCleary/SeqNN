@@ -826,6 +826,12 @@ class Layer(_object):
         raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
 
+    def ResetWeights(self):
+        return _CNN.Layer_ResetWeights(self)
+
+    def GradientCorrect(self, model, startIndex, endIndex):
+        return _CNN.Layer_GradientCorrect(self, model, startIndex, endIndex)
+
     def UpdateWeights(self, step):
         return _CNN.Layer_UpdateWeights(self, step)
 
@@ -859,8 +865,11 @@ class SequentialModel(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def Add(self, layer):
-        return _CNN.SequentialModel_Add(self, layer)
+    def CheckGradientNumerically(self):
+        return _CNN.SequentialModel_CheckGradientNumerically(self)
+
+    def CalcErrorNumerically(self, dataPointIndex):
+        return _CNN.SequentialModel_CalcErrorNumerically(self, dataPointIndex)
 
     def AddInputDataPoint(self, len1_):
         return _CNN.SequentialModel_AddInputDataPoint(self, len1_)

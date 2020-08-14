@@ -11,17 +11,10 @@ class testClass {
 class Conv2DLayer :
     public Layer
 {
-    
-    //current layer [row][col]
-    std::vector<std::vector<double>> error;
-    //input layer[row][col]
-    std::vector<std::vector<double>> backPropError;
-
-
-    int windowRows = 2;
-    int windowCols = 2;
-    int strideRow = 2;
-    int strideCol = 2;
+    int windowRows = 4;
+    int windowCols = 4;
+    int strideRow = 4;
+    int strideCol = 4;
     int padding = 0;
     
 public:

@@ -16,9 +16,6 @@ class Pool2DLayer :
     //first two dim are [row][col] of input 2D matrix, each element is an adjacency list of a pair of indexes to the output matrix {row, col}
     std::vector<std::vector<std::vector<std::vector<int>>>> adjList;
 
-    //input layer[row][col]
-    std::vector<std::vector<double>> backPropError;
-
     double MaxPool(int i, int j, const std::vector<std::vector<double>>& input) {
         double maxAct = DBL_MIN;
         int mMax = -1;
@@ -59,7 +56,6 @@ public:
 
     virtual std::vector<std::vector<double>>* FwdProp(const std::vector<std::vector<double>>& input) override {
         if (!initialized) {
-            usingWeights = false;
             numInputRows = input.size();
             numInputCols = input[0].size();
 
@@ -71,7 +67,6 @@ public:
                 std::vector<double> row_i(numOutputCols, 0);
                 output.push_back(row_i);
             }
-            initialized = true;
 
             //initializing adjList
             for (int i = 0; i < numInputRows; ++i) {
@@ -89,7 +84,11 @@ public:
                 backPropError.push_back(row_i);
             }
 
+            usingWeights = false;
+            initialized = true;
         }
+
+        inputValues = &input;
         //std::cout << "finished initializing pool2dlayer" << std::endl;
         ClearAdjList();
         //std::cout << " numInputRows: " << numInputRows << " numInputCols: " << numInputCols << " numOutputRows: " << numOutputRows << " numOutputCols: " << numOutputCols << std::endl;
