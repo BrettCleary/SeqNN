@@ -8,11 +8,12 @@ import CNNSlow
 import cProfile
 import re
 import CNN
-
+import SeqNN
+import SeqNNTests
 
 #def cnnTest():
-imgWidth = 28
-imgHeight = 28
+imgWidth = 8
+imgHeight = 2
 strideHor = 4
 strideVert = 4
 fieldWidth = 4
@@ -20,80 +21,23 @@ fieldHeight = 4
 poolWidth = 2
 poolHeight = 2
 step = 0.01
+numOutputClasses = 4
+padding = 0
 
 #model = CNNSlow.Cnn(imgWidth, imgHeight, strideHor, strideVert, fieldWidth, fieldHeight, poolWidth, poolHeight, step)
 
-def createNpImgArray(csvFileName, isTrain):
-    dfTrainRaw = pd.read_csv(csvFileName)
 
-    dfTrain = dfTrainRaw
-    if isTrain:
-        dfTrain = dfTrainRaw.iloc[:, 1:]
+csvFileName = "Data//trainScratchSimple3.csv"
 
-    imagesArray = np.zeros((imgHeight, imgWidth))
-    for rowIndex, row in dfTrain.iterrows():
-        numpyArray = np.zeros((imgHeight, imgWidth))
-        for colIndex in range(len(dfTrain.columns)):
-            #read pixels into 2d numpy array
-            npRow = math.floor(colIndex / imgWidth)
-            npCol = colIndex % imgWidth
-            temp = dfTrain.iloc[rowIndex, colIndex]
-            numpyArray[npRow, npCol] = temp
-        imagesArray = np.dstack((imagesArray, numpyArray))
-    return imagesArray[:,:,1:]
+SeqNNTests.RunAllTests(csvFileName)
 
-def createNpImgTargetArray(csvFileName):
-    dfTrainRaw = pd.read_csv(csvFileName)
-
-    dfTarget = dfTrainRaw.iloc[:, 0]
-
-    targetArrayNp = np.zeros((1, 10))
-    for rowIndex, row in dfTarget.iteritems():
-        targetArray = np.zeros((1, 10))
-        targetArray[0, dfTarget.iloc[rowIndex]] = 1
-        targetArrayNp = np.dstack((targetArrayNp, targetArray))
-    return targetArrayNp[:,:,1:]
+model = SeqNN.SeqNN(2, 4, 4, csvFileName)
+layer = CNN.Conv2DLayer(fieldHeight, fieldWidth, strideHor, strideVert, padding)
+model.__addLayer__(layer)
 
 
-#allImagesArrayTrain = [] #list of 2d numpy arrays representing pixel values
-#targetArrayTrain = []
 
-allImagesArrayTest = [] 
-dummyTarget = []
 
-allImagesArrayTrain = createNpImgArray('Data\\trainScratch.csv', True)
-targetArrayTrain = createNpImgTargetArray('Data\\trainScratch.csv')
-
-model = CNN.SequentialModel()
-
-#print(allImagesArrayTrain.shape)
-#print(allImagesArrayTrain.dtype)
-#print(targetArrayTrain.shape)
-model.AddInputDataPoints(allImagesArrayTrain)
-model.AddTargetVectors(targetArrayTrain)
-
-#print("made it here")
-batchSize = 10
-numEpochs = 2
-
-model.SetBatchSize(batchSize)
-model.SetNumEpochs(numEpochs)
-print("")
-print("set batch size and num epochs")
-
-model.Train()
-#model.CheckGradientNumerically()
-#model.Train()
-
-print("trained")
-
-print("")
-
-#print(model.CheckGradientNumerically())
-
-output = model.Predict(allImagesArrayTrain)
-print(output)
-print("printed")
 
 #cross validate
 #n_foldsBoundaries = 6

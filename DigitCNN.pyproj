@@ -24,6 +24,12 @@
   <ItemGroup>
     <Compile Include="CNNSlow.py" />
     <Compile Include="DigitCNN.py" />
+    <Compile Include="SeqNN.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SeqNNTests.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="Global|PythonCore|3.8-32" />

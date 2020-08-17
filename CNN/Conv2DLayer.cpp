@@ -6,6 +6,8 @@ std::vector<std::vector<double>>* Conv2DLayer::FwdProp(const std::vector<std::ve
         numInputRows = windowRows;
         numInputCols = windowCols;
 
+        std::cout << "conv2dlayer input rows: " << input.size() << " col: " << input[0].size() << std::endl;
+
         numOutputCols = (input[0].size() - windowCols) / strideCol + 1;
         numOutputRows = (input.size() - windowRows) / strideRow + 1;
 
@@ -64,6 +66,14 @@ std::vector<std::vector<double>>* Conv2DLayer::FwdProp(const std::vector<std::ve
 
     inputValues = &input;
 
+
+    std::cout << "inputValues rows = " << inputValues->size() << " inputValues cols = " << (*inputValues)[0].size() << std::endl;
+    for (int i = 0; i < inputValues->size(); ++i) {
+        for (int j = 0; j < (*inputValues)[0].size(); ++j) {
+            std::cout << "ij " << i << j << " input values[i][j] = " << (*inputValues)[i][j] << std::endl;
+        }
+    }
+
     for (int i = 0; i < numOutputRows; ++i) {
         for (int j = 0; j < numOutputCols; ++j) {
             double activation = 0;
@@ -81,13 +91,21 @@ std::vector<std::vector<double>>* Conv2DLayer::FwdProp(const std::vector<std::ve
 }
 
 const std::vector<std::vector<double>>* Conv2DLayer::BackProp(const std::vector<std::vector<double>>& backPropErrorSum) {
+    if (backPropErrorSum.size() != numOutputRows) {
+        std::cout << "ERROR: Back propagation error rows = " << backPropErrorSum.size() << " does not equal numOutputRows = " << numOutputRows << std::endl;
+    }
+    if (!backPropErrorSum.empty() && backPropErrorSum[0].size() != numOutputCols) {
+        std::cout << "ERROR: Back propagation error rows = " << backPropErrorSum[0].size() << " does not equal numOutputCols = " << numOutputCols << std::endl;
+    }
+    std::cout << numOutputCols << std::endl;
 
     //calculate errors
     for (int i = 0; i < numOutputRows; ++i) {
         for (int j = 0; j < numOutputCols; ++j) {
+            std::cout << "ij" << i << j << std::endl;
             error[i][j] = output[i][j] * (1 - output[i][j]) * backPropErrorSum[i][j];
             //if (error[i][j] != 0)
-                //std::cout << "ij " << i << j << " error = " << error[i][j] << " output = " << output[i][j] << " backpropErrorSum = " << backPropErrorSum[i][j] << std::endl;
+                std::cout << "ij " << i << j << " error = " << error[i][j] << " output = " << output[i][j] << " backpropErrorSum = " << backPropErrorSum[i][j] << std::endl;
         }
     }
     //std::cout << "calculated errors for backprop" << std::endl;
@@ -99,7 +117,7 @@ const std::vector<std::vector<double>>* Conv2DLayer::BackProp(const std::vector<
                 for (int n = 0; n < numInputCols; ++n) {
                     weightDer[i][j][m][n] += error[i][j] * (*inputValues)[m][n];
                     //if (error[i][j] != 0)
-                       // std::cout << "ijmn: " << i << j << m << n << " weightDer = " << weightDer[i][j][m][n] << std::endl;
+                        std::cout << "ijmn: " << i << j << m << n << " weightDer = " << weightDer[i][j][m][n] << " input values[m][n] = " << (*inputValues)[m][n] << std::endl;
                 }
             }
             biasDer[i][j] += error[i][j];
@@ -119,7 +137,7 @@ const std::vector<std::vector<double>>* Conv2DLayer::BackProp(const std::vector<
             backPropError[m][n] = errorSum;
         }
     }
-   // std::cout << "calculated backproperrorsum for backprop" << std::endl;
+    //std::cout << "calculated backproperrorsum for backprop" << std::endl;
 
     ++numPropsSinceLastUpdate;
 

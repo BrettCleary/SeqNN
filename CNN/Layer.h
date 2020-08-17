@@ -33,7 +33,7 @@ protected:
 	//current layer [row][col]
 	std::vector<std::vector<double>> error;
 
-	//input layer [row][col
+	//input layer [row][col]
 	const std::vector<std::vector<double>>* inputValues;
 
 

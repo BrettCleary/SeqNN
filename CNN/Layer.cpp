@@ -73,7 +73,8 @@ void Layer::UpdateWeights(double step) {
 						weights[i][j][m][n] = -rangeLimit;
 					else if (weights[i][j][m][n] > rangeLimit)
 						weights[i][j][m][n] = rangeLimit;*/
-					//std::cout << "i j m n: " << i << j << m << n << " step: " << step << " weightDer[i][j][m][n] = " << weightDer[i][j][m][n] << " weights[i][j][m][n] = " << weights[i][j][m][n] << std::endl;
+					//if (i == 0 && j == 0)
+					//	std::cout << "i j m n: " << i << j << m << n << " step: " << step << " weightDer[i][j][m][n] = " << weightDer[i][j][m][n] << " weights[i][j][m][n] = " << weights[i][j][m][n] << std::endl;
 					weightDer[i][j][m][n] = 0;
 				}
 			}

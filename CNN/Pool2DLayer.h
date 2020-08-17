@@ -9,9 +9,9 @@ class Pool2DLayer :
     public Layer
 {
     int poolCols = 2;
-    int poolRows = 2;
+    int poolRows = 1;
 
-    bool isMax = true;
+    bool isMax = false;
 
     //first two dim are [row][col] of input 2D matrix, each element is an adjacency list of a pair of indexes to the output matrix {row, col}
     std::vector<std::vector<std::vector<std::vector<int>>>> adjList;
@@ -53,6 +53,12 @@ class Pool2DLayer :
     }
 
 public:
+
+    Pool2DLayer(bool isMaxPool, int poolColsInput, int poolRowsInput) : Layer() {
+        isMax = isMaxPool;
+        poolCols = poolColsInput;
+        poolRows = poolRowsInput;
+    }
 
     virtual std::vector<std::vector<double>>* FwdProp(const std::vector<std::vector<double>>& input) override {
         if (!initialized) {

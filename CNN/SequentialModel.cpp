@@ -3,7 +3,7 @@
 double SequentialModel::CalcErrorNumerically(int dataPointIndex) {
 	FwdProp(&SequentialModel::inputData[dataPointIndex]);
 
-	auto& lastLayer = allLayers[numLayers - 1];
+	auto& lastLayer = allLayers[allLayers.size() - 1];
 	const std::vector<std::vector<double>>& output = *(lastLayer->GetOutput());
 	double crossEntropyErrorSum = 0;
 	for (int i = 0; i < targets[dataPointIndex].size(); ++i) {

@@ -865,6 +865,12 @@ class SequentialModel(_object):
         except __builtin__.Exception:
             self.this = this
 
+    def GetInputDataPointsVector(self):
+        return _CNN.SequentialModel_GetInputDataPointsVector(self)
+
+    def GetTargetVectors(self):
+        return _CNN.SequentialModel_GetTargetVectors(self)
+
     def CheckGradientNumerically(self):
         return _CNN.SequentialModel_CheckGradientNumerically(self)
 
@@ -888,6 +894,15 @@ class SequentialModel(_object):
 
     def SetNumEpochs(self, num):
         return _CNN.SequentialModel_SetNumEpochs(self, num)
+
+    def SetStepSize(self, step):
+        return _CNN.SequentialModel_SetStepSize(self, step)
+
+    def AddLayer(self, layer):
+        return _CNN.SequentialModel_AddLayer(self, layer)
+
+    def ClearLayers(self):
+        return _CNN.SequentialModel_ClearLayers(self)
 
     def Train(self):
         return _CNN.SequentialModel_Train(self)
@@ -928,18 +943,18 @@ class Conv2DLayer(Layer):
     __getattr__ = lambda self, name: _swig_getattr(self, Conv2DLayer, name)
     __repr__ = _swig_repr
 
+    def __init__(self, winRows, winCols, strideRowInput, strideColInput, paddingInput):
+        this = _CNN.new_Conv2DLayer(winRows, winCols, strideRowInput, strideColInput, paddingInput)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
     def FwdProp(self, input):
         return _CNN.Conv2DLayer_FwdProp(self, input)
 
     def BackProp(self, backPropErrorSum):
         return _CNN.Conv2DLayer_BackProp(self, backPropErrorSum)
-
-    def __init__(self):
-        this = _CNN.new_Conv2DLayer()
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
     __swig_destroy__ = _CNN.delete_Conv2DLayer
     __del__ = lambda self: None
 Conv2DLayer_swigregister = _CNN.Conv2DLayer_swigregister

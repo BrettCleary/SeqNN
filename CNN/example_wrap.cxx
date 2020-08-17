@@ -17118,6 +17118,50 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_SequentialModel_GetInputDataPointsVector(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SequentialModel *arg1 = (SequentialModel *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > >,std::allocator< std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > > > > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SequentialModel_GetInputDataPointsVector",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_SequentialModel, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SequentialModel_GetInputDataPointsVector" "', argument " "1"" of type '" "SequentialModel *""'"); 
+  }
+  arg1 = reinterpret_cast< SequentialModel * >(argp1);
+  result = (arg1)->GetInputDataPointsVector();
+  resultobj = swig::from(static_cast< std::vector< std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > >,std::allocator< std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > > > > >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SequentialModel_GetTargetVectors(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SequentialModel *arg1 = (SequentialModel *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > >,std::allocator< std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > > > > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SequentialModel_GetTargetVectors",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_SequentialModel, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SequentialModel_GetTargetVectors" "', argument " "1"" of type '" "SequentialModel *""'"); 
+  }
+  arg1 = reinterpret_cast< SequentialModel * >(argp1);
+  result = (arg1)->GetTargetVectors();
+  resultobj = swig::from(static_cast< std::vector< std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > >,std::allocator< std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > > > > >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_SequentialModel_CheckGradientNumerically(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SequentialModel *arg1 = (SequentialModel *) 0 ;
@@ -17443,6 +17487,87 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_SequentialModel_SetStepSize(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SequentialModel *arg1 = (SequentialModel *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:SequentialModel_SetStepSize",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_SequentialModel, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SequentialModel_SetStepSize" "', argument " "1"" of type '" "SequentialModel *""'"); 
+  }
+  arg1 = reinterpret_cast< SequentialModel * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SequentialModel_SetStepSize" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  (arg1)->SetStepSize(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SequentialModel_AddLayer(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SequentialModel *arg1 = (SequentialModel *) 0 ;
+  Layer *arg2 = (Layer *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:SequentialModel_AddLayer",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_SequentialModel, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SequentialModel_AddLayer" "', argument " "1"" of type '" "SequentialModel *""'"); 
+  }
+  arg1 = reinterpret_cast< SequentialModel * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Layer, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SequentialModel_AddLayer" "', argument " "2"" of type '" "Layer *""'"); 
+  }
+  arg2 = reinterpret_cast< Layer * >(argp2);
+  (arg1)->AddLayer(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SequentialModel_ClearLayers(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SequentialModel *arg1 = (SequentialModel *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SequentialModel_ClearLayers",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_SequentialModel, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SequentialModel_ClearLayers" "', argument " "1"" of type '" "SequentialModel *""'"); 
+  }
+  arg1 = reinterpret_cast< SequentialModel * >(argp1);
+  (arg1)->ClearLayers();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_SequentialModel_Train(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SequentialModel *arg1 = (SequentialModel *) 0 ;
@@ -17587,6 +17712,64 @@ SWIGINTERN PyObject *testClass_swigregister(PyObject *SWIGUNUSEDPARM(self), PyOb
   return SWIG_Py_Void();
 }
 
+SWIGINTERN PyObject *_wrap_new_Conv2DLayer(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  int arg2 ;
+  int arg3 ;
+  int arg4 ;
+  int arg5 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  int val4 ;
+  int ecode4 = 0 ;
+  int val5 ;
+  int ecode5 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  Conv2DLayer *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOOO:new_Conv2DLayer",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_Conv2DLayer" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = static_cast< int >(val1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_Conv2DLayer" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_Conv2DLayer" "', argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "new_Conv2DLayer" "', argument " "4"" of type '" "int""'");
+  } 
+  arg4 = static_cast< int >(val4);
+  ecode5 = SWIG_AsVal_int(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "new_Conv2DLayer" "', argument " "5"" of type '" "int""'");
+  } 
+  arg5 = static_cast< int >(val5);
+  result = (Conv2DLayer *)new Conv2DLayer(arg1,arg2,arg3,arg4,arg5);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Conv2DLayer, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Conv2DLayer_FwdProp(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Conv2DLayer *arg1 = (Conv2DLayer *) 0 ;
@@ -17659,19 +17842,6 @@ SWIGINTERN PyObject *_wrap_Conv2DLayer_BackProp(PyObject *SWIGUNUSEDPARM(self), 
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_Conv2DLayer(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Conv2DLayer *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)":new_Conv2DLayer")) SWIG_fail;
-  result = (Conv2DLayer *)new Conv2DLayer();
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Conv2DLayer, SWIG_POINTER_NEW |  0 );
-  return resultobj;
-fail:
   return NULL;
 }
 
@@ -18159,6 +18329,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_Layer", _wrap_delete_Layer, METH_VARARGS, NULL},
 	 { (char *)"Layer_swigregister", Layer_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_SequentialModel", _wrap_new_SequentialModel, METH_VARARGS, NULL},
+	 { (char *)"SequentialModel_GetInputDataPointsVector", _wrap_SequentialModel_GetInputDataPointsVector, METH_VARARGS, NULL},
+	 { (char *)"SequentialModel_GetTargetVectors", _wrap_SequentialModel_GetTargetVectors, METH_VARARGS, NULL},
 	 { (char *)"SequentialModel_CheckGradientNumerically", _wrap_SequentialModel_CheckGradientNumerically, METH_VARARGS, NULL},
 	 { (char *)"SequentialModel_CalcErrorNumerically", _wrap_SequentialModel_CalcErrorNumerically, METH_VARARGS, NULL},
 	 { (char *)"SequentialModel_AddInputDataPoint", _wrap_SequentialModel_AddInputDataPoint, METH_VARARGS, NULL},
@@ -18167,6 +18339,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SequentialModel_AddTargetVectors", _wrap_SequentialModel_AddTargetVectors, METH_VARARGS, NULL},
 	 { (char *)"SequentialModel_SetBatchSize", _wrap_SequentialModel_SetBatchSize, METH_VARARGS, NULL},
 	 { (char *)"SequentialModel_SetNumEpochs", _wrap_SequentialModel_SetNumEpochs, METH_VARARGS, NULL},
+	 { (char *)"SequentialModel_SetStepSize", _wrap_SequentialModel_SetStepSize, METH_VARARGS, NULL},
+	 { (char *)"SequentialModel_AddLayer", _wrap_SequentialModel_AddLayer, METH_VARARGS, NULL},
+	 { (char *)"SequentialModel_ClearLayers", _wrap_SequentialModel_ClearLayers, METH_VARARGS, NULL},
 	 { (char *)"SequentialModel_Train", _wrap_SequentialModel_Train, METH_VARARGS, NULL},
 	 { (char *)"SequentialModel_Predict", _wrap_SequentialModel_Predict, METH_VARARGS, NULL},
 	 { (char *)"delete_SequentialModel", _wrap_delete_SequentialModel, METH_VARARGS, NULL},
@@ -18174,9 +18349,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_testClass", _wrap_new_testClass, METH_VARARGS, NULL},
 	 { (char *)"delete_testClass", _wrap_delete_testClass, METH_VARARGS, NULL},
 	 { (char *)"testClass_swigregister", testClass_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_Conv2DLayer", _wrap_new_Conv2DLayer, METH_VARARGS, NULL},
 	 { (char *)"Conv2DLayer_FwdProp", _wrap_Conv2DLayer_FwdProp, METH_VARARGS, NULL},
 	 { (char *)"Conv2DLayer_BackProp", _wrap_Conv2DLayer_BackProp, METH_VARARGS, NULL},
-	 { (char *)"new_Conv2DLayer", _wrap_new_Conv2DLayer, METH_VARARGS, NULL},
 	 { (char *)"delete_Conv2DLayer", _wrap_delete_Conv2DLayer, METH_VARARGS, NULL},
 	 { (char *)"Conv2DLayer_swigregister", Conv2DLayer_swigregister, METH_VARARGS, NULL},
 	 { (char *)"DenseLayer_FwdProp", _wrap_DenseLayer_FwdProp, METH_VARARGS, NULL},
