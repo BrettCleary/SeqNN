@@ -999,18 +999,18 @@ class Pool2DLayer(Layer):
     __getattr__ = lambda self, name: _swig_getattr(self, Pool2DLayer, name)
     __repr__ = _swig_repr
 
+    def __init__(self, isMaxPool, poolColsInput, poolRowsInput):
+        this = _CNN.new_Pool2DLayer(isMaxPool, poolColsInput, poolRowsInput)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
     def FwdProp(self, input):
         return _CNN.Pool2DLayer_FwdProp(self, input)
 
     def BackProp(self, backPropErrorSum):
         return _CNN.Pool2DLayer_BackProp(self, backPropErrorSum)
-
-    def __init__(self):
-        this = _CNN.new_Pool2DLayer()
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
     __swig_destroy__ = _CNN.delete_Pool2DLayer
     __del__ = lambda self: None
 Pool2DLayer_swigregister = _CNN.Pool2DLayer_swigregister

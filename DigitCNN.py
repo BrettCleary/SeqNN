@@ -27,13 +27,14 @@ padding = 0
 #model = CNNSlow.Cnn(imgWidth, imgHeight, strideHor, strideVert, fieldWidth, fieldHeight, poolWidth, poolHeight, step)
 
 
-csvFileName = "Data//trainScratchSimple3.csv"
+csvFileName = "Data//MNIST_train.csv"
 
-SeqNNTests.RunAllTests(csvFileName)
+SeqNNTests.RunAllTests()
+print("tests finished")
 
-model = SeqNN.SeqNN(2, 4, 4, csvFileName)
-layer = CNN.Conv2DLayer(fieldHeight, fieldWidth, strideHor, strideVert, padding)
-model.__addLayer__(layer)
+#model = SeqNN.SeqNN(2, 4, 4, csvFileName)
+#layer = CNN.Conv2DLayer(fieldHeight, fieldWidth, strideHor, strideVert, padding)
+#model.__addLayer__(layer)
 
 
 

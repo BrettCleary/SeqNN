@@ -5883,6 +5883,20 @@ SWIGINTERN void std_vector_Sl_int_Sg__insert__SWIG_1(std::vector< int > *self,st
 
 
 
+
+SWIGINTERN int
+SWIG_AsVal_bool (PyObject *obj, bool *val)
+{
+  int r;
+  if (!PyBool_Check(obj))
+    return SWIG_ERROR;
+  r = PyObject_IsTrue(obj);
+  if (r == -1)
+    return SWIG_ERROR;
+  if (val) *val = r ? true : false;
+  return SWIG_OK;
+}
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -17991,6 +18005,46 @@ SWIGINTERN PyObject *DenseLayer_swigregister(PyObject *SWIGUNUSEDPARM(self), PyO
   return SWIG_Py_Void();
 }
 
+SWIGINTERN PyObject *_wrap_new_Pool2DLayer(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  bool arg1 ;
+  int arg2 ;
+  int arg3 ;
+  bool val1 ;
+  int ecode1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  Pool2DLayer *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:new_Pool2DLayer",&obj0,&obj1,&obj2)) SWIG_fail;
+  ecode1 = SWIG_AsVal_bool(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_Pool2DLayer" "', argument " "1"" of type '" "bool""'");
+  } 
+  arg1 = static_cast< bool >(val1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_Pool2DLayer" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_Pool2DLayer" "', argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  result = (Pool2DLayer *)new Pool2DLayer(arg1,arg2,arg3);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Pool2DLayer, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Pool2DLayer_FwdProp(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Pool2DLayer *arg1 = (Pool2DLayer *) 0 ;
@@ -18063,19 +18117,6 @@ SWIGINTERN PyObject *_wrap_Pool2DLayer_BackProp(PyObject *SWIGUNUSEDPARM(self), 
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_Pool2DLayer(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Pool2DLayer *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)":new_Pool2DLayer")) SWIG_fail;
-  result = (Pool2DLayer *)new Pool2DLayer();
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Pool2DLayer, SWIG_POINTER_NEW |  0 );
-  return resultobj;
-fail:
   return NULL;
 }
 
@@ -18359,9 +18400,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_DenseLayer", _wrap_new_DenseLayer, METH_VARARGS, NULL},
 	 { (char *)"delete_DenseLayer", _wrap_delete_DenseLayer, METH_VARARGS, NULL},
 	 { (char *)"DenseLayer_swigregister", DenseLayer_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_Pool2DLayer", _wrap_new_Pool2DLayer, METH_VARARGS, NULL},
 	 { (char *)"Pool2DLayer_FwdProp", _wrap_Pool2DLayer_FwdProp, METH_VARARGS, NULL},
 	 { (char *)"Pool2DLayer_BackProp", _wrap_Pool2DLayer_BackProp, METH_VARARGS, NULL},
-	 { (char *)"new_Pool2DLayer", _wrap_new_Pool2DLayer, METH_VARARGS, NULL},
 	 { (char *)"delete_Pool2DLayer", _wrap_delete_Pool2DLayer, METH_VARARGS, NULL},
 	 { (char *)"Pool2DLayer_swigregister", Pool2DLayer_swigregister, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }

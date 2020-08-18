@@ -23,54 +23,28 @@ class SeqNN(object):
     __testData = None
     __testTargets = None
 
+    __modelTrained = False
+    __outputPredicted = None
 
-    def __getTrainData__(self):
-        return self.__trainData
-
-    def __init__(self, inputRows, inputCols, numOutputClasses, csvFileName):#, strideH, strideV, fieldW, fieldH, poolW, poolH, gradStep):
+    def __init__(self, inputRows, inputCols, numOutputClasses):#, strideH, strideV, fieldW, fieldH, poolW, poolH, gradStep):
         self.__inputRows = inputRows
         self.__inputCols = inputCols
         self.__numOutputClasses = numOutputClasses
-        self.__readData__(csvFileName)
-        self.__initNN__()
 
-    
-    def __addLayer__(self, layer):
-        self.__model.AddLayer(layer)
-
-    def __addLayerList__(self, layerList):
-        for layer in layerList:
-            self.__model.AddLayer(layer)
-
-    def __clearLayers(self):
-        self.__model.__clearLayers()
-  
-    def __readData__(self, csvFileName):
-        self.__trainData = self.__createNpImgArray__(csvFileName, True)
-        self.__trainTargets = self.__createNpImgTargetArray__(csvFileName)
-    
     def __initNN__(self):
         self.__model = CNN.SequentialModel()
         self.__model.AddInputDataPoints(self.__trainTargets)
         self.__model.AddTargetVectors(self.__trainTargets)
     
-    def __trainNN__(self, batchSize, numEpochs, weightStepSize):
-        self.__model.SetBatchSize(batchSize)
-        self.__model.SetNumEpochs(numEpochs)
-        self.__model.SetStepSize(weightStepSize)
-        self.__model.Train()
-
-    def __predict__(self, csvFileName):
-        inputData = self.__createNpImgArray__(csvFileName, False)
-        output = self.__model.Predict(inputData)
-        return output
-
     def __createNpImgArray__(self, csvFileName, isTrain):
         dfTrainRaw = pd.read_csv(csvFileName)
 
         dfTrain = dfTrainRaw
         if isTrain:
             dfTrain = dfTrainRaw.iloc[:, 1:]
+
+        #if len(dfTrain.iterrows()) != self.__inputRows:
+        #    print("for file ", csvFileName, " num input rows provided in constructor = \t", len(dfTrain.iterrows()), " does not equal the numRows = \t", len(dfTrain.columns), " and input")
 
         imagesArray = np.zeros((self.__inputRows, self.__inputCols))
         for rowIndex, row in dfTrain.iterrows():
@@ -105,5 +79,41 @@ class SeqNN(object):
         np.ascontiguousarray(returnArray)
         return returnArray
 
+    def getTrainData(self):
+        return self.__trainData
 
+    def getTrainTargets(self):
+        return self.__trainTargets
 
+    def trainNN(self, batchSize, numEpochs, weightStepSize):
+        #if ((not any(self.__trainData)) or (not any(self.__trainTargets))):
+        #    print("Training data and targets must be loaded first before training the neural network.")
+        #    return
+        self.__model.SetBatchSize(batchSize)
+        self.__model.SetNumEpochs(numEpochs)
+        self.__model.SetStepSize(weightStepSize)
+        self.__model.Train()
+        self.__modelTrained = True
+
+    def predict(self, csvFileName):
+        if not self.__modelTrained:
+            print("Model must be trained first before predicting classes.")
+            return
+        inputData = self.__createNpImgArray__(csvFileName, False)
+        self.__outputPredicted = self.__model.Predict(inputData)
+        return self.__outputPredicted
+
+    def readData(self, csvFileName):
+        self.__trainData = self.__createNpImgArray__(csvFileName, True)
+        self.__trainTargets = self.__createNpImgTargetArray__(csvFileName)
+        self.__initNN__()
+
+    def addLayer(self, layer):
+        self.__model.AddLayer(layer)
+
+    def addLayerList(self, layerList):
+        for layer in layerList:
+            self.__model.AddLayer(layer)
+
+    def clearLayers(self):
+        self.__model.ClearLayers()
