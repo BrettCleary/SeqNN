@@ -88,7 +88,7 @@ class SequentialModel
 		auto& lastLayer = allLayers[allLayers.size() - 1];
 		const std::vector<std::vector<double>>& output = *(lastLayer->GetOutput());
 
-		std::cout << "target rows: " << target.size() << " target cols" << target[0].size() << std::endl;
+		//std::cout << "target rows: " << target.size() << " target cols" << target[0].size() << std::endl;
 
 		/*std::cout << "target vector in calcerror" << std::endl;
 		for (int i = 0; i < target.size(); ++i) {
@@ -101,7 +101,7 @@ class SequentialModel
 			for (int j = 0; j < target[0].size(); ++j) {
 				dError_dAct[i][j] = (output[i][j] - target[i][j]) / (output[i][j] * (1 - output[i][j]));
 				//if (i == 0 && j == 0)
-					std::cout << "for i and j: " << i << j << " dError_dact = " << dError_dAct[i][j] << " output = " << output[i][j] << " target = " << target[i][j] << std::endl;
+					//std::cout << "for i and j: " << i << j << " dError_dact = " << dError_dAct[i][j] << " output = " << output[i][j] << " target = " << target[i][j] << std::endl;
 			}
 		}
 		return std::move(dError_dAct);
@@ -126,12 +126,12 @@ class SequentialModel
 	const std::vector<int> _Predict(const std::vector<std::vector<std::vector<double>>>& inputDataPredict) {
 		std::vector<int> maxOutputs;
 		for (auto& input_i : inputDataPredict) {
-			std::cout << "input data array" << std::endl;
+			/*std::cout << "input data array" << std::endl;
 			for (int i = 0; i < input_i.size(); ++i) {
 				for (int j = 0; j < input_i[0].size(); ++j) {
 					std::cout << "ij: " << i << j << " inputData to Predict = " << input_i[i][j] << std::endl;
 				}
-			}
+			}*/
 
 			FwdProp(&input_i);
 			//std::cout << "fwdprop completed" << std::endl;
@@ -304,8 +304,8 @@ public:
 
 	void Train() {
 		try {
-			int z = 0;
-			/*for (auto dataPoint : inputData) {
+			/*int z = 0;
+			for (auto dataPoint : inputData) {
 				std::cout << "image input for index z = " << z << std::endl;
 				for (int i = 0; i < dataPoint.size(); ++i) {
 					for (int j = 0; j < dataPoint[0].size(); ++j) {

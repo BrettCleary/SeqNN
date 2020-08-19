@@ -19,20 +19,39 @@ def RunAllTests():
     for fileIndex in range(len(csvFileNames)):
         DataConvertTest(csvFileNames[fileIndex], True, numRowsInput[fileIndex], numColsInput[fileIndex], numOutputClasses[fileIndex])
 
+    print("Single Dense Layer Tests: ")
+    for fileIndex in range(len(csvFileNames)):
+        SingleDenseLayerTest(csvFileNames[fileIndex], numRowsInput[fileIndex], numColsInput[fileIndex], numOutputClasses[fileIndex])
+
+    print("CNN 2D -> Dense Layer -> Output Tests: ")
     for fileIndex in range(len(csvFileNames)):
         Simple2DCnnTest(csvFileNames[fileIndex], numRowsInput[fileIndex], numColsInput[fileIndex], numOutputClasses[fileIndex])
 
     return
 
 def Calc2DErrorRate(target, predicted):
-    if target.shape != predicted.shape:
-        print("Target and predicted matrices do not have the same shape. Target shape is ", target.shape, ", and predicted shape is ", predicted.shape)
-    
+
+    #print("target: ", type(target), " has shape", target.shape)
+    #print("predicted: ", type(predicted), " has len ", len(predicted))
+
+    targetClasses = np.zeros(target.shape[2])
+
+    for z in range(target.shape[2]):
+        zClass = -1
+        for j in range(target.shape[1]):
+            if (target[0, j, z] == 1):
+                zClass = j
+        targetClasses[z] = zClass
+
+
+    if len(predicted) != targetClasses.shape[0]:
+        print("Target and predicted matrices do not have the same shape. Target shape is ", target.shape, ", and predicted shape is ", targetClasses.shape)
+
+
     numWrong = 0
-    for x in range(target.shape[0]):
-        for y in range(target.shape[1]):
-            if target[x,y] != predicted[x,y]:
-                numWrong += 1
+    for z in range(targetClasses.shape[0]):
+        if targetClasses[z] != predicted[z]:
+            numWrong += 1
     
     return numWrong / (target.shape[0] * target.shape[1])
 
@@ -46,20 +65,33 @@ def DataConvertTest(csvFileName, isTrain, inputRows, inputCols, numOutputClasses
     print("Target vector convert test for csv file:", csvFileName, " is successful: ", targetVectorConvertTest(targetArrays))
     print()
 
+def SingleDenseLayerTest(csvFileName, inputRows, inputCols, numOutputClasses):
+    model = SeqNN.SeqNN(inputRows, inputCols, numOutputClasses)
+    model.readData(csvFileName)
+    denseLayer = CNN.DenseLayer()
+    model.addLayer(denseLayer)
+    model.trainNN(1, 1000, 0.01)
+
+    output = model.predict(csvFileName, True)
+    errorRate = Calc2DErrorRate(model.getTrainTargets(), output)
+    print("\nThe error rate for ", csvFileName, " is ", errorRate, "\n")
+
 def Simple2DCnnTest(csvFileName, inputRows, inputCols, numOutputClasses):
 
     model = SeqNN.SeqNN(inputRows, inputCols, numOutputClasses)
     model.readData(csvFileName)
+    #print(model.getTrainData().shape)
+    #print(model.getTrainTargets().shape)
     cnnLayer = CNN.Conv2DLayer(2, 2, 2, 2, 0)
+    #cnnLayer = CNN.Conv2DLayer(1, 1, 1, 1, 0)
     model.addLayer(cnnLayer)
     denseLayer = CNN.DenseLayer()
     model.addLayer(denseLayer)
-
     model.trainNN(1, 2, 0.01)
 
-    output = model.predict(model.getTrainData())
+    output = model.predict(csvFileName, True)
     errorRate = Calc2DErrorRate(model.getTrainTargets(), output)
-    print("The error rate for ", csvFileName, " is ", errorRate)
+    print("\nThe error rate for ", csvFileName, " is ", errorRate, "\n")
 
 def imageArrayConvertTest(inputImageArray):
     modelTest = CNN.SequentialModel()

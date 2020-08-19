@@ -33,7 +33,7 @@ class SeqNN(object):
 
     def __initNN__(self):
         self.__model = CNN.SequentialModel()
-        self.__model.AddInputDataPoints(self.__trainTargets)
+        self.__model.AddInputDataPoints(self.__trainData)
         self.__model.AddTargetVectors(self.__trainTargets)
     
     def __createNpImgArray__(self, csvFileName, isTrain):
@@ -95,11 +95,11 @@ class SeqNN(object):
         self.__model.Train()
         self.__modelTrained = True
 
-    def predict(self, csvFileName):
+    def predict(self, csvFileName, ignoreFirstColumn):
         if not self.__modelTrained:
             print("Model must be trained first before predicting classes.")
             return
-        inputData = self.__createNpImgArray__(csvFileName, False)
+        inputData = self.__createNpImgArray__(csvFileName, ignoreFirstColumn)
         self.__outputPredicted = self.__model.Predict(inputData)
         return self.__outputPredicted
 
