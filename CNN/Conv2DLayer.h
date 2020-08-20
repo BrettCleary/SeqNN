@@ -19,7 +19,7 @@ class Conv2DLayer :
     
 public:
 
-    Conv2DLayer(int winRows, int winCols, int strideRowInput, int strideColInput, int paddingInput) : Layer() {
+    Conv2DLayer(int winRows, int winCols, int strideRowInput, int strideColInput, int paddingInput, double step) : Layer(step) {
         windowRows = winRows;
         windowCols = winCols;
         strideRow = strideRowInput;

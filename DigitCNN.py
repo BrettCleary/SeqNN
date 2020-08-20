@@ -30,6 +30,8 @@ padding = 0
 csvFileName = "Data//MNIST_train.csv"
 
 SeqNNTests.RunAllTests()
+#SeqNNTests.RunOneCnnTest(1)
+#SeqNNTests.RunMNISTTest()
 print("tests finished")
 
 #model = SeqNN.SeqNN(2, 4, 4, csvFileName)

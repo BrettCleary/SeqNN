@@ -101,7 +101,7 @@ const std::vector<std::vector<double>>* DenseLayer::BackProp(const std::vector<s
         for (int j = 0; j < numOutputCols; ++j) {
             error[i][j] = output[i][j] * (1 - output[i][j]) * backPropErrorSum[i][j];
             //if (i == 0 && j == 0)
-            //    std::cout << "error for i: " << i << " j: " << j << " is " << error[i][j] << " backproperrorsum: " << backPropErrorSum[i][j] << " output: " << output[i][j] << std::endl;
+                //std::cout << "error for i: " << i << " j: " << j << " is " << error[i][j] << " backproperrorsum: " << backPropErrorSum[i][j] << " output: " << output[i][j] << std::endl;
         }
     }
     //std::cout << "calculated errors for backprop" << std::endl;

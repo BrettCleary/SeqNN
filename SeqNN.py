@@ -85,13 +85,12 @@ class SeqNN(object):
     def getTrainTargets(self):
         return self.__trainTargets
 
-    def trainNN(self, batchSize, numEpochs, weightStepSize):
+    def trainNN(self, batchSize, numEpochs):
         #if ((not any(self.__trainData)) or (not any(self.__trainTargets))):
         #    print("Training data and targets must be loaded first before training the neural network.")
         #    return
         self.__model.SetBatchSize(batchSize)
         self.__model.SetNumEpochs(numEpochs)
-        self.__model.SetStepSize(weightStepSize)
         self.__model.Train()
         self.__modelTrained = True
 
@@ -117,3 +116,6 @@ class SeqNN(object):
 
     def clearLayers(self):
         self.__model.ClearLayers()
+
+    def checkGradientNumerically(self):
+        return self.__model.CheckGradientNumerically()

@@ -52,7 +52,7 @@ bool Layer::GradientCorrect(SequentialModel* model, int startIndex, int endIndex
 	return true;
 }
 
-void Layer::UpdateWeights(double step) {
+void Layer::UpdateWeights() {
 	//std::cout << "updating weights in Layer Class" << std::endl;
 	if (!usingWeights)
 		return;
@@ -67,18 +67,19 @@ void Layer::UpdateWeights(double step) {
 		for (int j = 0; j < numOutputCols; ++j) {
 			for (int m = 0; m < numInputRows; ++m) {
 				for (int n = 0; n < numInputCols; ++n) {
-					weights[i][j][m][n] -= step * weightDer[i][j][m][n];
+					weights[i][j][m][n] -= weightStepSize * weightDer[i][j][m][n];
 					/*double rangeLimit = 0.1;
 					if (weights[i][j][m][n] < -rangeLimit)
 						weights[i][j][m][n] = -rangeLimit;
 					else if (weights[i][j][m][n] > rangeLimit)
 						weights[i][j][m][n] = rangeLimit;*/
 					//if (i == 0 && j == 0)
-					//	std::cout << "i j m n: " << i << j << m << n << " step: " << step << " weightDer[i][j][m][n] = " << weightDer[i][j][m][n] << " weights[i][j][m][n] = " << weights[i][j][m][n] << std::endl;
+					if (displayWeights)
+						std::cout << "i j m n: " << i << j << m << n << " step: " << weightStepSize << " weightDer[i][j][m][n] = " << weightDer[i][j][m][n] << " weights[i][j][m][n] = " << weights[i][j][m][n] << std::endl;
 					weightDer[i][j][m][n] = 0;
 				}
 			}
-			bias[i][j] -= step * biasDer[i][j];
+			bias[i][j] -= weightStepSize * biasDer[i][j];
 			biasDer[i][j] = 0;
 		}
 	}

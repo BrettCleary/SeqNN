@@ -11,21 +11,46 @@ import SeqNN
 
 
 def RunAllTests():
-    csvFileNames = ["Data//TestA_fourClassEightBinaryPixels.csv", "Data//TestB_fourClassFourBinaryPixels.csv", "Data//TestC_fourClassEightBinarySparsePixels.csv", "Data//TestD_MNIST_tenDigits.csv"]
-    numRowsInput = [2, 2, 2, 28]
-    numColsInput = [4, 2, 4, 28]
+    csvFileNames = ["Data//TestA_fourClassEightBinaryPixels.csv", "Data//TestB_fourClassSixteenBinaryPixels.csv", "Data//TestC_fourClassEightBinarySparsePixels.csv", "Data//TestD_MNIST_tenDigits.csv"]
+    numRowsInput = [2, 4, 2, 28]
+    numColsInput = [4, 4, 4, 28]
     numOutputClasses = [4, 4, 4, 10]
+    batchSizes = [1, 1, 1, 1]
+    numEpochs = [100, 100, 100, 1000]
+    stepSizes = [0.001, 0.001, 0.001, 0.000001]
     
     for fileIndex in range(len(csvFileNames)):
         DataConvertTest(csvFileNames[fileIndex], True, numRowsInput[fileIndex], numColsInput[fileIndex], numOutputClasses[fileIndex])
 
     print("Single Dense Layer Tests: ")
     for fileIndex in range(len(csvFileNames)):
-        SingleDenseLayerTest(csvFileNames[fileIndex], numRowsInput[fileIndex], numColsInput[fileIndex], numOutputClasses[fileIndex])
+        SingleDenseLayerTest(csvFileNames[fileIndex], numRowsInput[fileIndex], numColsInput[fileIndex], numOutputClasses[fileIndex], 
+        batchSizes[fileIndex], numEpochs[fileIndex], stepSizes[fileIndex])
+
+    numEpochsCnn = [1000, 10000, 1000, 10000]
+    denseStepSize = [0.04, 0.04, 0.04, 0.04]
+    cnnStepSize = [1, 1, 1, 1]
 
     print("CNN 2D -> Dense Layer -> Output Tests: ")
     for fileIndex in range(len(csvFileNames)):
-        Simple2DCnnTest(csvFileNames[fileIndex], numRowsInput[fileIndex], numColsInput[fileIndex], numOutputClasses[fileIndex])
+        Simple2DCnnTest(csvFileNames[fileIndex], numRowsInput[fileIndex], numColsInput[fileIndex], numOutputClasses[fileIndex], 
+        batchSizes[fileIndex], numEpochsCnn[fileIndex], cnnStepSize[fileIndex], denseStepSize[fileIndex])
+
+    return
+
+def RunOneCnnTest(fileIndex):
+    csvFileNames = ["Data//TestA_fourClassEightBinaryPixels.csv", "Data//TestB_fourClassSixteenBinaryPixels.csv", "Data//TestC_fourClassEightBinarySparsePixels.csv", "Data//TestD_MNIST_tenDigits.csv"]
+    numRowsInput = [2, 4, 2, 28]
+    numColsInput = [4, 4, 4, 28]
+    numOutputClasses = [4, 4, 4, 10]
+    batchSizes = [1, 1, 1, 1]
+    numEpochsCnn = [1000, 10000, 1000, 1000]
+    denseStepSize = [0.04, 0.04, 0.04, 0.001]
+    cnnStepSize = [1, 1, 1, 0.001]
+
+    print("CNN 2D -> Dense Layer -> Output Tests: ")
+    Simple2DCnnTest(csvFileNames[fileIndex], numRowsInput[fileIndex], numColsInput[fileIndex], numOutputClasses[fileIndex], 
+    batchSizes[fileIndex], numEpochsCnn[fileIndex], cnnStepSize[fileIndex], denseStepSize[fileIndex])
 
     return
 
@@ -33,6 +58,9 @@ def Calc2DErrorRate(target, predicted):
 
     #print("target: ", type(target), " has shape", target.shape)
     #print("predicted: ", type(predicted), " has len ", len(predicted))
+
+    #print("target: ", target)
+    #print("predicted: ", predicted)
 
     targetClasses = np.zeros(target.shape[2])
 
@@ -50,6 +78,7 @@ def Calc2DErrorRate(target, predicted):
 
     numWrong = 0
     for z in range(targetClasses.shape[0]):
+        #print("Target is ", targetClasses[z], ", and predicted is ", predicted[z])
         if targetClasses[z] != predicted[z]:
             numWrong += 1
     
@@ -65,29 +94,32 @@ def DataConvertTest(csvFileName, isTrain, inputRows, inputCols, numOutputClasses
     print("Target vector convert test for csv file:", csvFileName, " is successful: ", targetVectorConvertTest(targetArrays))
     print()
 
-def SingleDenseLayerTest(csvFileName, inputRows, inputCols, numOutputClasses):
+def SingleDenseLayerTest(csvFileName, inputRows, inputCols, numOutputClasses, batchSize, numEpochs, stepSize):
     model = SeqNN.SeqNN(inputRows, inputCols, numOutputClasses)
     model.readData(csvFileName)
-    denseLayer = CNN.DenseLayer()
+    denseLayer = CNN.DenseLayer(stepSize)
     model.addLayer(denseLayer)
-    model.trainNN(1, 1000, 0.01)
+    #print(model.__model.CheckGradientNumerically())
+    model.trainNN(batchSize, numEpochs)
 
     output = model.predict(csvFileName, True)
     errorRate = Calc2DErrorRate(model.getTrainTargets(), output)
     print("\nThe error rate for ", csvFileName, " is ", errorRate, "\n")
 
-def Simple2DCnnTest(csvFileName, inputRows, inputCols, numOutputClasses):
+def Simple2DCnnTest(csvFileName, inputRows, inputCols, numOutputClasses, batchSize, numEpochs, cnnStepSize, denseLayerStepSize):
 
     model = SeqNN.SeqNN(inputRows, inputCols, numOutputClasses)
     model.readData(csvFileName)
     #print(model.getTrainData().shape)
     #print(model.getTrainTargets().shape)
-    cnnLayer = CNN.Conv2DLayer(2, 2, 2, 2, 0)
+    cnnLayer = CNN.Conv2DLayer(2, 2, 2, 2, 0, cnnStepSize)
     #cnnLayer = CNN.Conv2DLayer(1, 1, 1, 1, 0)
     model.addLayer(cnnLayer)
-    denseLayer = CNN.DenseLayer()
+    denseLayer = CNN.DenseLayer(denseLayerStepSize)
     model.addLayer(denseLayer)
-    model.trainNN(1, 2, 0.01)
+    print("Initial numerical gradient agrees with initial backprop gradient :", model.checkGradientNumerically())
+    model.trainNN(batchSize, numEpochs)
+    print("Final Numerical gradient agrees with final backprop gradient", model.checkGradientNumerically())
 
     output = model.predict(csvFileName, True)
     errorRate = Calc2DErrorRate(model.getTrainTargets(), output)

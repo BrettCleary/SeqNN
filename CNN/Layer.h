@@ -36,6 +36,8 @@ protected:
 	//input layer [row][col]
 	const std::vector<std::vector<double>>* inputValues;
 
+	double weightStepSize;
+
 
 	//input layer[row][col]
 	std::vector<std::vector<double>> backPropError;
@@ -51,11 +53,18 @@ protected:
 
 	std::vector<std::vector<double>> output;
 
+
+
 	double LogSig(double a) {
 		return 1 / (1 + exp(-a));
 	}
 
 public:
+	bool displayWeights = false;
+
+	Layer(double step) : weightStepSize(step) {
+
+	}
 
 	void ResetWeights() {
 		if (!usingWeights)
@@ -82,7 +91,7 @@ public:
 
 	bool GradientCorrect(SequentialModel* model, int startIndex, int endIndex);
 
-	void UpdateWeights(double step);
+	void UpdateWeights();
 
 	const std::vector<std::vector<double>>* GetOutput() {
 		return &output;

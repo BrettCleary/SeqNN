@@ -825,6 +825,10 @@ class Layer(_object):
     def __init__(self, *args, **kwargs):
         raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
+    __swig_setmethods__["displayWeights"] = _CNN.Layer_displayWeights_set
+    __swig_getmethods__["displayWeights"] = _CNN.Layer_displayWeights_get
+    if _newclass:
+        displayWeights = _swig_property(_CNN.Layer_displayWeights_get, _CNN.Layer_displayWeights_set)
 
     def ResetWeights(self):
         return _CNN.Layer_ResetWeights(self)
@@ -832,8 +836,8 @@ class Layer(_object):
     def GradientCorrect(self, model, startIndex, endIndex):
         return _CNN.Layer_GradientCorrect(self, model, startIndex, endIndex)
 
-    def UpdateWeights(self, step):
-        return _CNN.Layer_UpdateWeights(self, step)
+    def UpdateWeights(self):
+        return _CNN.Layer_UpdateWeights(self)
 
     def GetOutput(self):
         return _CNN.Layer_GetOutput(self)
@@ -895,9 +899,6 @@ class SequentialModel(_object):
     def SetNumEpochs(self, num):
         return _CNN.SequentialModel_SetNumEpochs(self, num)
 
-    def SetStepSize(self, step):
-        return _CNN.SequentialModel_SetStepSize(self, step)
-
     def AddLayer(self, layer):
         return _CNN.SequentialModel_AddLayer(self, layer)
 
@@ -943,8 +944,8 @@ class Conv2DLayer(Layer):
     __getattr__ = lambda self, name: _swig_getattr(self, Conv2DLayer, name)
     __repr__ = _swig_repr
 
-    def __init__(self, winRows, winCols, strideRowInput, strideColInput, paddingInput):
-        this = _CNN.new_Conv2DLayer(winRows, winCols, strideRowInput, strideColInput, paddingInput)
+    def __init__(self, winRows, winCols, strideRowInput, strideColInput, paddingInput, step):
+        this = _CNN.new_Conv2DLayer(winRows, winCols, strideRowInput, strideColInput, paddingInput, step)
         try:
             self.this.append(this)
         except __builtin__.Exception:
@@ -971,18 +972,18 @@ class DenseLayer(Layer):
     __getattr__ = lambda self, name: _swig_getattr(self, DenseLayer, name)
     __repr__ = _swig_repr
 
+    def __init__(self, step):
+        this = _CNN.new_DenseLayer(step)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
     def FwdProp(self, input):
         return _CNN.DenseLayer_FwdProp(self, input)
 
     def BackProp(self, backPropErrorSum):
         return _CNN.DenseLayer_BackProp(self, backPropErrorSum)
-
-    def __init__(self):
-        this = _CNN.new_DenseLayer()
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
     __swig_destroy__ = _CNN.delete_DenseLayer
     __del__ = lambda self: None
 DenseLayer_swigregister = _CNN.DenseLayer_swigregister

@@ -10,6 +10,10 @@ class DenseLayer :
 
 public:
 
+    DenseLayer(double step) : Layer(step) {
+
+    }
+
     virtual std::vector<std::vector<double>>* FwdProp(const std::vector<std::vector<double>>& input) override;
 
     virtual const std::vector<std::vector<double>>* BackProp(const std::vector<std::vector<double>>& backPropErrorSum) override;

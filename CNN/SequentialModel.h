@@ -21,7 +21,7 @@ class SequentialModel
 	//static const int numLayers = 1;
 	//Layer* allLayers[numLayers];
 	std::vector<Layer*> allLayers;
-	double weightStepSize = .01;
+	//double weightStepSize = .01;
 
 	std::vector<std::vector<std::vector<double>>> inputData;
 	//[dataPoint][row][col]
@@ -88,9 +88,9 @@ class SequentialModel
 		auto& lastLayer = allLayers[allLayers.size() - 1];
 		const std::vector<std::vector<double>>& output = *(lastLayer->GetOutput());
 
-		//std::cout << "target rows: " << target.size() << " target cols" << target[0].size() << std::endl;
+		/*std::cout << "target rows: " << target.size() << " target cols" << target[0].size() << std::endl;
 
-		/*std::cout << "target vector in calcerror" << std::endl;
+		std::cout << "target vector in calcerror" << std::endl;
 		for (int i = 0; i < target.size(); ++i) {
 			for (int j = 0; j < target[0].size(); ++j) {
 				std::cout << "ij " << i << j << " target = " << target[i][j] << std::endl;
@@ -101,7 +101,7 @@ class SequentialModel
 			for (int j = 0; j < target[0].size(); ++j) {
 				dError_dAct[i][j] = (output[i][j] - target[i][j]) / (output[i][j] * (1 - output[i][j]));
 				//if (i == 0 && j == 0)
-					//std::cout << "for i and j: " << i << j << " dError_dact = " << dError_dAct[i][j] << " output = " << output[i][j] << " target = " << target[i][j] << std::endl;
+				//	std::cout << "for i and j: " << i << j << " dError_dact = " << dError_dAct[i][j] << " output = " << output[i][j] << " target = " << target[i][j] << std::endl;
 			}
 		}
 		return std::move(dError_dAct);
@@ -114,7 +114,11 @@ class SequentialModel
 
 		for (int i = 0; i < allLayers.size(); ++i) {
 			//std::cout << "Updating Weights for i = " << i << std::endl;
-			allLayers[i]->UpdateWeights(weightStepSize);
+			//if (i == 0)
+			//	allLayers[i]->displayWeights = true;
+			allLayers[i]->UpdateWeights();
+			//if (i == 0)
+			//	allLayers[i]->displayWeights = false;
 			//std::cout << "Updated Weights for i = " << i << std::endl;
 		}
 	}
@@ -138,8 +142,6 @@ class SequentialModel
 			//auto& lastLayer = allLayers[allLayers.size() - 1];
 			auto& lastLayer = allLayers[allLayers.size() - 1];
 			const std::vector<std::vector<double>>& output = *(lastLayer->GetOutput());
-
-			
 
 			double maxProb = -1;
 			int maxI = -1;
@@ -290,9 +292,9 @@ public:
 		numEpochs = num;
 	}
 
-	void SetStepSize(double step) {
+	/*void SetStepSize(double step) {
 		weightStepSize = step;
-	}
+	}*/
 
 	void AddLayer(Layer* layer) {
 		allLayers.push_back(layer);

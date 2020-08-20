@@ -54,7 +54,7 @@ class Pool2DLayer :
 
 public:
 
-    Pool2DLayer(bool isMaxPool, int poolColsInput, int poolRowsInput) : Layer() {
+    Pool2DLayer(bool isMaxPool, int poolColsInput, int poolRowsInput) : Layer(0) {
         isMax = isMaxPool;
         poolCols = poolColsInput;
         poolRows = poolRowsInput;
