@@ -17381,6 +17381,7 @@ SWIGINTERN PyObject *_wrap_new_DenseLayer(PyObject *SWIGUNUSEDPARM(self), PyObje
   int arg2 ;
   int arg3 ;
   double arg4 ;
+  int arg5 ;
   double val1 ;
   int ecode1 = 0 ;
   int val2 ;
@@ -17389,13 +17390,16 @@ SWIGINTERN PyObject *_wrap_new_DenseLayer(PyObject *SWIGUNUSEDPARM(self), PyObje
   int ecode3 = 0 ;
   double val4 ;
   int ecode4 = 0 ;
+  int val5 ;
+  int ecode5 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
   DenseLayer *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOO:new_DenseLayer",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OOOOO:new_DenseLayer",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
   ecode1 = SWIG_AsVal_double(obj0, &val1);
   if (!SWIG_IsOK(ecode1)) {
     SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_DenseLayer" "', argument " "1"" of type '" "double""'");
@@ -17416,7 +17420,12 @@ SWIGINTERN PyObject *_wrap_new_DenseLayer(PyObject *SWIGUNUSEDPARM(self), PyObje
     SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "new_DenseLayer" "', argument " "4"" of type '" "double""'");
   } 
   arg4 = static_cast< double >(val4);
-  result = (DenseLayer *)new DenseLayer(arg1,arg2,arg3,arg4);
+  ecode5 = SWIG_AsVal_int(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "new_DenseLayer" "', argument " "5"" of type '" "int""'");
+  } 
+  arg5 = static_cast< int >(val5);
+  result = (DenseLayer *)new DenseLayer(arg1,arg2,arg3,arg4,arg5);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_DenseLayer, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
@@ -18713,6 +18722,8 @@ SWIG_init(void) {
   
   import_array();
   
+  SWIG_Python_SetConstant(d, "logSig",SWIG_From_int(static_cast< int >(logSig)));
+  SWIG_Python_SetConstant(d, "softmax",SWIG_From_int(static_cast< int >(softmax)));
 #if PY_VERSION_HEX >= 0x03000000
   return m;
 #else

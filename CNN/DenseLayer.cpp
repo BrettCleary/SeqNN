@@ -76,6 +76,8 @@ std::vector<std::vector<double>>* DenseLayer::FwdProp(const std::vector<std::vec
 
     inputValues = &input;
 
+    double expSum = 0;
+
     for (int i = 0; i < numOutputRows; ++i) {
         for (int j = 0; j < numOutputCols; ++j) {
             double activation = 0;
@@ -85,9 +87,21 @@ std::vector<std::vector<double>>* DenseLayer::FwdProp(const std::vector<std::vec
                 }
             }
             activation += bias[i][j];
-            output[i][j] = LogSig(activation);
+            if (actFxn == ActFxn::logSig)
+                output[i][j] = LogSig(activation);
+            else if (actFxn == ActFxn::softmax) {
+                output[i][j] = exp(activation);
+                expSum += output[i][j];
+            }
         }
     }
+    for (int i = 0; i < numOutputRows; ++i) {
+        for (int j = 0; j < numOutputCols; ++j) {
+            output[i][j] /= expSum;
+        }
+    }
+
+
     return &output;
 }
 
@@ -95,6 +109,7 @@ const std::vector<std::vector<double>>* DenseLayer::BackProp(const std::vector<s
     //calculate errors
     for (int i = 0; i < numOutputRows; ++i) {
         for (int j = 0; j < numOutputCols; ++j) {
+            //same for logSig squared loss and crossEntropy loss for softmax
             error[i][j] = output[i][j] * (1 - output[i][j]) * backPropErrorSum[i][j];
         }
     }

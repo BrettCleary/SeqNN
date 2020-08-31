@@ -35,15 +35,15 @@ class SequentialModel
 	}
 
 	std::vector<std::vector<double>> CalcError(const std::vector<std::vector<double>>& target) {
-		auto dError_dAct = target;
+		auto dError_dOutput = target;
 		auto& lastLayer = allLayers[allLayers.size() - 1];
 		const std::vector<std::vector<double>>& output = *(lastLayer->GetOutput());
 
 		for (int i = 0; i < target.size(); ++i) {
 			for (int j = 0; j < target[0].size(); ++j) {
-				dError_dAct[i][j] = (output[i][j] - target[i][j]) / (output[i][j] * (1 - output[i][j]));}
+				dError_dOutput[i][j] = (output[i][j] - target[i][j]) / (output[i][j] * (1 - output[i][j]));}
 		}
-		return std::move(dError_dAct);
+		return std::move(dError_dOutput);
 	}
 	
 	void UpdateWeights() {
