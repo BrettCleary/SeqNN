@@ -10,6 +10,7 @@ import re
 import CNN
 import SeqNN
 import SeqNNTests
+import Datasets as ds
 
 #def cnnTest():
 imgWidth = 8
@@ -27,12 +28,80 @@ padding = 0
 #model = CNNSlow.Cnn(imgWidth, imgHeight, strideHor, strideVert, fieldWidth, fieldHeight, poolWidth, poolHeight, step)
 
 
-csvFileName = "Data//MNIST_train.csv"
+csvFileNameTrain = "Data//MNIST_trainShort.csv"
+#csvFileNameTest = "Data//MNIST_testShort.csv"
+csvFileNameTest = "Data//MNIST_trainShort.csv"
 
-SeqNNTests.RunAllTests()
+mnistTrain = np.true_divide(ds.mnistTrainData, 255.0)
+mnistTargets = ds.mnistTrainTargets
+
+testDData = np.true_divide(ds.testD_trainData, 255.0)
+testDTargets = ds.testD_trainTargets
+
+#print(testDData[5,:,0])
+#print(testDTargets)
+
+#SeqNNTests.convertAllCsvToNpy()
+
+#SeqNNTests.RunAllTests()
+#SeqNNTests.RunAllTests(True, 3)
 #SeqNNTests.RunOneCnnTest(1)
 #SeqNNTests.RunMNISTTest()
+
 print("tests finished")
+
+def CNNPoolTest(trainData, trainTargets, inputRows, inputCols, numOutputClasses, 
+batchSize, numEpochs, cnnStepSize, denseLayerStepSize, testData, testTargets):
+    model = SeqNN.SeqNN(inputRows, inputCols, numOutputClasses)
+    model.setTrainData(trainData, trainTargets)
+    print("starting to read data")
+    cnnLayer = CNN.Conv2DLayer(2, 2, 2, 2, 0, cnnStepSize)
+    model.addLayer(cnnLayer)
+    poolLayer = CNN.Pool2DLayer(True, 2, 2)
+    model.addLayer(poolLayer)
+    denseLayer = CNN.DenseLayer(denseLayerStepSize, 1, numOutputClasses)
+    model.addLayer(denseLayer)
+    print("starting to train nn")
+    model.setValidationDataAndTargets(trainData, trainTargets)
+    model.trainNN(batchSize, numEpochs, True, 0.1, 1, 5)
+
+    #output = model.predict(csvFileNameTest, True)
+    print("starting to calc test error rate")
+    errorRate = model.calcTestErrorRate(testData, testTargets)
+    print("\nThe error rate for test dataset is ", errorRate, "\n")
+
+def CNNDenseTest(trainData, trainTargets, inputRows, inputCols, numOutputClasses, 
+batchSize, numEpochs, cnnStepSize, denseLayerStepSize, testData, testTargets):
+    model = SeqNN.SeqNN(inputRows, inputCols, numOutputClasses)
+    model.setTrainData(trainData, trainTargets)
+    print("starting to read data")
+    denseLayer = CNN.DenseLayer(denseLayerStepSize, 1, 128)
+    model.addLayer(denseLayer)
+    #poolLayer = CNN.Pool2DLayer(True, 2, 2)
+    #model.addLayer(poolLayer)
+    denseLayer = CNN.DenseLayer(denseLayerStepSize, 1, numOutputClasses)
+    model.addLayer(denseLayer)
+    print("starting to train nn")
+    model.setValidationDataAndTargets(trainData, trainTargets)
+    model.trainNN(batchSize, numEpochs, True, 0.1, 1, 100)
+
+    #output = model.predict(csvFileNameTest, True)
+    print("starting to calc test error rate")
+    errorRate = model.calcTestErrorRate(testData, testTargets)
+    print("\nThe error rate for test dataset is ", errorRate, "\n")
+#def MNIST_Test()
+
+CNNPoolTest(mnistTrain, mnistTargets, 28, 28, 10, 1, 10, 1, 0.04, mnistTrain, mnistTargets)
+#CNNDenseTest(mnistTrain, mnistTargets, 28, 28, 10, 1, 5, 1, 0.04, mnistTrain, mnistTargets)
+#CNNPoolTest(testDData, testDTargets, 28, 28, 10, 1, 100, 1, 0.04, testDData, testDTargets)
+
+#SeqNNTests.Simple2DCnnPoolTest(csvFileNameTrain, 28, 28, 10, 1, 10000, 1, 0.04)
+
+#SeqNNTests.convertAllCsvToNpy()
+#SeqNNTests.convertMNIST_Arrays()
+
+
+
 
 #model = SeqNN.SeqNN(2, 4, 4, csvFileName)
 #layer = CNN.Conv2DLayer(fieldHeight, fieldWidth, strideHor, strideVert, padding)

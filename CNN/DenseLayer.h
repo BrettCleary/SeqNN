@@ -10,8 +10,9 @@ class DenseLayer :
 
 public:
 
-    DenseLayer(double step) : Layer(step) {
-
+    DenseLayer(double step, int outRows, int outCols) : Layer(step) {
+        numOutputCols = outCols;
+        numOutputRows = outRows;
     }
 
     virtual std::vector<std::vector<double>>* FwdProp(const std::vector<std::vector<double>>& input) override;

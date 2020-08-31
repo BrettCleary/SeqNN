@@ -972,8 +972,8 @@ class DenseLayer(Layer):
     __getattr__ = lambda self, name: _swig_getattr(self, DenseLayer, name)
     __repr__ = _swig_repr
 
-    def __init__(self, step):
-        this = _CNN.new_DenseLayer(step)
+    def __init__(self, step, outRows, outCols):
+        this = _CNN.new_DenseLayer(step, outRows, outCols)
         try:
             self.this.append(this)
         except __builtin__.Exception:

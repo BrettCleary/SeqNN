@@ -3,9 +3,6 @@
 
 std::vector<std::vector<double>>* DenseLayer::FwdProp(const std::vector<std::vector<double>>& input) {
     if (!initialized) {
-        numOutputRows = 1;
-        numOutputCols = 4;
-
         numInputRows = input.size();
         numInputCols = input[0].size();
 

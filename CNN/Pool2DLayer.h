@@ -29,18 +29,22 @@ class Pool2DLayer :
                 }
             }
         }
-
-        adjList[mMax][nMax].push_back({ i, j });
+        adjList[i * poolRows + mMax][j * poolCols + nMax].push_back({ i, j });
         return maxAct;
     }
 
     double MinPool(int i, int j, const std::vector<std::vector<double>>& input) {
         double minAct = DBL_MAX;
+        int mMin = -1;
+        int nMin = -1;
         for (int m = 0; m < poolRows; ++m) {
             for (int n = 0; n < poolCols; ++n) {
                 minAct = std::min(minAct, input[i * poolRows + m][j * poolCols + n]);
+                mMin = m;
+                nMin = n;
             }
         }
+        adjList[i * poolRows + mMin][j * poolCols + nMin].push_back({ i, j });
         return minAct;
     }
 

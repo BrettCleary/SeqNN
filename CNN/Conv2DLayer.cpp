@@ -26,7 +26,7 @@ std::vector<std::vector<double>>* Conv2DLayer::FwdProp(const std::vector<std::ve
                     std::vector<double> row_iDer(windowCols, 0);
                     col_poolDer.push_back(row_iDer);
                     std::vector<double> row_iDerNum(windowCols, 0);
-                    col_poolDerNum.push_back(row_iDer);
+                    col_poolDerNum.push_back(row_iDerNum);
                 }
                 row_pool.push_back(col_pool);
                 row_poolDer.push_back(col_poolDer);
@@ -48,7 +48,7 @@ std::vector<std::vector<double>>* Conv2DLayer::FwdProp(const std::vector<std::ve
             std::vector<double> biasDerNum_i(numOutputCols, 0);
             biasDerNumerical.push_back(biasDerNum_i);
             std::vector<double> error_i(numOutputCols, 0);
-            error.push_back(biasDer_i);
+            error.push_back(error_i);
         }
 
         //init backPropError to 0
@@ -79,7 +79,7 @@ std::vector<std::vector<double>>* Conv2DLayer::FwdProp(const std::vector<std::ve
             double activation = 0;
             for (int m = 0; m < windowRows; ++m) {
                 for (int n = 0; n < windowCols; ++n) {
-                    activation += input[i * windowRows + m][j * windowCols + n] * weights[i][j][m][n];
+                    activation += input[i * strideRow + m][j * strideCol + n] * weights[i][j][m][n];
                 }
             }
             activation += bias[i][j];
@@ -113,9 +113,9 @@ const std::vector<std::vector<double>>* Conv2DLayer::BackProp(const std::vector<
     //calculate weight derivatives
     for (int i = 0; i < numOutputRows; ++i) {
         for (int j = 0; j < numOutputCols; ++j) {
-            for (int m = 0; m < numInputRows; ++m) {
-                for (int n = 0; n < numInputCols; ++n) {
-                    weightDer[i][j][m][n] += error[i][j] * (*inputValues)[m][n];
+            for (int m = 0; m < windowRows; ++m) {
+                for (int n = 0; n < windowCols; ++n) {
+                    weightDer[i][j][m][n] += error[i][j] * (*inputValues)[i * strideRow + m][j * strideCol + n];
                     //if (error[i][j] != 0)
                         //std::cout << "ijmn: " << i << j << m << n << " weightDer = " << weightDer[i][j][m][n] << " input values[m][n] = " << (*inputValues)[m][n] << std::endl;
                 }

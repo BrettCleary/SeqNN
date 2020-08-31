@@ -28,13 +28,14 @@ class SequentialModel
 	std::vector<std::vector<std::vector<double>>> targets;
 	int batchSize = 1;
 	int numEpochs = 1;
+	int lastTrainedIndex = 0;
 
 	//double* crossEntropyErrorSum;
 
 	//bool calcCrossEntropyError = false;
 
 	std::vector<std::vector<double>> errorPrev;
-	int printCounter = 0;
+	//int printCounter = 0;
 
 
 	void PrintErrorChange(const std::vector<std::vector<double>>& error) {
@@ -64,12 +65,13 @@ class SequentialModel
 	}
 
 	void BackProp(const std::vector<std::vector<double>>& error) {
-		/*if (printCounter > 100) {
-			PrintErrorChange(error);
-			errorPrev = error;
+		/*if (printCounter % 10 == 0) {
+			//PrintErrorChange(error);
+			//errorPrev = error;
 			printCounter = 0;
-		}*/
-		//++printCounter;
+			std::cout << "num of backprops: " << printCounter << std::endl;
+		}
+		++printCounter;*/
 		const std::vector<std::vector<double>>* errorPtr = &error;
 		/*for (int i = allLayers.size() - 1; i >= 0; --i) {
 			errorPtr = allLayers[i]->BackProp(*errorPtr);
@@ -321,18 +323,18 @@ public:
 			//std::cout << "\n entering train" << std::endl;
 			//std::cout << "batches: " << batchSize << std::endl;
 			int numBatches = numEpochs * std::min(inputData.size(), targets.size()) / batchSize;
-			int n = 0;
+			//int n = 0;
 			for (int batch_k = 0; batch_k < numBatches; ++batch_k) {
 				for (int i = 0; i < batchSize; ++i) {
 					//std::cout << "Entering FwdProp()" << std::endl;
-					FwdProp(&inputData[n]);
+					FwdProp(&inputData[lastTrainedIndex]);
 					//std::cout << "finished fwdprop for batch: " << batch_k << " and data element i: " << i << std::endl;
 					//std::cout << " n = " << n << std::endl;
-					auto error = CalcError(targets[n]);
+					auto error = CalcError(targets[lastTrainedIndex]);
 					//std::cout << "finished error for batch: " << batch_k << " and data element i: " << i << std::endl;
 					BackProp(error);
 					//std::cout << "finished backprop for batch: " << batch_k << " and data element i: " << i << std::endl;
-					n = (n + 1) % inputData.size();
+					lastTrainedIndex = (lastTrainedIndex + 1) % inputData.size();
 				}
 				//std::cout << "updating weights: " << std::endl;
 				UpdateWeights();
