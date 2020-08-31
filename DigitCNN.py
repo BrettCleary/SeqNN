@@ -16,9 +16,9 @@ mnistTargets = ds.mnistTrainTargets
 
 #MNIST Model
 model = SeqNN.SeqNN([
-    CNN.Conv2DLayer(2, 2, 2, 2, 0, 1),
+    CNN.Conv2DLayer(2, 2, 2, 2, 0, 0.5, 0.9),
     CNN.Pool2DLayer(True, 2, 2),
-    CNN.DenseLayer(0.04, 1, 10)
+    CNN.DenseLayer(0.02, 1, 10, 0.9)
 ])
 
 model.trainNN(10, 10, mnistTrain, mnistTargets, mnistTrain, mnistTargets, True, 0.1, 1, 5)

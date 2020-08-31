@@ -733,10 +733,6 @@ class Layer(_object):
     def __init__(self, *args, **kwargs):
         raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
-    __swig_setmethods__["displayWeights"] = _CNN.Layer_displayWeights_set
-    __swig_getmethods__["displayWeights"] = _CNN.Layer_displayWeights_get
-    if _newclass:
-        displayWeights = _swig_property(_CNN.Layer_displayWeights_get, _CNN.Layer_displayWeights_set)
 
     def ResetWeights(self):
         return _CNN.Layer_ResetWeights(self)
@@ -834,8 +830,8 @@ class Conv2DLayer(Layer):
     __getattr__ = lambda self, name: _swig_getattr(self, Conv2DLayer, name)
     __repr__ = _swig_repr
 
-    def __init__(self, winRows, winCols, strideRowInput, strideColInput, paddingInput, step):
-        this = _CNN.new_Conv2DLayer(winRows, winCols, strideRowInput, strideColInput, paddingInput, step)
+    def __init__(self, winRows, winCols, strideRowInput, strideColInput, paddingInput, step, momentum):
+        this = _CNN.new_Conv2DLayer(winRows, winCols, strideRowInput, strideColInput, paddingInput, step, momentum)
         try:
             self.this.append(this)
         except __builtin__.Exception:
@@ -862,8 +858,8 @@ class DenseLayer(Layer):
     __getattr__ = lambda self, name: _swig_getattr(self, DenseLayer, name)
     __repr__ = _swig_repr
 
-    def __init__(self, step, outRows, outCols):
-        this = _CNN.new_DenseLayer(step, outRows, outCols)
+    def __init__(self, step, outRows, outCols, momentum):
+        this = _CNN.new_DenseLayer(step, outRows, outCols, momentum)
         try:
             self.this.append(this)
         except __builtin__.Exception:

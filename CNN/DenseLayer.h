@@ -8,9 +8,11 @@ class DenseLayer :
     public Layer
 {
 
+    void Initialize(const std::vector<std::vector<double>>& input);
+
 public:
 
-    DenseLayer(double step, int outRows, int outCols) : Layer(step) {
+    DenseLayer(double step, int outRows, int outCols, double momentum) : Layer(step, momentum) {
         numOutputCols = outCols;
         numOutputRows = outRows;
     }

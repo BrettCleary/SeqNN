@@ -63,13 +63,13 @@ void Layer::UpdateWeights() {
 		for (int j = 0; j < numOutputCols; ++j) {
 			for (int m = 0; m < numInputRows; ++m) {
 				for (int n = 0; n < numInputCols; ++n) {
-					weights[i][j][m][n] -= weightStepSize * weightDer[i][j][m][n];
-					if (displayWeights)
-						std::cout << "i j m n: " << i << j << m << n << " step: " << weightStepSize << " weightDer[i][j][m][n] = " << weightDer[i][j][m][n] << " weights[i][j][m][n] = " << weights[i][j][m][n] << std::endl;
+					weightDerMomentum[i][j][m][n] = weightDerMomentum[i][j][m][n] * momentum + (1 - momentum) * weightDer[i][j][m][n];
+					weights[i][j][m][n] -= weightStepSize * weightDerMomentum[i][j][m][n];
 					weightDer[i][j][m][n] = 0;
 				}
 			}
-			bias[i][j] -= weightStepSize * biasDer[i][j];
+			biasDerMomentum[i][j] = biasDerMomentum[i][j] * momentum + (1 - momentum) * biasDer[i][j];
+			bias[i][j] -= weightStepSize * biasDerMomentum[i][j];
 			biasDer[i][j] = 0;
 		}
 	}

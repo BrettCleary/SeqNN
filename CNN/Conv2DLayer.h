@@ -10,16 +10,19 @@ class Conv2DLayer :
     int strideRow = 2;
     int strideCol = 2;
     int padding = 0;
-    
+
+    void Initialize(const std::vector<std::vector<double>>& input);
+
 public:
 
-    Conv2DLayer(int winRows, int winCols, int strideRowInput, int strideColInput, int paddingInput, double step) : Layer(step) {
+    Conv2DLayer(int winRows, int winCols, int strideRowInput, int strideColInput, int paddingInput, double step, double momentum) : Layer(step, momentum) {
         windowRows = winRows;
         windowCols = winCols;
         strideRow = strideRowInput;
         strideCol = strideColInput;
         padding = paddingInput;
     }
+
 
     virtual std::vector<std::vector<double>>* FwdProp(const std::vector<std::vector<double>>& input) override;
 

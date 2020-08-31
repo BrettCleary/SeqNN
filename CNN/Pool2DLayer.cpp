@@ -32,38 +32,42 @@ double Pool2DLayer::MinPool(int i, int j, const std::vector<std::vector<double>>
     return minAct;
 }
 
+void Pool2DLayer::Initialize(const std::vector<std::vector<double>>& input) {
+    numInputRows = input.size();
+    numInputCols = input[0].size();
+
+    numOutputRows = numInputRows / poolRows;
+    numOutputCols = numInputCols / poolCols;
+
+    //initializing output
+    for (int i = 0; i < numOutputRows; ++i) {
+        std::vector<double> row_i(numOutputCols, 0);
+        output.push_back(row_i);
+    }
+
+    //initializing adjList
+    for (int i = 0; i < numInputRows; ++i) {
+        std::vector<std::vector<std::vector<int>>> row_pool;
+        for (int j = 0; j < numInputCols; ++j) {
+            std::vector<std::vector<int>> col_pool;
+            row_pool.push_back(col_pool);
+        }
+        adjList.push_back(row_pool);
+    }
+
+    //init backPropError to 0
+    for (int k = 0; k < numInputRows; ++k) {
+        std::vector<double> row_i(numInputCols, 0);
+        backPropError.push_back(row_i);
+    }
+
+    usingWeights = false;
+    initialized = true;
+}
+
 std::vector<std::vector<double>>* Pool2DLayer::FwdProp(const std::vector<std::vector<double>>& input) {
     if (!initialized) {
-        numInputRows = input.size();
-        numInputCols = input[0].size();
-
-        numOutputRows = numInputRows / poolRows;
-        numOutputCols = numInputCols / poolCols;
-
-        //initializing output
-        for (int i = 0; i < numOutputRows; ++i) {
-            std::vector<double> row_i(numOutputCols, 0);
-            output.push_back(row_i);
-        }
-
-        //initializing adjList
-        for (int i = 0; i < numInputRows; ++i) {
-            std::vector<std::vector<std::vector<int>>> row_pool;
-            for (int j = 0; j < numInputCols; ++j) {
-                std::vector<std::vector<int>> col_pool;
-                row_pool.push_back(col_pool);
-            }
-            adjList.push_back(row_pool);
-        }
-
-        //init backPropError to 0
-        for (int k = 0; k < numInputRows; ++k) {
-            std::vector<double> row_i(numInputCols, 0);
-            backPropError.push_back(row_i);
-        }
-
-        usingWeights = false;
-        initialized = true;
+        Initialize(input);
     }
 
     inputValues = &input;

@@ -5405,20 +5405,6 @@ SWIGINTERN void std_vector_Sl_int_Sg__insert__SWIG_1(std::vector< int > *self,st
 #include <complex> 
 
 
-SWIGINTERN int
-SWIG_AsVal_bool (PyObject *obj, bool *val)
-{
-  int r;
-  if (!PyBool_Check(obj))
-    return SWIG_ERROR;
-  r = PyObject_IsTrue(obj);
-  if (r == -1)
-    return SWIG_ERROR;
-  if (val) *val = r ? true : false;
-  return SWIG_OK;
-}
-
-
 #if NPY_API_VERSION < 0x00000007
 #define NPY_ARRAY_DEFAULT NPY_DEFAULT
 #define NPY_ARRAY_FARRAY  NPY_FARRAY
@@ -5890,6 +5876,20 @@ SWIG_AsVal_bool (PyObject *obj, bool *val)
   }
 
 
+
+
+SWIGINTERN int
+SWIG_AsVal_bool (PyObject *obj, bool *val)
+{
+  int r;
+  if (!PyBool_Check(obj))
+    return SWIG_ERROR;
+  r = PyObject_IsTrue(obj);
+  if (r == -1)
+    return SWIG_ERROR;
+  if (val) *val = r ? true : false;
+  return SWIG_OK;
+}
 
 #ifdef __cplusplus
 extern "C" {
@@ -16424,58 +16424,6 @@ SWIGINTERN PyObject *outputVector_swigregister(PyObject *SWIGUNUSEDPARM(self), P
   return SWIG_Py_Void();
 }
 
-SWIGINTERN PyObject *_wrap_Layer_displayWeights_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Layer *arg1 = (Layer *) 0 ;
-  bool arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  bool val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Layer_displayWeights_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Layer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Layer_displayWeights_set" "', argument " "1"" of type '" "Layer *""'"); 
-  }
-  arg1 = reinterpret_cast< Layer * >(argp1);
-  ecode2 = SWIG_AsVal_bool(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Layer_displayWeights_set" "', argument " "2"" of type '" "bool""'");
-  } 
-  arg2 = static_cast< bool >(val2);
-  if (arg1) (arg1)->displayWeights = arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Layer_displayWeights_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Layer *arg1 = (Layer *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:Layer_displayWeights_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Layer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Layer_displayWeights_get" "', argument " "1"" of type '" "Layer *""'"); 
-  }
-  arg1 = reinterpret_cast< Layer * >(argp1);
-  result = (bool) ((arg1)->displayWeights);
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_Layer_ResetWeights(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Layer *arg1 = (Layer *) 0 ;
@@ -17255,6 +17203,7 @@ SWIGINTERN PyObject *_wrap_new_Conv2DLayer(PyObject *SWIGUNUSEDPARM(self), PyObj
   int arg4 ;
   int arg5 ;
   double arg6 ;
+  double arg7 ;
   int val1 ;
   int ecode1 = 0 ;
   int val2 ;
@@ -17267,15 +17216,18 @@ SWIGINTERN PyObject *_wrap_new_Conv2DLayer(PyObject *SWIGUNUSEDPARM(self), PyObj
   int ecode5 = 0 ;
   double val6 ;
   int ecode6 = 0 ;
+  double val7 ;
+  int ecode7 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   PyObject * obj4 = 0 ;
   PyObject * obj5 = 0 ;
+  PyObject * obj6 = 0 ;
   Conv2DLayer *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOOOO:new_Conv2DLayer",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OOOOOOO:new_Conv2DLayer",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) SWIG_fail;
   ecode1 = SWIG_AsVal_int(obj0, &val1);
   if (!SWIG_IsOK(ecode1)) {
     SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_Conv2DLayer" "', argument " "1"" of type '" "int""'");
@@ -17306,7 +17258,12 @@ SWIGINTERN PyObject *_wrap_new_Conv2DLayer(PyObject *SWIGUNUSEDPARM(self), PyObj
     SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "new_Conv2DLayer" "', argument " "6"" of type '" "double""'");
   } 
   arg6 = static_cast< double >(val6);
-  result = (Conv2DLayer *)new Conv2DLayer(arg1,arg2,arg3,arg4,arg5,arg6);
+  ecode7 = SWIG_AsVal_double(obj6, &val7);
+  if (!SWIG_IsOK(ecode7)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "new_Conv2DLayer" "', argument " "7"" of type '" "double""'");
+  } 
+  arg7 = static_cast< double >(val7);
+  result = (Conv2DLayer *)new Conv2DLayer(arg1,arg2,arg3,arg4,arg5,arg6,arg7);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Conv2DLayer, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
@@ -17423,18 +17380,22 @@ SWIGINTERN PyObject *_wrap_new_DenseLayer(PyObject *SWIGUNUSEDPARM(self), PyObje
   double arg1 ;
   int arg2 ;
   int arg3 ;
+  double arg4 ;
   double val1 ;
   int ecode1 = 0 ;
   int val2 ;
   int ecode2 = 0 ;
   int val3 ;
   int ecode3 = 0 ;
+  double val4 ;
+  int ecode4 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
   DenseLayer *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOO:new_DenseLayer",&obj0,&obj1,&obj2)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:new_DenseLayer",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   ecode1 = SWIG_AsVal_double(obj0, &val1);
   if (!SWIG_IsOK(ecode1)) {
     SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_DenseLayer" "', argument " "1"" of type '" "double""'");
@@ -17450,7 +17411,12 @@ SWIGINTERN PyObject *_wrap_new_DenseLayer(PyObject *SWIGUNUSEDPARM(self), PyObje
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_DenseLayer" "', argument " "3"" of type '" "int""'");
   } 
   arg3 = static_cast< int >(val3);
-  result = (DenseLayer *)new DenseLayer(arg1,arg2,arg3);
+  ecode4 = SWIG_AsVal_double(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "new_DenseLayer" "', argument " "4"" of type '" "double""'");
+  } 
+  arg4 = static_cast< double >(val4);
+  result = (DenseLayer *)new DenseLayer(arg1,arg2,arg3,arg4);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_DenseLayer, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
@@ -17896,8 +17862,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"outputVector_capacity", _wrap_outputVector_capacity, METH_VARARGS, NULL},
 	 { (char *)"delete_outputVector", _wrap_delete_outputVector, METH_VARARGS, NULL},
 	 { (char *)"outputVector_swigregister", outputVector_swigregister, METH_VARARGS, NULL},
-	 { (char *)"Layer_displayWeights_set", _wrap_Layer_displayWeights_set, METH_VARARGS, NULL},
-	 { (char *)"Layer_displayWeights_get", _wrap_Layer_displayWeights_get, METH_VARARGS, NULL},
 	 { (char *)"Layer_ResetWeights", _wrap_Layer_ResetWeights, METH_VARARGS, NULL},
 	 { (char *)"Layer_GradientCorrect", _wrap_Layer_GradientCorrect, METH_VARARGS, NULL},
 	 { (char *)"Layer_UpdateWeights", _wrap_Layer_UpdateWeights, METH_VARARGS, NULL},

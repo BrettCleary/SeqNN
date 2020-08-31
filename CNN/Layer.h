@@ -19,13 +19,16 @@ protected:
 	int numOutputCols = -1;
 	bool initialized = false;
 	int numPropsSinceLastUpdate = 0;
+	double momentum = 0.9;
 
 	//first [row][col] is for current layer indexes. second [row][col] is for input
 	std::vector<std::vector<std::vector<std::vector<double>>>> weights;
 	std::vector<std::vector<std::vector<std::vector<double>>>> weightDer;
+	std::vector<std::vector<std::vector<std::vector<double>>>> weightDerMomentum;
 	//first [row][col] is for current layer indices to access bias
 	std::vector<std::vector<double>> bias;
 	std::vector<std::vector<double>> biasDer;
+	std::vector<std::vector<double>> biasDerMomentum;
 	//current layer [row][col]
 	std::vector<std::vector<double>> error;
 
@@ -52,9 +55,7 @@ protected:
 	}
 
 public:
-	bool displayWeights = false;
-
-	Layer(double step) : weightStepSize(step) {
+	Layer(double step, double momentumParam) : weightStepSize(step), momentum(momentumParam) {
 
 	}
 

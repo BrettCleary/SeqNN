@@ -28,9 +28,11 @@ class Pool2DLayer :
         }
     }
 
+    void Initialize(const std::vector<std::vector<double>>& input);
+
 public:
 
-    Pool2DLayer(bool isMaxPool, int poolColsInput, int poolRowsInput) : Layer(0) {
+    Pool2DLayer(bool isMaxPool, int poolColsInput, int poolRowsInput) : Layer(0, 0.9) {
         isMax = isMaxPool;
         poolCols = poolColsInput;
         poolRows = poolRowsInput;
