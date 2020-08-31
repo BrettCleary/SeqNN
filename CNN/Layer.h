@@ -13,10 +13,6 @@ class Layer
 protected:
 	std::string name;
 
-	//row indexes are previous layer vertice indexes and column indexes are current layer vertice index
-	//improves speed of dot product with next layer error vector during backprop
-	//std::vector<std::vector<double>> weights;
-
 	int numInputRows = -1;
 	int numInputCols = -1;
 	int numOutputRows = -1;
@@ -38,10 +34,8 @@ protected:
 
 	double weightStepSize;
 
-
 	//input layer[row][col]
 	std::vector<std::vector<double>> backPropError;
-
 
 	//for use in calculating numerical derivatives in O(W^2) time to verify backprop procedure which runs in O(W) time
 	std::vector<std::vector<std::vector<std::vector<double>>>> weightDerNumerical;
@@ -52,8 +46,6 @@ protected:
 	bool usingWeights = true;
 
 	std::vector<std::vector<double>> output;
-
-
 
 	double LogSig(double a) {
 		return 1 / (1 + exp(-a));
@@ -66,28 +58,7 @@ public:
 
 	}
 
-	void ResetWeights() {
-		if (!usingWeights)
-			return;
-
-		for (int i = 0; i < weights.size(); ++i) {
-			for (int j = 0; j < weights[0].size(); ++j) {
-				for (int m = 0; m < weights[0][0].size(); ++m) {
-					for (int n = 0; n < weights[0][0][0].size(); ++n) {
-						weightDer[i][j][m][n] = 0;
-						weightDerNumerical[i][j][m][n] = 0;
-					}
-				}
-				biasDer[i][j] = 0;
-				biasDerNumerical[i][j] = 0;
-			}
-		}
-	}
-
-	/*void InitializeWeightArrays() {
-		if (!usingWeights)
-			return;
-	}*/
+	void ResetWeights();
 
 	bool GradientCorrect(SequentialModel* model, int startIndex, int endIndex);
 
@@ -104,10 +75,6 @@ public:
 	std::string GetName() {
 		return name;
 	}
-	/*
-	Layer(PyObject* outputSize, PyObject* activationFxn, PyObject* nameIn, PyObject* regMethod) {
-
-	}*/
 };
 
 #endif // CNN_LAYER_H

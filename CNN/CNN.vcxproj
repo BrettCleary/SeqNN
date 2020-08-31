@@ -155,29 +155,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="cnnmodule.cpp" />
     <ClCompile Include="Conv2DLayer.cpp" />
     <ClCompile Include="DenseLayer.cpp" />
-    <ClCompile Include="example.cxx" />
-    <ClCompile Include="example_wrap.cxx" />
     <ClCompile Include="Layer.cpp" />
     <ClCompile Include="Pool2DLayer.cpp" />
+    <ClCompile Include="seqNN_wrap.cxx" />
     <ClCompile Include="SequentialModel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Conv2DLayer.h" />
     <ClInclude Include="DenseLayer.h" />
-    <ClInclude Include="example.h" />
     <ClInclude Include="Layer.h" />
     <ClInclude Include="Pool2DLayer.h" />
     <ClInclude Include="SequentialModel.h" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="example.i">
+    <CustomBuild Include="seqNN.i">
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">swig -c++ -python example.i</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">swig -c++ -python seqNN.i</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(Filename)_wrap.cxx;$(Outdir)CNN.py</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">swig -c++ -python example.i</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">swig -c++ -python seqNN.i</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(Filename)_wrap.cxx;$(Outdir)CNN.py</Outputs>
     </CustomBuild>
   </ItemGroup>

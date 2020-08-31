@@ -14,10 +14,7 @@ bool Layer::GradientCorrect(SequentialModel* model, int startIndex, int endIndex
 						double error1 = model->CalcErrorNumerically(dataIndex);
 						weights[m][n][i][j] -= 2 * epsilon;
 						double error0 = model->CalcErrorNumerically(dataIndex);
-
-						//std::cout << "error1: " << error1 << " error2: " << error0 << std::endl;
 						weightDerNumerical[m][n][i][j] += (error1 - error0) / (2 * epsilon);
-
 						weights[m][n][i][j] += epsilon;
 					}
 				}
@@ -30,7 +27,7 @@ bool Layer::GradientCorrect(SequentialModel* model, int startIndex, int endIndex
 			}
 		}
 	}
-	//std::cout << "updating weights in layer class for startIndex = " << startIndex << " and endIndex = " << endIndex << std::endl;
+	
 	for (int m = 0; m < numOutputRows; ++m) {
 		for (int n = 0; n < numOutputCols; ++n) {
 			for (int i = 0; i < numInputRows; ++i) {
@@ -53,7 +50,6 @@ bool Layer::GradientCorrect(SequentialModel* model, int startIndex, int endIndex
 }
 
 void Layer::UpdateWeights() {
-	//std::cout << "updating weights in Layer Class" << std::endl;
 	if (!usingWeights)
 		return;
 
@@ -68,12 +64,6 @@ void Layer::UpdateWeights() {
 			for (int m = 0; m < numInputRows; ++m) {
 				for (int n = 0; n < numInputCols; ++n) {
 					weights[i][j][m][n] -= weightStepSize * weightDer[i][j][m][n];
-					/*double rangeLimit = 0.1;
-					if (weights[i][j][m][n] < -rangeLimit)
-						weights[i][j][m][n] = -rangeLimit;
-					else if (weights[i][j][m][n] > rangeLimit)
-						weights[i][j][m][n] = rangeLimit;*/
-					//if (i == 0 && j == 0)
 					if (displayWeights)
 						std::cout << "i j m n: " << i << j << m << n << " step: " << weightStepSize << " weightDer[i][j][m][n] = " << weightDer[i][j][m][n] << " weights[i][j][m][n] = " << weights[i][j][m][n] << std::endl;
 					weightDer[i][j][m][n] = 0;
@@ -83,5 +73,22 @@ void Layer::UpdateWeights() {
 			biasDer[i][j] = 0;
 		}
 	}
-	//std::cout << "finished updating weights in Layer Class" << std::endl;
+}
+
+void Layer::ResetWeights() {
+	if (!usingWeights)
+		return;
+
+	for (int i = 0; i < weights.size(); ++i) {
+		for (int j = 0; j < weights[0].size(); ++j) {
+			for (int m = 0; m < weights[0][0].size(); ++m) {
+				for (int n = 0; n < weights[0][0][0].size(); ++n) {
+					weightDer[i][j][m][n] = 0;
+					weightDerNumerical[i][j][m][n] = 0;
+				}
+			}
+			biasDer[i][j] = 0;
+			biasDerNumerical[i][j] = 0;
+		}
+	}
 }

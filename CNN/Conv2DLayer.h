@@ -2,12 +2,6 @@
 #define CNN_CONV2DLAYER_HC
 #include "Layer.h"
 
-
-class testClass {
-
-};
-
-
 class Conv2DLayer :
     public Layer
 {
@@ -25,7 +19,6 @@ public:
         strideRow = strideRowInput;
         strideCol = strideColInput;
         padding = paddingInput;
-        //std::cout << "conv2dLayer initialized" << std::endl;
     }
 
     virtual std::vector<std::vector<double>>* FwdProp(const std::vector<std::vector<double>>& input) override;

@@ -23,6 +23,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CNNSlow.py" />
+    <Compile Include="Datasets.py" />
     <Compile Include="DigitCNN.py" />
     <Compile Include="SeqNN.py">
       <SubType>Code</SubType>
@@ -30,6 +31,7 @@
     <Compile Include="SeqNNTests.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="tfCnn.py" />
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="Global|PythonCore|3.8-32" />

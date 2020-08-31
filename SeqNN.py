@@ -9,11 +9,8 @@ import re
 import CNN
 
 class SeqNN(object):
-    """description of class"""
+    """Python wrapper for Sequential Neural Network Python Extension with modular layers."""
 
-    __inputRows = 0
-    __inputCols = 0
-    __numOutputClasses = 0
     __model = None
     #Numpy arrays
     __trainData = None
@@ -22,17 +19,18 @@ class SeqNN(object):
     __validationTargets = None
     __testData = None
     __testTargets = None
+    __layerList = None
 
     __modelTrained = False
     __outputPredicted = None
 
-    def __init__(self, inputRows, inputCols, numOutputClasses):#, strideH, strideV, fieldW, fieldH, poolW, poolH, gradStep):
-        self.__inputRows = inputRows
-        self.__inputCols = inputCols
-        self.__numOutputClasses = numOutputClasses
+    def __init__(self, layerList = None):
+        self.__model = CNN.SequentialModel()
+        self.__layerList = layerList
+        if layerList is not None:
+            self.addLayerList(layerList)
 
     def __initNN__(self):
-        self.__model = CNN.SequentialModel()
         self.__model.AddInputDataPoints(self.__trainData)
         self.__model.AddTargetVectors(self.__trainTargets)
     
@@ -63,11 +61,24 @@ class SeqNN(object):
                 
         return numWrong / len(predicted) * 100
 
-    def setValidationData(self, data):
+    def __setValidationData(self, data):
         self.__validationData = data
 
-    def setValidationTargets(self, targets):
+    def __setValidationTargets(self, targets):
         self.__validationTargets = targets
+
+    def __predict(self, data):
+        self.__outputPredicted = self.__model.Predict(data)
+        return self.__outputPredicted
+
+    def __setValidationDataAndTargets(self, validationData, validationTargets):
+        self.__setValidationData(validationData)
+        self.__setValidationTargets(validationTargets)
+        
+    def __setTrainData(self, trainData, trainTargets):
+        self.__trainData = trainData
+        self.__trainTargets = trainTargets
+        self.__initNN__()
 
     def getTrainData(self):
         return self.__trainData
@@ -75,19 +86,12 @@ class SeqNN(object):
     def getTrainTargets(self):
         return self.__trainTargets
 
-    def __predict(self, data):
-        self.__outputPredicted = self.__model.Predict(data)
-        return self.__outputPredicted
-
-    def setValidationDataAndTargets(self, validationData, validationTargets):
-        self.setValidationData(validationData)
-        self.setValidationTargets(validationTargets)
-        
-    def trainNN(self, batchSize, numEpochs, useEarlyStopping = False,
+    def trainNN(self, batchSize, numEpochs, trainData, trainTargets, validationData = None, validationTargets = None, useEarlyStopping = False,
      stopPercentThreshold = 0.1, numEpochsBetweenChecks = 1, numFailsToStop = 10):
-        #if ((not any(self.__trainData)) or (not any(self.__trainTargets))):
-        #    print("Training data and targets must be loaded first before training the neural network.")
-        #    return
+        self.__setTrainData(trainData, trainTargets)
+        if validationData is not None and validationTargets is not None:
+            self.__setValidationDataAndTargets(validationData, validationTargets)
+
         self.__model.SetBatchSize(batchSize)
         if not useEarlyStopping:
             self.__model.SetNumEpochs(numEpochs)
@@ -119,12 +123,7 @@ class SeqNN(object):
             print("Model must be trained first before predicting classes.")
             return
         return self.__predict(inputData)
-
-    def setTrainData(self, trainData, trainTargets):
-        self.__trainData = trainData
-        self.__trainTargets = trainTargets
-        self.__initNN__()
-
+   
     def calcTestErrorRate(self, testData, testTargets):
         self.__testData = testData
         self.__testTargets = testTargets

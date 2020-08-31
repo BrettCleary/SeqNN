@@ -64,9 +64,6 @@ std::vector<std::vector<double>>* DenseLayer::FwdProp(const std::vector<std::vec
     }
 
     inputValues = &input;
-    //std::cout << "finished initializing denselayer" << std::endl;
-
-    //std::cout << " numInputRows: " << numInputRows << " numInputCols: " << numInputCols << " numOutputRows: " << numOutputRows << " numOutputCols: " << numOutputCols << std::endl;
 
     for (int i = 0; i < numOutputRows; ++i) {
         for (int j = 0; j < numOutputCols; ++j) {
@@ -74,34 +71,22 @@ std::vector<std::vector<double>>* DenseLayer::FwdProp(const std::vector<std::vec
             for (int m = 0; m < numInputRows; ++m) {
                 for (int n = 0; n < numInputCols; ++n) {
                     activation += input[m][n] * weights[i][j][m][n];
-                    //std::cout << "ijmn" << i << j << m << n << " weights[i][j][m][n] = " << weights[i][j][m][n] << std::endl;
                 }
             }
             activation += bias[i][j];
             output[i][j] = LogSig(activation);
-            //std::cout << "activation for dense layer = " << activation << " output for ij (" << i << j << ") = " << output[i][j] << std::endl;
         }
     }
-    //std::cout << "leaving fwdprop for dense layer" << std::endl;
     return &output;
 }
 
 const std::vector<std::vector<double>>* DenseLayer::BackProp(const std::vector<std::vector<double>>& backPropErrorSum) {
-    /*std::cout << "backprop dense layer" << std::endl;
-    for (auto vec : backPropErrorSum) {
-        for (auto element : vec) {
-            std::cout << element << std::endl;
-        }
-    }*/
     //calculate errors
     for (int i = 0; i < numOutputRows; ++i) {
         for (int j = 0; j < numOutputCols; ++j) {
             error[i][j] = output[i][j] * (1 - output[i][j]) * backPropErrorSum[i][j];
-            //if (i == 0 && j == 0)
-                //std::cout << "error for i: " << i << " j: " << j << " is " << error[i][j] << " backproperrorsum: " << backPropErrorSum[i][j] << " output: " << output[i][j] << std::endl;
         }
     }
-    //std::cout << "calculated errors for backprop" << std::endl;
 
     //calculate weight derivatives
     for (int i = 0; i < numOutputRows; ++i) {
@@ -110,14 +95,11 @@ const std::vector<std::vector<double>>* DenseLayer::BackProp(const std::vector<s
                 for (int n = 0; n < numInputCols; ++n) {
                     //add weight derivatives until next weight update at end of batch
                     weightDer[i][j][m][n] += error[i][j] * (*inputValues)[m][n];
-                    //if (i == 0 && j == 0 && m == 0 && n == 0)
-                    //    std::cout << "error for i: " << i << " j: " << j << " is " << error[i][j] <<  " weightDer: for m "<< m << " and n " << n << " is " << weightDer[i][j][m][n] << " inputVal = " << (*inputValues)[m][n] << std::endl;
                 }
             }
             biasDer[i][j] += error[i][j];
         }
     }
-    //std::cout << "calculated weight derivatives for backprop" << std::endl;
 
     //calculate backPropErrorSum for the input layer
     for (int m = 0; m < numInputRows; ++m) {
@@ -131,7 +113,6 @@ const std::vector<std::vector<double>>* DenseLayer::BackProp(const std::vector<s
             backPropError[m][n] = errorSum;
         }
     }
-    // std::cout << "calculated backproperrorsum for backprop" << std::endl;
 
     ++numPropsSinceLastUpdate;
 

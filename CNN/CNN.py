@@ -724,98 +724,6 @@ class outputVector(_object):
 outputVector_swigregister = _CNN.outputVector_swigregister
 outputVector_swigregister(outputVector)
 
-class Shape(_object):
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, Shape, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, Shape, name)
-
-    def __init__(self, *args, **kwargs):
-        raise AttributeError("No constructor defined - class is abstract")
-    __repr__ = _swig_repr
-    __swig_destroy__ = _CNN.delete_Shape
-    __del__ = lambda self: None
-    __swig_setmethods__["x"] = _CNN.Shape_x_set
-    __swig_getmethods__["x"] = _CNN.Shape_x_get
-    if _newclass:
-        x = _swig_property(_CNN.Shape_x_get, _CNN.Shape_x_set)
-    __swig_setmethods__["y"] = _CNN.Shape_y_set
-    __swig_getmethods__["y"] = _CNN.Shape_y_get
-    if _newclass:
-        y = _swig_property(_CNN.Shape_y_get, _CNN.Shape_y_set)
-
-    def move(self, dx, dy):
-        return _CNN.Shape_move(self, dx, dy)
-
-    def area(self):
-        return _CNN.Shape_area(self)
-
-    def perimeter(self):
-        return _CNN.Shape_perimeter(self)
-    __swig_setmethods__["nshapes"] = _CNN.Shape_nshapes_set
-    __swig_getmethods__["nshapes"] = _CNN.Shape_nshapes_get
-    if _newclass:
-        nshapes = _swig_property(_CNN.Shape_nshapes_get, _CNN.Shape_nshapes_set)
-Shape_swigregister = _CNN.Shape_swigregister
-Shape_swigregister(Shape)
-cvar = _CNN.cvar
-
-class Circle(Shape):
-    __swig_setmethods__ = {}
-    for _s in [Shape]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, Circle, name, value)
-    __swig_getmethods__ = {}
-    for _s in [Shape]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, Circle, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, r):
-        this = _CNN.new_Circle(r)
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-
-    def area(self):
-        return _CNN.Circle_area(self)
-
-    def perimeter(self):
-        return _CNN.Circle_perimeter(self)
-    __swig_destroy__ = _CNN.delete_Circle
-    __del__ = lambda self: None
-Circle_swigregister = _CNN.Circle_swigregister
-Circle_swigregister(Circle)
-
-class Square(Shape):
-    __swig_setmethods__ = {}
-    for _s in [Shape]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, Square, name, value)
-    __swig_getmethods__ = {}
-    for _s in [Shape]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, Square, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, w):
-        this = _CNN.new_Square(w)
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-
-    def area(self):
-        return _CNN.Square_area(self)
-
-    def perimeter(self):
-        return _CNN.Square_perimeter(self)
-    __swig_destroy__ = _CNN.delete_Square
-    __del__ = lambda self: None
-Square_swigregister = _CNN.Square_swigregister
-Square_swigregister(Square)
-
 class Layer(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, Layer, name, value)
@@ -914,24 +822,6 @@ class SequentialModel(_object):
     __del__ = lambda self: None
 SequentialModel_swigregister = _CNN.SequentialModel_swigregister
 SequentialModel_swigregister(SequentialModel)
-
-class testClass(_object):
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, testClass, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, testClass, name)
-    __repr__ = _swig_repr
-
-    def __init__(self):
-        this = _CNN.new_testClass()
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-    __swig_destroy__ = _CNN.delete_testClass
-    __del__ = lambda self: None
-testClass_swigregister = _CNN.testClass_swigregister
-testClass_swigregister(testClass)
 
 class Conv2DLayer(Layer):
     __swig_setmethods__ = {}
