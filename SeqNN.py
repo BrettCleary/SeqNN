@@ -108,7 +108,7 @@ class SeqNN(object):
                 numEpochsTrained += numEpochsBetweenChecks
                 predictedOutput = self.__predict(self.__validationData)
                 errorPct = self.__Calc2DErrorRate__(self.__validationTargets, predictedOutput)
-                print("Error Rate (%) after training ", numEpochsTrained, " number of epochs is ", errorPct)
+                print("Error Rate (%) after training ", numEpochsTrained, " number of epochs is ", "%.1f" % round(errorPct, 2))
                 if (lastErrorPct - errorPct) < stopPercentThreshold:
                     numErrorTooLow += 1
                 else: 

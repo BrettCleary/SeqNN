@@ -7,10 +7,6 @@ mnistTrainData = np.load('Data//MNIST_trainData.npy')
 
 mnistTrainTargets = np.load('Data//MNIST_trainTargets.npy')
 
-#[row, col, imageIndex]
-mnistTestData = np.load('Data//MNIST_testData.npy')
-
-
 #testD_trainData = np.load("Data//TestD_MNIST_tenDigits" + "_trainData.npy")
 #testD_trainTargets = np.load("Data//TestD_MNIST_tenDigits" + "_trainTargets.npy")
 
@@ -23,7 +19,6 @@ def convertAllCsvToNpy():
     csvFileNames = ["Data//TestA_fourClassEightBinaryPixels", "Data//TestB_fourClassSixteenBinaryPixels",
     "Data//TestC_fourClassEightBinarySparsePixels", "Data//TestD_MNIST_tenDigits", "Data//TestE_MNIST_tenDigits_normalized",
     "Data//TestF_MNIST_fourDigits_normalized"]
-    #csvFileNames = ["Data//MNIST_train"]
     numRowsInput = [2, 4, 2, 28, 28, 28]
     numColsInput = [4, 4, 4, 28, 28, 28]
     numOutputClasses = [4, 4, 5, 10, 10, 4]
@@ -32,6 +27,17 @@ def convertAllCsvToNpy():
         np.save(csvFileNames[index] + "_trainData.npy", trainData)
         np.save(csvFileNames[index] + "_trainTargets.npy", trainTargets)
         #convertCsvToNpyFile(csvFileNames[index])
+
+def convertMnistCsvToNpy():
+    csvFileNames = ["Data//MNIST"]
+    numRowsInput = [28]
+    numColsInput = [28]
+    numOutputClasses = [10]
+    for index in range(len(csvFileNames)):
+        [trainData, trainTargets] = createTrainArrays(csvFileNames[index] + ".csv", numRowsInput[index], numColsInput[index], numOutputClasses[index])
+        np.save(csvFileNames[index] + "_trainData.npy", trainData)
+        np.save(csvFileNames[index] + "_trainTargets.npy", trainTargets)
+
 
 def convertMNIST_Arrays():
     #[trainData, trainTargets] = createTrainArrays("Data//MNIST_train.csv", 28, 28, 10)
@@ -52,8 +58,8 @@ def createNpImgArray(csvFileName, ignoreFirstColumn, inputRows, inputCols):
 
     imagesArray = np.zeros((inputRows, inputCols))
     for rowIndex, row in dfTrain.iterrows():
-        if rowIndex % 100 == 0:
-            print("rowIndex for train data", rowIndex)
+        #if rowIndex % 100 == 0:
+        #    print("rowIndex for train data", rowIndex)
         numpyArray = np.zeros((inputRows, inputCols))
         for colIndex in range(len(dfTrain.columns)):
             #read pixels into 2d numpy array
@@ -96,8 +102,8 @@ def createTrainArrays(csvFileName, inputRows, inputCols, numOutputClasses):
     imagesArray = np.zeros((inputRows, inputCols))
     targetArrayNp = np.zeros((1, numOutputClasses))
     for rowIndex, row in dfTrain.iterrows():
-        if rowIndex % 100 == 0:
-            print("rowIndex for train arrays", rowIndex)
+        #if rowIndex % 100 == 0:
+        #    print("rowIndex for train arrays", rowIndex)
         numpyArray = np.zeros((inputRows, inputCols))
         for colIndex in range(len(dfTrain.columns)):
             #read pixels into 2d numpy array
@@ -126,8 +132,8 @@ def createTestArrays(csvFileName, inputRows, inputCols, numOutputClasses):
     imagesArray = np.zeros((inputRows, inputCols))
     targetArrayNp = np.zeros((1, numOutputClasses))
     for rowIndex, row in dfTrain.iterrows():
-        if rowIndex % 100 == 0:
-            print("rowIndex for test arrays", rowIndex)
+        #if rowIndex % 100 == 0:
+        #    print("rowIndex for test arrays", rowIndex)
         numpyArray = np.zeros((inputRows, inputCols))
         for colIndex in range(len(dfTrain.columns)):
             #read pixels into 2d numpy array

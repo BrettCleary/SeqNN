@@ -14,19 +14,14 @@ import time
 mnistData = np.true_divide(ds.mnistTrainData, 255.0)
 mnistTargets = ds.mnistTrainTargets
 
-mnistTrainData = mnistData[:,:,:-7500]
-mnistTrainTargets = mnistTargets[:,:,:-7500]
+mnistTrainData = mnistData[:,:,:-500]
+mnistTrainTargets = mnistTargets[:,:,:-500]
 
-mnistValidationData = mnistData[:,:,-7500:-5000]
-mnistValidationTargets = mnistTargets[:,:,-7500:-5000]
+mnistValidationData = mnistData[:,:,-500:-250]
+mnistValidationTargets = mnistTargets[:,:,-500:-250]
 
-mnistTestData = mnistData[:,:,-5000:]
-mnistTestTargets = mnistTargets[:,:,-5000:]
-
-
-t = time.localtime()
-current_time = time.strftime("%H:%M:%S", t)
-print(current_time)
+mnistTestData = mnistData[:,:,-250:]
+mnistTestTargets = mnistTargets[:,:,-250:]
 
 #MNIST Model
 model = SeqNN.SeqNN([
@@ -36,15 +31,7 @@ model = SeqNN.SeqNN([
     SeqNN.DenseLayer(0.02, 1, 10, 0.9, SeqNN.ActFxn.SOFTMAX, SeqNN.Regularizer.NONE, 0.01)
 ])
 
-model.trainNN(1, 10, mnistTrainData, mnistTrainTargets, mnistValidationData, mnistValidationTargets, True, 0.1, 1, 5)
-
-t = time.localtime()
-current_time = time.strftime("%H:%M:%S", t)
-print(current_time)
+model.trainNN(1, 20, mnistTrainData, mnistTrainTargets, mnistValidationData, mnistValidationTargets, True, 0.1, 2, 5)
 
 errorRate = model.calcTestErrorRate(mnistTestData, mnistTestTargets)
-print("\nThe error rate for test dataset is ", errorRate, "\n")
-
-t = time.localtime()
-current_time = time.strftime("%H:%M:%S", t)
-print(current_time)
+print("\nThe error rate for test dataset is ", "%.1f" % round(errorRate, 2), "\n")
