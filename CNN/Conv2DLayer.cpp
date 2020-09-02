@@ -24,10 +24,11 @@ void Conv2DLayer::InitializeSoftWeightSharingVectors() {
     double avgMixingCoef = 1 / numGaussians;
     gaussianMixingCoefs.insert(gaussianMixingCoefs.begin(), numGaussians, avgMixingCoef);
     gaussianMixingCoefsAuxiliaryVars.insert(gaussianMixingCoefsAuxiliaryVars.begin(), numGaussians, 0);
-    gaussianStdDevs.insert(gaussianStdDevs.begin(), numGaussians, 0.1);
+    gaussianStdDevs.insert(gaussianStdDevs.begin(), numGaussians, 1);
 
     gaussianMeansDer.insert(gaussianMeansDer.begin(), numGaussians, 0);
-    gaussianStdDevsDer.insert(gaussianStdDevsDer.begin(), numGaussians, 0);
+    gaussianStdDevAuxVars.insert(gaussianStdDevAuxVars.begin(), numGaussians, 0);
+    gaussianStdDevAuxVarsDer.insert(gaussianStdDevAuxVarsDer.begin(), numGaussians, 0);
     gaussianMixingCoefsAuxiliaryVarsDer.insert(gaussianMixingCoefsAuxiliaryVarsDer.begin(), numGaussians, 0);
 
     for (int gausIndex = 0; gausIndex < numGaussians; ++gausIndex) {
@@ -53,7 +54,6 @@ std::vector<std::vector<double>>* Conv2DLayer::FwdProp(const std::vector<std::ve
         Initialize(input.size(), input[0].size());
     }
 
-    //std::cout << "entering denselayer fwdprop" << std::endl;
     inputValues = &input;
     for (int i = 0; i < numOutputRows; ++i) {
         for (int j = 0; j < numOutputCols; ++j) {
@@ -67,7 +67,6 @@ std::vector<std::vector<double>>* Conv2DLayer::FwdProp(const std::vector<std::ve
             output[i][j] = LogSig(activation);
         }
     }
-    //std::cout << "leaving denselayer fwdprop" << std::endl;
     return &output;
 }
 
@@ -85,6 +84,8 @@ const std::vector<std::vector<double>>* Conv2DLayer::BackProp(const std::vector<
     if (regType == Regularizer::softWeightSharing) {
         //calculate mixing coefficients from auxiliary variables
         CalcMixingCoefs();
+        //calculate std deviations from auxiliary std dev variables
+        CalcStdDevs();
     }
 
     //calculate weight derivatives
@@ -125,22 +126,22 @@ void Conv2DLayer::CalcBackPropErrorSum() {
 void Conv2DLayer::CalcSoftWeightSharingDers() {
     for (int gausIndex = 0; gausIndex < numGaussians; ++gausIndex) {
         double gausMeanDer = 0;
-        double gausStdDevDer = 0;
+        double gausStdDevAuxDer = 0;
         double gausPriorAuxDer = 0;
         for (int i = 0; i < numOutputRows; ++i) {
             for (int j = 0; j < numOutputCols; ++j) {
                 for (int m = 0; m < windowRows; ++m) {
                     for (int n = 0; n < windowCols; ++n) {
                         gausMeanDer += gaussianPosteriors[gausIndex][i][j][m][n] * (gaussianMeans[gausIndex] - weights[i][j][m][n]) / pow(gaussianStdDevs[gausIndex], 2);
-                        gausStdDevDer += gaussianPosteriors[gausIndex][i][j][m][n] * (1 / gaussianStdDevs[gausIndex] - pow(weights[i][j][m][n] - gaussianMeans[gausIndex], 2) / pow(gaussianStdDevs[gausIndex], 3));
+                        gausStdDevAuxDer += gaussianPosteriors[gausIndex][i][j][m][n] * (1 / (2 * exp(gaussianStdDevAuxVars[gausIndex])) - pow(weights[i][j][m][n] - gaussianMeans[gausIndex], 2) / (2 * pow(exp(gaussianStdDevAuxVars[gausIndex]), 2)));
                         gausPriorAuxDer += gaussianMixingCoefs[gausIndex] - gaussianPosteriors[gausIndex][i][j][m][n];
                     }
                 }
             }
         }
-        gaussianMeansDer[gausIndex] = regCoef * gausMeanDer;
-        gaussianStdDevsDer[gausIndex] = regCoef * gausStdDevDer;
-        gaussianMixingCoefsAuxiliaryVarsDer[gausIndex] = regCoef * gausPriorAuxDer;
+        gaussianMeansDer[gausIndex] += regCoef * gausMeanDer;
+        gaussianStdDevAuxVarsDer[gausIndex] += regCoef * gausStdDevAuxDer;
+        gaussianMixingCoefsAuxiliaryVarsDer[gausIndex] += regCoef * gausPriorAuxDer;
     }
 }
 
@@ -171,6 +172,12 @@ void Conv2DLayer::CalcMixingCoefs() {
     }
     for (int i = 0; i < numGaussians; ++i) {
         gaussianMixingCoefs[i] /= expSum;
+    }
+}
+
+void Conv2DLayer::CalcStdDevs() {
+    for (int j = 0; j < numGaussians; ++j) {
+        gaussianStdDevs[j] = sqrt(exp(gaussianStdDevAuxVars[j]));
     }
 }
 

@@ -8,6 +8,9 @@
 class Pool2DLayer :
     public Layer
 {
+    std::vector<double> lastOutput{ 0.174358, 0.173724, 0.181982, 0.14475 };
+    int nextOutputIndex = 0;
+
     int poolCols = 2;
     int poolRows = 1;
 
@@ -29,6 +32,8 @@ class Pool2DLayer :
     }
 
     void Initialize(const std::vector<std::vector<double>>& input);
+
+    bool isClose(double i, double j);
 
 public:
 

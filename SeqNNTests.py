@@ -41,9 +41,9 @@ def RunAllTests(runOneDenseTest = False, denseIndex = 0, runOneCnnTest = False, 
         batchSizes[denseIndex], numEpochs[denseIndex], stepSizes[denseIndex], useEarlyStopping[denseIndex], stopPercentThreshold[denseIndex],
         numEpochsBetweenChecks[denseIndex], numFailsToStop[denseIndex])
 
-    numEpochsCnn = [1000, 10000, 1000, 10000, 10000]
-    denseStepSize = [0.04, 0.04, 0.04, 0.04, 0.04]
-    cnnStepSize = [1, 1, 1, 1, 1]
+    numEpochsCnn = [1000, 1000, 1000, 1000, 1000]
+    denseStepSize = [0.04, 0.04, 0.04, 0.02, 0.04]
+    cnnStepSize = [1, 1, 1, 0.5, 1]
     
     print("CNN 2D -> Dense Layer -> Output Tests: \n")
     if not runOneCnnTest:
@@ -90,7 +90,7 @@ def DataConvertTest(csvFileName, inputData, inputTargets):
 def SingleDenseLayerTest(csvFileName, trainData, trainTargets, inputRows, inputCols, numOutputClasses, batchSize, numEpochs, stepSize, 
 useEarlyStopping = False, stopPercentThreshold = 0.1, numEpochsBetweenChecks = 1, numFailsToStop = 10):
     model = SeqNN.SeqNN([
-        CNN.DenseLayer(stepSize, 1, numOutputClasses)
+        SeqNN.DenseLayer(stepSize, 1, numOutputClasses, 0.9, SeqNN.ActFxn.SOFTMAX, SeqNN.Regularizer.NONE, 0.01)
     ])
     model.trainNN(batchSize, numEpochs, trainData, trainTargets, trainData, trainTargets, 
     useEarlyStopping, stopPercentThreshold, numEpochsBetweenChecks, numFailsToStop)
@@ -99,8 +99,8 @@ useEarlyStopping = False, stopPercentThreshold = 0.1, numEpochsBetweenChecks = 1
 
 def Simple2DCnnTest(csvFileName, trainData, trainTargets, inputRows, inputCols, numOutputClasses, batchSize, numEpochs, cnnStepSize, denseLayerStepSize):
     model = SeqNN.SeqNN([
-        CNN.Conv2DLayer(2, 2, 2, 2, 0, cnnStepSize),
-        CNN.DenseLayer(denseLayerStepSize, 1, numOutputClasses)
+        SeqNN.Conv2DLayer(2, 2, 2, 2, 0, cnnStepSize, 0.9, SeqNN.Regularizer.NONE, 0.001, 2, 0.1, 0.001, 0.03),
+        SeqNN.DenseLayer(denseLayerStepSize, 1, numOutputClasses, 0.9, SeqNN.ActFxn.SOFTMAX, SeqNN.Regularizer.NONE, 0.01)
     ])
     #print("Initial numerical gradient agrees with initial backprop gradient :", model.checkGradientNumerically())
     print("starting to train simple2DCNNTest")
@@ -110,9 +110,10 @@ def Simple2DCnnTest(csvFileName, trainData, trainTargets, inputRows, inputCols, 
 
 def Simple2DCnnPoolTest(csvFileName, trainData, trainTargets, inputRows, inputCols, numOutputClasses, batchSize, numEpochs, cnnStepSize, denseLayerStepSize):
     model = SeqNN.SeqNN([
-        CNN.Conv2DLayer(2, 2, 2, 2, 0, cnnStepSize),
-        CNN.Pool2DLayer(True, 2, 2),
-        CNN.DenseLayer(denseLayerStepSize, 1, numOutputClasses)
+        SeqNN.Conv2DLayer(7, 7, 1, 1, 0, cnnStepSize, 0.9, 
+    SeqNN.Regularizer.NONE, 0.001, 2, 0.1, 0.001, 0.03),
+        SeqNN.Pool2DLayer(True, 2, 2),
+        SeqNN.DenseLayer(denseLayerStepSize, 1, numOutputClasses, 0.9, SeqNN.ActFxn.SOFTMAX, SeqNN.Regularizer.NONE, 0.01)
     ])
     #print("Initial numerical gradient agrees with initial backprop gradient :", model.checkGradientNumerically())
     model.trainNN(batchSize, numEpochs, trainData, trainTargets)

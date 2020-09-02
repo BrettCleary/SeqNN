@@ -31,12 +31,12 @@ print(current_time)
 #MNIST Model
 model = SeqNN.SeqNN([
     SeqNN.Conv2DLayer(7, 7, 1, 1, 0, 0.5, 0.9, 
-    SeqNN.Regularizer.SOFTWEIGHTSHARING, 0.25, 2, 0.1, 0.1, 0.03),
+    SeqNN.Regularizer.SOFTWEIGHTSHARING, 0.001, 2, 0.1, 0.001, 0.03),
     SeqNN.Pool2DLayer(True, 2, 2),
     SeqNN.DenseLayer(0.02, 1, 10, 0.9, SeqNN.ActFxn.SOFTMAX, SeqNN.Regularizer.NONE, 0.01)
 ])
 
-model.trainNN(20, 10, mnistTrainData, mnistTrainTargets, mnistValidationData, mnistValidationTargets, True, 0.1, 1, 5)
+model.trainNN(1, 10, mnistTrainData, mnistTrainTargets, mnistValidationData, mnistValidationTargets, True, 0.1, 1, 5)
 
 t = time.localtime()
 current_time = time.strftime("%H:%M:%S", t)

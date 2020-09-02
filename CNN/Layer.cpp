@@ -79,8 +79,11 @@ void Layer::UpdateWeights() {
 void Layer::UpdateSoftWeightSharingParams() {
 	for (int i = 0; i < numGaussians; ++i) {
 		gaussianMeans[i] -= gausMeanStepSize * gaussianMeansDer[i];
-		gaussianStdDevs[i] -= gausStdDevStepSize * gaussianStdDevsDer[i];
+		gaussianStdDevAuxVars[i] -= gausStdDevStepSize * gaussianStdDevAuxVarsDer[i];
 		gaussianMixingCoefsAuxiliaryVars[i] -= gausMixingCoefStepSize * gaussianMixingCoefsAuxiliaryVarsDer[i];
+		gaussianMeansDer[i] = 0;
+		gaussianStdDevAuxVarsDer[i] = 0;
+		gaussianMixingCoefsAuxiliaryVarsDer[i] = 0;
 	}
 }
 

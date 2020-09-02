@@ -91,7 +91,7 @@ double SequentialModel::CalcErrorNumerically(int dataPointIndex) {
 	double crossEntropyErrorSum = 0;
 	for (int i = 0; i < targets[dataPointIndex].size(); ++i) {
 		for (int j = 0; j < targets[dataPointIndex][0].size(); ++j) {
-			crossEntropyErrorSum -=  targets[dataPointIndex][i][j] * log(output[i][j]) + (1 - targets[dataPointIndex][i][j]) * log(1 - output[i][j]);
+			crossEntropyErrorSum -= targets[dataPointIndex][i][j] * log(output[i][j]);
 		}
 	}
 	return crossEntropyErrorSum;

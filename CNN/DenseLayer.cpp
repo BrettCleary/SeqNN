@@ -17,7 +17,7 @@ std::vector<std::vector<double>>* DenseLayer::FwdProp(const std::vector<std::vec
     if (!initialized) {
         Initialize(input);
     }
-    //std::cout << "entering denselayer fwdprop" << std::endl;
+
     inputValues = &input;
 
     double expSum = 0;
@@ -44,13 +44,11 @@ std::vector<std::vector<double>>* DenseLayer::FwdProp(const std::vector<std::vec
             output[i][j] /= expSum;
         }
     }
-    //std::cout << "leaving denselayer fwdprop" << std::endl;
 
     return &output;
 }
 
 const std::vector<std::vector<double>>* DenseLayer::BackProp(const std::vector<std::vector<double>>& backPropErrorSum) {
-    //std::cout << "entering denselayer backprop" << std::endl;
     //calculate errors
     CalcErrors(backPropErrorSum);
 
@@ -59,7 +57,6 @@ const std::vector<std::vector<double>>* DenseLayer::BackProp(const std::vector<s
 
     //calculate backPropErrorSum for the input layer
     CalcBackPropErrorSum();
-    //std::cout << "leaving backprop denselayer" << std::endl;
     return &backPropError;
 }
 

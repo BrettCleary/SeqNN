@@ -15,6 +15,7 @@ class Conv2DLayer :
     double CalcSoftWeightSharingRegterm(int i, int j, int m, int n);
     void InitializeSoftWeightSharingVectors();
     void CalcMixingCoefs();
+    void CalcStdDevs();
     void CalcWeightDers();
     void CalcSoftWeightSharingDers();
     void CalcBackPropErrorSum();

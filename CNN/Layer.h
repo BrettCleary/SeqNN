@@ -43,11 +43,12 @@ protected:
 	int numGaussians = 0;
 	std::vector<double> gaussianMeans;
 	std::vector<double> gaussianStdDevs;
+	std::vector<double> gaussianStdDevAuxVars;
 	std::vector<double> gaussianMixingCoefs;
 	std::vector<double> gaussianMixingCoefsAuxiliaryVars;
 	std::vector<std::vector<std::vector<std::vector<std::vector<double>>>>> gaussianPosteriors;
 	std::vector<double> gaussianMeansDer;
-	std::vector<double> gaussianStdDevsDer;
+	std::vector<double> gaussianStdDevAuxVarsDer;
 	std::vector<double> gaussianMixingCoefsAuxiliaryVarsDer;
 	double gausMeanStepSize = 0.1, gausStdDevStepSize = 0.1, gausMixingCoefStepSize = 0.1;
 
