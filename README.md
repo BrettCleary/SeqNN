@@ -99,4 +99,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Project Link: [https://github.com/BrettCleary/DigitCNN](https://github.com/BrettCleary/DigitCNN)
+Project Link: [https://github.com/BrettCleary/SeqNN](https://github.com/BrettCleary/SeqNN)
