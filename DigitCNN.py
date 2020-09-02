@@ -6,10 +6,10 @@ import matplotlib.image as mpimg
 import math
 import cProfile
 import re
-import CNN
 import SeqNN
 import SeqNNTests
 import Datasets as ds
+import time
 
 mnistData = np.true_divide(ds.mnistTrainData, 255.0)
 mnistTargets = ds.mnistTrainTargets
@@ -23,14 +23,28 @@ mnistValidationTargets = mnistTargets[:,:,-7500:-5000]
 mnistTestData = mnistData[:,:,-5000:]
 mnistTestTargets = mnistTargets[:,:,-5000:]
 
+
+t = time.localtime()
+current_time = time.strftime("%H:%M:%S", t)
+print(current_time)
+
 #MNIST Model
 model = SeqNN.SeqNN([
-    CNN.Conv2DLayer(7, 7, 1, 1, 0, 0.5, 0.9),
-    CNN.Pool2DLayer(True, 2, 2),
-    CNN.DenseLayer(0.02, 1, 10, 0.9, 1)
+    SeqNN.Conv2DLayer(7, 7, 1, 1, 0, 0.5, 0.9, 
+    SeqNN.Regularizer.SOFTWEIGHTSHARING, 0.25, 2, 0.1, 0.1, 0.03),
+    SeqNN.Pool2DLayer(True, 2, 2),
+    SeqNN.DenseLayer(0.02, 1, 10, 0.9, SeqNN.ActFxn.SOFTMAX, SeqNN.Regularizer.NONE, 0.01)
 ])
 
-model.trainNN(10, 10, mnistTrainData, mnistTrainTargets, mnistValidationData, mnistValidationTargets, True, 0.1, 1, 5)
+model.trainNN(20, 10, mnistTrainData, mnistTrainTargets, mnistValidationData, mnistValidationTargets, True, 0.1, 1, 5)
+
+t = time.localtime()
+current_time = time.strftime("%H:%M:%S", t)
+print(current_time)
 
 errorRate = model.calcTestErrorRate(mnistTestData, mnistTestTargets)
 print("\nThe error rate for test dataset is ", errorRate, "\n")
+
+t = time.localtime()
+current_time = time.strftime("%H:%M:%S", t)
+print(current_time)

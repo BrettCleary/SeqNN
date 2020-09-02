@@ -17204,6 +17204,12 @@ SWIGINTERN PyObject *_wrap_new_Conv2DLayer(PyObject *SWIGUNUSEDPARM(self), PyObj
   int arg5 ;
   double arg6 ;
   double arg7 ;
+  int arg8 ;
+  double arg9 ;
+  int arg10 ;
+  double arg11 ;
+  double arg12 ;
+  double arg13 ;
   int val1 ;
   int ecode1 = 0 ;
   int val2 ;
@@ -17218,6 +17224,18 @@ SWIGINTERN PyObject *_wrap_new_Conv2DLayer(PyObject *SWIGUNUSEDPARM(self), PyObj
   int ecode6 = 0 ;
   double val7 ;
   int ecode7 = 0 ;
+  int val8 ;
+  int ecode8 = 0 ;
+  double val9 ;
+  int ecode9 = 0 ;
+  int val10 ;
+  int ecode10 = 0 ;
+  double val11 ;
+  int ecode11 = 0 ;
+  double val12 ;
+  int ecode12 = 0 ;
+  double val13 ;
+  int ecode13 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
@@ -17225,9 +17243,15 @@ SWIGINTERN PyObject *_wrap_new_Conv2DLayer(PyObject *SWIGUNUSEDPARM(self), PyObj
   PyObject * obj4 = 0 ;
   PyObject * obj5 = 0 ;
   PyObject * obj6 = 0 ;
+  PyObject * obj7 = 0 ;
+  PyObject * obj8 = 0 ;
+  PyObject * obj9 = 0 ;
+  PyObject * obj10 = 0 ;
+  PyObject * obj11 = 0 ;
+  PyObject * obj12 = 0 ;
   Conv2DLayer *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOOOOO:new_Conv2DLayer",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OOOOOOOOOOOOO:new_Conv2DLayer",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8,&obj9,&obj10,&obj11,&obj12)) SWIG_fail;
   ecode1 = SWIG_AsVal_int(obj0, &val1);
   if (!SWIG_IsOK(ecode1)) {
     SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_Conv2DLayer" "', argument " "1"" of type '" "int""'");
@@ -17263,7 +17287,37 @@ SWIGINTERN PyObject *_wrap_new_Conv2DLayer(PyObject *SWIGUNUSEDPARM(self), PyObj
     SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "new_Conv2DLayer" "', argument " "7"" of type '" "double""'");
   } 
   arg7 = static_cast< double >(val7);
-  result = (Conv2DLayer *)new Conv2DLayer(arg1,arg2,arg3,arg4,arg5,arg6,arg7);
+  ecode8 = SWIG_AsVal_int(obj7, &val8);
+  if (!SWIG_IsOK(ecode8)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode8), "in method '" "new_Conv2DLayer" "', argument " "8"" of type '" "int""'");
+  } 
+  arg8 = static_cast< int >(val8);
+  ecode9 = SWIG_AsVal_double(obj8, &val9);
+  if (!SWIG_IsOK(ecode9)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode9), "in method '" "new_Conv2DLayer" "', argument " "9"" of type '" "double""'");
+  } 
+  arg9 = static_cast< double >(val9);
+  ecode10 = SWIG_AsVal_int(obj9, &val10);
+  if (!SWIG_IsOK(ecode10)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode10), "in method '" "new_Conv2DLayer" "', argument " "10"" of type '" "int""'");
+  } 
+  arg10 = static_cast< int >(val10);
+  ecode11 = SWIG_AsVal_double(obj10, &val11);
+  if (!SWIG_IsOK(ecode11)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode11), "in method '" "new_Conv2DLayer" "', argument " "11"" of type '" "double""'");
+  } 
+  arg11 = static_cast< double >(val11);
+  ecode12 = SWIG_AsVal_double(obj11, &val12);
+  if (!SWIG_IsOK(ecode12)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode12), "in method '" "new_Conv2DLayer" "', argument " "12"" of type '" "double""'");
+  } 
+  arg12 = static_cast< double >(val12);
+  ecode13 = SWIG_AsVal_double(obj12, &val13);
+  if (!SWIG_IsOK(ecode13)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode13), "in method '" "new_Conv2DLayer" "', argument " "13"" of type '" "double""'");
+  } 
+  arg13 = static_cast< double >(val13);
+  result = (Conv2DLayer *)new Conv2DLayer(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11,arg12,arg13);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Conv2DLayer, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
@@ -17382,6 +17436,8 @@ SWIGINTERN PyObject *_wrap_new_DenseLayer(PyObject *SWIGUNUSEDPARM(self), PyObje
   int arg3 ;
   double arg4 ;
   int arg5 ;
+  int arg6 ;
+  double arg7 ;
   double val1 ;
   int ecode1 = 0 ;
   int val2 ;
@@ -17392,14 +17448,20 @@ SWIGINTERN PyObject *_wrap_new_DenseLayer(PyObject *SWIGUNUSEDPARM(self), PyObje
   int ecode4 = 0 ;
   int val5 ;
   int ecode5 = 0 ;
+  int val6 ;
+  int ecode6 = 0 ;
+  double val7 ;
+  int ecode7 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  PyObject * obj6 = 0 ;
   DenseLayer *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOOO:new_DenseLayer",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OOOOOOO:new_DenseLayer",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) SWIG_fail;
   ecode1 = SWIG_AsVal_double(obj0, &val1);
   if (!SWIG_IsOK(ecode1)) {
     SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_DenseLayer" "', argument " "1"" of type '" "double""'");
@@ -17425,7 +17487,17 @@ SWIGINTERN PyObject *_wrap_new_DenseLayer(PyObject *SWIGUNUSEDPARM(self), PyObje
     SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "new_DenseLayer" "', argument " "5"" of type '" "int""'");
   } 
   arg5 = static_cast< int >(val5);
-  result = (DenseLayer *)new DenseLayer(arg1,arg2,arg3,arg4,arg5);
+  ecode6 = SWIG_AsVal_int(obj5, &val6);
+  if (!SWIG_IsOK(ecode6)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "new_DenseLayer" "', argument " "6"" of type '" "int""'");
+  } 
+  arg6 = static_cast< int >(val6);
+  ecode7 = SWIG_AsVal_double(obj6, &val7);
+  if (!SWIG_IsOK(ecode7)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "new_DenseLayer" "', argument " "7"" of type '" "double""'");
+  } 
+  arg7 = static_cast< double >(val7);
+  result = (DenseLayer *)new DenseLayer(arg1,arg2,arg3,arg4,arg5,arg6,arg7);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_DenseLayer, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
@@ -18722,8 +18794,11 @@ SWIG_init(void) {
   
   import_array();
   
-  SWIG_Python_SetConstant(d, "logSig",SWIG_From_int(static_cast< int >(logSig)));
-  SWIG_Python_SetConstant(d, "softmax",SWIG_From_int(static_cast< int >(softmax)));
+  SWIG_Python_SetConstant(d, "ActFxn_logSig",SWIG_From_int(static_cast< int >(ActFxn::logSig)));
+  SWIG_Python_SetConstant(d, "ActFxn_softmax",SWIG_From_int(static_cast< int >(ActFxn::softmax)));
+  SWIG_Python_SetConstant(d, "Regularizer_none",SWIG_From_int(static_cast< int >(Regularizer::none)));
+  SWIG_Python_SetConstant(d, "Regularizer_weightDecay",SWIG_From_int(static_cast< int >(Regularizer::weightDecay)));
+  SWIG_Python_SetConstant(d, "Regularizer_softWeightSharing",SWIG_From_int(static_cast< int >(Regularizer::softWeightSharing)));
 #if PY_VERSION_HEX >= 0x03000000
   return m;
 #else

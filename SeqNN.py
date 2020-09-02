@@ -7,6 +7,7 @@ import math
 import cProfile
 import re
 import CNN
+from enum import IntEnum
 
 class SeqNN(object):
     """Python wrapper for Sequential Neural Network Python Extension with modular layers."""
@@ -135,10 +136,36 @@ class SeqNN(object):
 
     def addLayerList(self, layerList):
         for layer in layerList:
-            self.__model.AddLayer(layer)
+            self.__model.AddLayer(layer.layer)
 
     def clearLayers(self):
         self.__model.ClearLayers()
 
     def checkGradientNumerically(self):
         return self.__model.CheckGradientNumerically()
+
+class ActFxn(IntEnum):
+    LOGSIG = 0,
+    SOFTMAX = 1
+
+class Regularizer(IntEnum):
+    NONE = 0,
+    WEIGHTDECAY = 1,
+    SOFTWEIGHTSHARING = 2
+
+class Layer(object):
+    layer = None
+
+class DenseLayer(Layer):
+    def __init__(self, step, outRows, outCols, momentum, activationFxn, regularizer, weightDecayParam):
+        self.layer = CNN.DenseLayer(step, outRows, outCols, momentum, activationFxn.value, regularizer.value, weightDecayParam)
+
+class Pool2DLayer(Layer):
+    def __init__(self, isMaxPool, poolCols, poolRows):
+        self.layer = CNN.Pool2DLayer(isMaxPool, poolCols, poolRows)
+
+class Conv2DLayer(Layer):
+    def __init__(self, winRows, winCols, strideRow, strideCol, padding, step, momentum,
+    reg, regCoefInput, numGaussiansInput, meanStepSize, stdDevStepSize, mixingStepSize):
+        self.layer = CNN.Conv2DLayer(winRows, winCols, strideRow, strideCol, padding, step, momentum,
+        reg, regCoefInput, numGaussiansInput, meanStepSize, stdDevStepSize, mixingStepSize)

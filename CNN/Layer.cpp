@@ -5,6 +5,34 @@ bool Layer::GradientCorrect(SequentialModel* model, int startIndex, int endIndex
 	if (!usingWeights)
 		return true;
 
+	CalculateNumericalDerivatives(model, startIndex, endIndex);
+
+	return CheckNumDerEqualsBackProp();
+}
+
+bool Layer::CheckNumDerEqualsBackProp() {
+	for (int m = 0; m < numOutputRows; ++m) {
+		for (int n = 0; n < numOutputCols; ++n) {
+			for (int i = 0; i < numInputRows; ++i) {
+				for (int j = 0; j < numInputCols; ++j) {
+					if (abs(weightDerNumerical[m][n][i][j] - weightDer[m][n][i][j]) > errorLimitWeightDer) {
+						std::cout << "Numerical weight derivative does not agree with backprop weightDer for mnij: " << m << n << i << j <<
+							" Numerical is " << weightDerNumerical[m][n][i][j] << " and backprop der is : " << weightDer[m][n][i][j] << std::endl;
+						return false;
+					}
+				}
+			}
+			if (abs(biasDerNumerical[m][n] - biasDer[m][n]) > errorLimitWeightDer) {
+				std::cout << "Numerical weight derivative for bias does not agree with backprop weightDer for mn: " << m << n <<
+					" Numerical is " << biasDerNumerical[m][n] - biasDer[m][n] << " greater than backprop derivative." << std::endl;
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+void Layer::CalculateNumericalDerivatives(SequentialModel* model, int startIndex, int endIndex) {
 	for (int dataIndex = startIndex; dataIndex < endIndex; ++dataIndex) {
 		for (int m = 0; m < numOutputRows; ++m) {
 			for (int n = 0; n < numOutputCols; ++n) {
@@ -27,26 +55,6 @@ bool Layer::GradientCorrect(SequentialModel* model, int startIndex, int endIndex
 			}
 		}
 	}
-	
-	for (int m = 0; m < numOutputRows; ++m) {
-		for (int n = 0; n < numOutputCols; ++n) {
-			for (int i = 0; i < numInputRows; ++i) {
-				for (int j = 0; j < numInputCols; ++j) {
-					if (abs(weightDerNumerical[m][n][i][j] - weightDer[m][n][i][j]) > errorLimitWeightDer) {
-						std::cout << "Numerical weight derivative does not agree with backprop weightDer for mnij: " << m << n << i << j <<
-							" Numerical is " << weightDerNumerical[m][n][i][j] << " and backprop der is : " << weightDer[m][n][i][j] << std::endl;
-						return false;
-					}
-				}
-			}
-			if (abs(biasDerNumerical[m][n] - biasDer[m][n]) > errorLimitWeightDer) {
-				std::cout << "Numerical weight derivative for bias does not agree with backprop weightDer for mn: " << m << n <<
-					" Numerical is " << biasDerNumerical[m][n] - biasDer[m][n] << " greater than backprop derivative." << std::endl;
-				return false;
-			}
-		}
-	}
-	return true;
 }
 
 void Layer::UpdateWeights() {
@@ -59,6 +67,24 @@ void Layer::UpdateWeights() {
 		return;
 	}
 
+	//updating weights
+	UpdateMainWeights();
+
+	//updating hyperparams for soft weight sharing
+	if (regType == Regularizer::softWeightSharing) {
+		UpdateSoftWeightSharingParams();
+	}
+}
+
+void Layer::UpdateSoftWeightSharingParams() {
+	for (int i = 0; i < numGaussians; ++i) {
+		gaussianMeans[i] -= gausMeanStepSize * gaussianMeansDer[i];
+		gaussianStdDevs[i] -= gausStdDevStepSize * gaussianStdDevsDer[i];
+		gaussianMixingCoefsAuxiliaryVars[i] -= gausMixingCoefStepSize * gaussianMixingCoefsAuxiliaryVarsDer[i];
+	}
+}
+
+void Layer::UpdateMainWeights() {
 	for (int i = 0; i < numOutputRows; ++i) {
 		for (int j = 0; j < numOutputCols; ++j) {
 			for (int m = 0; m < numInputRows; ++m) {
@@ -90,5 +116,65 @@ void Layer::ResetWeights() {
 			biasDer[i][j] = 0;
 			biasDerNumerical[i][j] = 0;
 		}
+	}
+}
+
+void Layer::InitalizeWeights(int outRows, int outCols, int inRows, int inCols) {
+	//init weights and weight derivatives to 0
+	for (int i = 0; i < outRows; ++i) {
+		std::vector<std::vector<std::vector<double>>> row_pool;
+		std::vector<std::vector<std::vector<double>>> row_poolDer;
+		std::vector<std::vector<std::vector<double>>> row_poolMomentumDer;
+		std::vector<std::vector<std::vector<double>>> row_poolDerNum;
+		for (int j = 0; j < outCols; ++j) {
+			std::vector<std::vector<double>> col_pool;
+			std::vector<std::vector<double>> col_poolDer;
+			std::vector<std::vector<double>> col_poolMomentumDer;
+			std::vector<std::vector<double>> col_poolDerNum;
+			for (int k = 0; k < inRows; ++k) {
+				std::vector<double> row_i(inCols, 0);
+				col_pool.push_back(row_i);
+				std::vector<double> row_iDer(inCols, 0);
+				col_poolDer.push_back(row_iDer);
+				std::vector<double> row_iMomentumDer(inCols, 0);
+				col_poolMomentumDer.push_back(row_iMomentumDer);
+				std::vector<double> row_iDerNum(inCols, 0);
+				col_poolDerNum.push_back(row_iDerNum);
+			}
+			row_pool.push_back(col_pool);
+			row_poolDer.push_back(col_poolDer);
+			row_poolDerNum.push_back(col_poolDerNum);
+			row_poolMomentumDer.push_back(col_poolMomentumDer);
+		}
+		weights.push_back(row_pool);
+		weightDer.push_back(row_poolDer);
+		weightDerMomentum.push_back(row_poolMomentumDer);
+		weightDerNumerical.push_back(row_poolDerNum);
+	}
+
+	//init output and bias to 0
+	for (int i = 0; i < numOutputRows; ++i) {
+		std::vector<double> bias_i(numOutputCols, 0);
+		bias.push_back(bias_i);
+		std::vector<double> biasDer_i(numOutputCols, 0);
+		biasDer.push_back(biasDer_i);
+		std::vector<double> biasDerMom_i(numOutputCols, 0);
+		biasDerMomentum.push_back(biasDerMom_i);
+		std::vector<double> biasDerNum_i(numOutputCols, 0);
+		biasDerNumerical.push_back(biasDerNum_i);
+	}
+}
+
+void Layer::InitializeErrorAndOutput() {
+	//init backPropError to 0
+	for (int k = 0; k < numInputRows; ++k) {
+		std::vector<double> row_i(numInputCols, 0);
+		backPropError.push_back(row_i);
+	}
+	for (int k = 0; k < numOutputRows; ++k) {
+		std::vector<double> error_i(numOutputCols, 0);
+		error.push_back(error_i);
+		std::vector<double> outputRow_i(numOutputCols, 0);
+		output.push_back(outputRow_i);
 	}
 }

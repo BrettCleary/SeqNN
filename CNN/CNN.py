@@ -724,6 +724,11 @@ class outputVector(_object):
 outputVector_swigregister = _CNN.outputVector_swigregister
 outputVector_swigregister(outputVector)
 
+ActFxn_logSig = _CNN.ActFxn_logSig
+ActFxn_softmax = _CNN.ActFxn_softmax
+Regularizer_none = _CNN.Regularizer_none
+Regularizer_weightDecay = _CNN.Regularizer_weightDecay
+Regularizer_softWeightSharing = _CNN.Regularizer_softWeightSharing
 class Layer(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, Layer, name, value)
@@ -830,8 +835,8 @@ class Conv2DLayer(Layer):
     __getattr__ = lambda self, name: _swig_getattr(self, Conv2DLayer, name)
     __repr__ = _swig_repr
 
-    def __init__(self, winRows, winCols, strideRowInput, strideColInput, paddingInput, step, momentum):
-        this = _CNN.new_Conv2DLayer(winRows, winCols, strideRowInput, strideColInput, paddingInput, step, momentum)
+    def __init__(self, winRows, winCols, strideRowInput, strideColInput, paddingInput, step, momentum, reg, regCoefInput, numGaussiansInput, meanStepSize, stdDevStepSize, mixingStepSize):
+        this = _CNN.new_Conv2DLayer(winRows, winCols, strideRowInput, strideColInput, paddingInput, step, momentum, reg, regCoefInput, numGaussiansInput, meanStepSize, stdDevStepSize, mixingStepSize)
         try:
             self.this.append(this)
         except __builtin__.Exception:
@@ -847,8 +852,6 @@ class Conv2DLayer(Layer):
 Conv2DLayer_swigregister = _CNN.Conv2DLayer_swigregister
 Conv2DLayer_swigregister(Conv2DLayer)
 
-logSig = _CNN.logSig
-softmax = _CNN.softmax
 class DenseLayer(Layer):
     __swig_setmethods__ = {}
     for _s in [Layer]:
@@ -860,8 +863,8 @@ class DenseLayer(Layer):
     __getattr__ = lambda self, name: _swig_getattr(self, DenseLayer, name)
     __repr__ = _swig_repr
 
-    def __init__(self, step, outRows, outCols, momentum, activationFxn):
-        this = _CNN.new_DenseLayer(step, outRows, outCols, momentum, activationFxn)
+    def __init__(self, step, outRows, outCols, momentum, activationFxn, reg, regCoefInput):
+        this = _CNN.new_DenseLayer(step, outRows, outCols, momentum, activationFxn, reg, regCoefInput)
         try:
             self.this.append(this)
         except __builtin__.Exception:

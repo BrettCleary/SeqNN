@@ -8,27 +8,59 @@
 
 class SequentialModel;
 
+enum class ActFxn {
+	logSig,
+	softmax
+};
+
+enum class Regularizer {
+	none,
+	weightDecay,
+	softWeightSharing
+};
+
 class Layer
 {
+private:
+	void CalculateNumericalDerivatives(SequentialModel*, int, int);
+	bool CheckNumDerEqualsBackProp();
+	void UpdateMainWeights();
+	void UpdateSoftWeightSharingParams();
+
 protected:
 	std::string name;
-
 	int numInputRows = -1;
 	int numInputCols = -1;
 	int numOutputRows = -1;
 	int numOutputCols = -1;
 	bool initialized = false;
-	int numPropsSinceLastUpdate = 0;
 	double momentum = 0.9;
+	double regCoef = 0;
+	ActFxn actFxn = ActFxn::logSig;
+	Regularizer regType = Regularizer::none;
+
+	//soft weight sharing
+	int numGaussians = 0;
+	std::vector<double> gaussianMeans;
+	std::vector<double> gaussianStdDevs;
+	std::vector<double> gaussianMixingCoefs;
+	std::vector<double> gaussianMixingCoefsAuxiliaryVars;
+	std::vector<std::vector<std::vector<std::vector<std::vector<double>>>>> gaussianPosteriors;
+	std::vector<double> gaussianMeansDer;
+	std::vector<double> gaussianStdDevsDer;
+	std::vector<double> gaussianMixingCoefsAuxiliaryVarsDer;
+	double gausMeanStepSize = 0.1, gausStdDevStepSize = 0.1, gausMixingCoefStepSize = 0.1;
 
 	//first [row][col] is for current layer indexes. second [row][col] is for input
 	std::vector<std::vector<std::vector<std::vector<double>>>> weights;
 	std::vector<std::vector<std::vector<std::vector<double>>>> weightDer;
 	std::vector<std::vector<std::vector<std::vector<double>>>> weightDerMomentum;
+
 	//first [row][col] is for current layer indices to access bias
 	std::vector<std::vector<double>> bias;
 	std::vector<std::vector<double>> biasDer;
 	std::vector<std::vector<double>> biasDerMomentum;
+
 	//current layer [row][col]
 	std::vector<std::vector<double>> error;
 
@@ -54,8 +86,21 @@ protected:
 		return 1 / (1 + exp(-a));
 	}
 
+	double Gaussian(double w, double u, double o) {
+		//missing 1 / (2*pi)^0.5 normalization term since it factors out in soft weight sharing
+		return exp(-1 / (2 * pow(o, 2)) * pow((w - u), 2)) / o;
+	}
+
+	void InitalizeWeights(int outRows, int outCols, int inRows, int inCols);
+	void InitializeErrorAndOutput();
+
 public:
 	Layer(double step, double momentumParam) : weightStepSize(step), momentum(momentumParam) {
+
+	}
+
+	Layer(double step, double momentumParam, double gausMeanStepSizeParam, double gausStdDevStepSizeParam, double gausMixingCoefStepSizeParam) :
+		weightStepSize(step), momentum(momentumParam), gausMeanStepSize(gausMeanStepSizeParam), gausStdDevStepSize(gausStdDevStepSizeParam), gausMixingCoefStepSize(gausMixingCoefStepSizeParam) {
 
 	}
 
@@ -77,5 +122,6 @@ public:
 		return name;
 	}
 };
+
 
 #endif // CNN_LAYER_H

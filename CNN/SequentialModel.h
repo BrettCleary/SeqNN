@@ -21,6 +21,9 @@ class SequentialModel
 
 	std::vector<std::vector<double>> errorPrev;
 
+	const std::vector<int> _Predict(const std::vector<std::vector<std::vector<double>>>& inputDataPredict);
+	std::vector<std::vector<std::vector<double>>> ConvertNpToVector(int len1_, int len2_, int len3_, double* vec_);
+
 	void FwdProp(const std::vector<std::vector<double>>* input) {
 		for (int i = 0; i < allLayers.size(); ++i) {
 			input = allLayers[i]->FwdProp(*input);
@@ -55,10 +58,6 @@ class SequentialModel
 	void _AddInputDataPoint(std::vector<std::vector<double>>& dataPoint) {
 		inputData.push_back(dataPoint);
 	}
-
-	const std::vector<int> _Predict(const std::vector<std::vector<std::vector<double>>>& inputDataPredict);
-
-	std::vector<std::vector<std::vector<double>>> ConvertNpToVector(int len1_, int len2_, int len3_, double* vec_);
 
 public:
 	SequentialModel(){

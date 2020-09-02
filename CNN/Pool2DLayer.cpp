@@ -6,6 +6,7 @@ double Pool2DLayer::MaxPool(int i, int j, const std::vector<std::vector<double>>
     int nMax = -1;
     for (int m = 0; m < poolRows; ++m) {
         for (int n = 0; n < poolCols; ++n) {
+            std::cout << input[i * poolRows + m][j * poolCols + n] << std::endl;
             if (input[i * poolRows + m][j * poolCols + n] > maxAct) {
                 maxAct = input[i * poolRows + m][j * poolCols + n];
                 mMax = m;
@@ -13,7 +14,9 @@ double Pool2DLayer::MaxPool(int i, int j, const std::vector<std::vector<double>>
             }
         }
     }
+    std::cout << "indexing adj list" << std::endl;
     adjList[i * poolRows + mMax][j * poolCols + nMax].push_back({ i, j });
+    std::cout << "leaving max pool " << std::endl;
     return maxAct;
 }
 
@@ -69,9 +72,12 @@ std::vector<std::vector<double>>* Pool2DLayer::FwdProp(const std::vector<std::ve
     if (!initialized) {
         Initialize(input);
     }
+    std::cout << "entering pool layer fwdprop" << std::endl;
 
     inputValues = &input;
     ClearAdjList();
+
+    std::cout << "adj list cleared" << std::endl;
 
     for (int i = 0; i < numOutputRows; ++i) {
         for (int j = 0; j < numOutputCols; ++j) {
@@ -83,6 +89,7 @@ std::vector<std::vector<double>>* Pool2DLayer::FwdProp(const std::vector<std::ve
             }
         }
     }
+    std::cout << "leaving pool layer fwdprop" << std::endl;
     return &output;
 }
 
