@@ -1,5 +1,5 @@
-# DigitCNN
- Basic 2 Layer CNN Implementation Built for MNIST Digit Dataset
+# SeqNN
+A simple sequential neural network python extension
 
 <!--
 *** Thanks for checking out this README Template. If you have a suggestion that would
@@ -31,11 +31,9 @@
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
 * [Usage](#usage)
-* [Roadmap](#roadmap)
 * [Contributing](#contributing)
 * [License](#license)
 * [Contact](#contact)
-* [Acknowledgements](#acknowledgements)
 
 
 
