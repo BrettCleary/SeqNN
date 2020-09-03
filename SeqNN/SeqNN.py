@@ -1,6 +1,10 @@
 import numpy as np
 import pandas as pd
+from PIL import Image
+from matplotlib import pyplot as plt
+import matplotlib.image as mpimg
 import math
+import cProfile
 import re
 import CNN
 from enum import IntEnum

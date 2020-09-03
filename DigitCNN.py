@@ -1,15 +1,8 @@
 import numpy as np
 import pandas as pd
-from PIL import Image
-from matplotlib import pyplot as plt
-import matplotlib.image as mpimg
-import math
-import cProfile
-import re
 import SeqNN
 import SeqNNTests
 import Datasets as ds
-import time
 
 mnistData = np.true_divide(ds.mnistTrainData, 255.0)
 mnistTargets = ds.mnistTrainTargets
@@ -25,7 +18,7 @@ mnistTestTargets = mnistTargets[:,:,-250:]
 
 #MNIST Model
 model = SeqNN.SeqNN([
-    SeqNN.Conv2DLayer(7, 7, 1, 1, 0, 0.5, 0.9, 
+    SeqNN.Conv2DLayer(8, 8, 1, 1, 0, 0.5, 0.9, 
     SeqNN.Regularizer.SOFTWEIGHTSHARING, 0.001, 2, 0.1, 0.001, 0.03),
     SeqNN.Pool2DLayer(True, 2, 2),
     SeqNN.DenseLayer(0.02, 1, 10, 0.9, SeqNN.ActFxn.SOFTMAX, SeqNN.Regularizer.NONE, 0.01)
