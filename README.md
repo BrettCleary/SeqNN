@@ -51,6 +51,7 @@ SeqNN is a simple single threaded sequential neural network python extension wri
 git clone https://github.com/BrettCleary/DigitCNN
 ```
 OR
+
 2. Install with PyPi
 ```sh
 pip install SeqNN
