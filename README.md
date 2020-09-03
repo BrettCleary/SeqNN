@@ -96,3 +96,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 ## Contact
 
 Project Link: [https://github.com/BrettCleary/SeqNN](https://github.com/BrettCleary/SeqNN)
+PyPi Link: [https://pypi.org/project/SeqNN/0.0.3/](https://pypi.org/project/SeqNN/0.0.3/)
