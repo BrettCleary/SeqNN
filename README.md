@@ -1,17 +1,6 @@
 # SeqNN
 A simple sequential neural network python extension
 
-<!--
-*** Thanks for checking out this README Template. If you have a suggestion that would
-*** make this better, please fork the repo and create a pull request or simply open
-*** an issue with the tag "enhancement".
-*** Thanks again! Now go create something AMAZING! :D
--->
-
-
-
-
-
 <!-- PROJECT SHIELDS -->
 <!--
 *** I'm using markdown "reference style" links for readability.
@@ -28,7 +17,6 @@ A simple sequential neural network python extension
 * [About the Project](#about-the-project)
   * [Built With](#built-with)
 * [Getting Started](#getting-started)
-  * [Prerequisites](#prerequisites)
   * [Installation](#installation)
 * [Usage](#usage)
 * [Contributing](#contributing)
@@ -36,29 +24,24 @@ A simple sequential neural network python extension
 * [Contact](#contact)
 
 
-
 <!-- ABOUT THE PROJECT -->
 ## About The Project
+SeqNN is a simple single threaded sequential neural network python extension written in c++ and compiled with SWIG.
 
-
+### Features
+- Modular layers
+    - 2 Dimensional Convolutional
+    - 2 Dimensional Max/Min Pool
+    - Fully Connected Dense Layer
+- Regularization
+    - Weight decay
+    - Soft weight sharing for the 2D Convolutional layer
 
 ### Built With
-This section should list any major frameworks that you built your project using. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
 * [SWIG](http://www.swig.org/download.html)
 
 <!-- GETTING STARTED -->
 ## Getting Started
-
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
-
-### Prerequisites
-
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-```sh
-npm install npm@latest -g
-```
 
 ### Installation
 
@@ -66,30 +49,41 @@ npm install npm@latest -g
 ```sh
 git clone https://github.com/BrettCleary/DigitCNN
 ```
-2. Install NPM packages
+OR
+2. Install with PyPi
 ```sh
-npm install
+pip install SeqNN
 ```
-
-
 
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+Example usage with a subset of the MNIST dataset is given in DigitCNN.py. Here is a sample output:
+
+    Error Rate (%) after training  2  number of epochs is  22.8
+    Error Rate (%) after training  4  number of epochs is  14.4
+    Error Rate (%) after training  6  number of epochs is  12.8
+    Error Rate (%) after training  8  number of epochs is  12.0
+    Error Rate (%) after training  10  number of epochs is  10.8
+    Error Rate (%) after training  12  number of epochs is  10.8
+    Error Rate (%) after training  14  number of epochs is  10.0
+    Error Rate (%) after training  16  number of epochs is  10.8
+    Error Rate (%) after training  18  number of epochs is  10.4
+    Error Rate (%) after training  20  number of epochs is  9.6
+
+    The error rate for test dataset is  6.4
+
 
 <!-- CONTRIBUTING -->
 ## Contributing
 
-Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+Any contributions you make are **greatly appreciated**.
 
 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
 3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
-
-
 
 <!-- LICENSE -->
 ## License
