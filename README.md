@@ -37,7 +37,7 @@ SeqNN is a simple single threaded sequential neural network python extension wri
     - Weight decay
     - Soft weight sharing for the 2D Convolutional layer
     - Early Stopping
- - Momentum SGD
+ - Momentum Gradient Descent
 
 ### Built With
 * [SWIG](http://www.swig.org/download.html)
